@@ -46,8 +46,8 @@ include ('../includes/bootstrap.html');
                 <input type="email" name="email" class="form-control">
             </div>
             <br>
-            <div class="btn">
-                <input type="submit" name="create" value="create">
+            <div class="btn" style="width: 100%;">
+                <input type="submit" name="create" value="create" class="btn btn-primary" style="width: 100%;">
             </div>
         </form>
     </div>
