@@ -1,12 +1,12 @@
 <?php
 include ('../../resources/database/config.php');
 
-if (!isset($_SESSION['account_id'])) {
+if (!isset($_SESSION['ID'])) {
     header("Location: login.php");
     exit;
 }
 
-$account_id = $_SESSION['account_id'];
+$account_id = $_SESSION['ID'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $profile_img = "";
 
     if (!empty($_FILES['profile_img']['name'])) {
-        $target_dir = "uploads/";
+        $target_dir = "../../assets";
         $profile_img = basename($_FILES["profile_img"]["name"]);
         $target_file = $target_dir . $profile_img;
         move_uploaded_file($_FILES["profile_img"]["tmp_name"], $target_file);

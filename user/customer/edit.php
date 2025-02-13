@@ -1,12 +1,12 @@
 <?php
 include ('../../resources/database/config.php'); 
 
-if (!isset($_SESSION['account_id'])) {
+if (!isset($_SESSION['ID'])) {
     header("Location:../login.php");
     exit;
 }
 
-$account_id = $_SESSION['account_id'];
+$account_id = $_SESSION['ID'];
 
 $sql = "SELECT u.*, a.username FROM user u 
         JOIN account a ON u.account_id = a.account_id 
@@ -38,8 +38,8 @@ if ($result->num_rows > 0) {
 <body>
     <div class="profile-container">
         <h2>Edit Profile</h2>
-        <form action="update_profile.php" method="POST" enctype="multipart/form-data">
-            <img src="uploads/<?php echo $user['profile_img']; ?>" class="profile-img" alt="Profile Image"><br>
+        <form action="update.php" method="POST" enctype="multipart/form-data">
+            <img src="../../assets/<?php echo $user['profile_img']; ?>" class="profile-img" alt="Profile Image"><br>
             <label>Upload New Profile Picture:</label>
             <input type="file" name="profile_img"><br>
 

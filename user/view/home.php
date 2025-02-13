@@ -120,7 +120,7 @@ $result = $conn->query($sql);
     <header>
         <div>Explore Our Luxurious Rooms</div>
         <div class="header-right">
-            <a href="http:localhost/resort-ms/user/customer/edit.php" class="profile-icon"></a>
+            <a href="../customer/edit.php" class="profile-icon"></a>
             <a href="../../logout.php" class="logout-btn">Logout</a>
         </div>
     </header>
