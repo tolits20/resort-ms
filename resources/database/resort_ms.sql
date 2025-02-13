@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 13, 2025 at 12:37 PM
+-- Generation Time: Feb 13, 2025 at 04:29 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,17 +34,19 @@ CREATE TABLE IF NOT EXISTS `account` (
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `role` enum('user','admin') NOT NULL,
+  `status` enum('activate','deactivate') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `created_at`, `updated_at`) VALUES
-(13, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-02-13 11:36:07', '2025-02-13 11:36:07');
+INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `created_at`, `updated_at`) VALUES
+(13, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-13 11:36:07', '2025-02-13 11:36:07'),
+(14, 'tolits@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'user', 'activate', '2025-02-13 13:56:31', '2025-02-13 13:56:31');
 
 -- --------------------------------------------------------
 
@@ -114,14 +116,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `contact` (`contact`),
   KEY `user_account_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`user_id`, `account_id`, `name`, `age`, `gender`, `contact`, `profile_img`, `created_at`, `updated_at`) VALUES
-(8, 13, 'Levi Asher   Penaverde', 20, 'male', '987867546', '67add9278008a0.53893895.jpg', '2025-02-13 11:36:07', '2025-02-13 11:36:07');
+(8, 13, 'Levi Asher   Penaverde', 20, 'male', '987867546', '67add9278008a0.53893895.jpg', '2025-02-13 11:36:07', '2025-02-13 11:36:07'),
+(9, 14, 'Tolits Jacalan', 21, 'female', '9876544466', '67adfa0fead136.77894954.jpg', '2025-02-13 13:56:31', '2025-02-13 13:56:31');
 
 --
 -- Constraints for dumped tables
