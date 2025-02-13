@@ -29,7 +29,7 @@ if(isset($_POST['login'])){
             $_SESSION['ID']=$ID;
             $_SESSION['role']=$role;
             $_SESSION['status']=$status;
-            header('location:user/index.php');
+            header('location:user/view/home.php');
            }else{
            throw new Exception("Account is deactivated!");
            }

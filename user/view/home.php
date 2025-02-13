@@ -32,6 +32,31 @@ $result = $conn->query($sql);
             justify-content: space-between;
             align-items: center;
         }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: url('profile.jpg') center/cover;
+            border: 2px solid white;
+            display: block;
+        }
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .logout-btn:hover {
+            background: #c0392b;
+        }
         .room-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -89,56 +114,14 @@ $result = $conn->query($sql);
         .book-btn:hover {
             background: #1e8449;
         }
-
-        /* Profile Dropdown */
-        .profile-container {
-            position: relative;
-            display: inline-block;
-        }
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: url('profile.jpg') center/cover;
-            border: 2px solid white;
-            display: block;
-            cursor: pointer;
-        }
-        .dropdown {
-            position: absolute;
-            top: 45px;
-            right: 0;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            width: 130px;
-            display: none;
-            text-align: left;
-        }
-        .profile-container:hover .dropdown {
-            display: block;
-        }
-        .dropdown a {
-            display: block;
-            padding: 10px;
-            color: #333;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .dropdown a:hover {
-            background: #f4f4f4;
-        }
     </style>
 </head>
 <body>
     <header>
         <div>Explore Our Luxurious Rooms</div>
-        <div class="profile-container">
-            <div class="profile-icon"></div>
-            <div class="dropdown">
-                <a href="profile.php">View Profile</a>
-                <a href="logout.php">Logout</a>
-            </div>
+        <div class="header-right">
+            <a href="http:localhost/resort-ms/user/customer/edit.php" class="profile-icon"></a>
+            <a href="../../logout.php" class="logout-btn">Logout</a>
         </div>
     </header>
 
