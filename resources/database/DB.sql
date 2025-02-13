@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2025 at 01:08 PM
+-- Generation Time: Feb 13, 2025 at 12:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -26,39 +26,43 @@ USE `resort_ms`;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `account`
+--
+
+CREATE TABLE IF NOT EXISTS `account` (
+  `account_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `role` enum('user','admin') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `account`
+--
+
+INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `created_at`, `updated_at`) VALUES
+(13, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-02-13 11:36:07', '2025-02-13 11:36:07');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `booking`
 --
 
 CREATE TABLE IF NOT EXISTS `booking` (
   `book_id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
   `check_in` date NOT NULL,
   `check_out` date NOT NULL,
   `status` enum('pending','confirmed','check in','check out','cancelled') NOT NULL,
   `price` decimal(10,2) NOT NULL,
   PRIMARY KEY (`book_id`),
-  KEY `book_customer_fk` (`customer_id`),
-  KEY `book_room_fk` (`room_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customer`
---
-
-CREATE TABLE IF NOT EXISTS `customer` (
-  `customer_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `age` int(11) NOT NULL,
-  `gender` enum('male','female') NOT NULL,
-  `contact` varchar(15) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`customer_id`),
-  UNIQUE KEY `name` (`name`,`contact`,`email`)
+  KEY `book_room_fk` (`room_id`),
+  KEY `book_account_fk` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -90,6 +94,35 @@ CREATE TABLE IF NOT EXISTS `room` (
   PRIMARY KEY (`room_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `age` int(11) NOT NULL,
+  `gender` enum('male','female') NOT NULL,
+  `contact` varchar(15) NOT NULL,
+  `profile_img` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `contact` (`contact`),
+  KEY `user_account_fk` (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`user_id`, `account_id`, `name`, `age`, `gender`, `contact`, `profile_img`, `created_at`, `updated_at`) VALUES
+(8, 13, 'Levi Asher   Penaverde', 20, 'male', '987867546', '67add9278008a0.53893895.jpg', '2025-02-13 11:36:07', '2025-02-13 11:36:07');
+
 --
 -- Constraints for dumped tables
 --
@@ -98,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `room` (
 -- Constraints for table `booking`
 --
 ALTER TABLE `booking`
-  ADD CONSTRAINT `book_customer_fk` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `book_account_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `book_room_fk` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -106,6 +139,12 @@ ALTER TABLE `booking`
 --
 ALTER TABLE `payments`
   ADD CONSTRAINT `payment_book_fk` FOREIGN KEY (`book_id`) REFERENCES `booking` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_account_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

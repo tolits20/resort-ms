@@ -17,6 +17,7 @@ if(isset($_POST['login'])){
             $_SESSION['user'];
             $_SESSION['ID'];
             $_SESSION['role'];
+            header('location:admin/index.php');
         }
 
     }catch(Exception $e){
