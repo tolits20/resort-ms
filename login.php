@@ -31,9 +31,7 @@ if(isset($_POST['login'])){
             $_SESSION['status']=$status;
             header('location:user/index.php');
            }else{
-            echo $_SESSION['ID']=$ID;
-            echo $_SESSION['role']=$role;
-            echo $_SESSION['status']=$status;
+           throw new Exception("Account is deactivated!");
            }
         }else{
             throw new Exception("account doesnt exist!");

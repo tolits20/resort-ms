@@ -2,8 +2,13 @@
 include ('includes/template.html');
 
 
+
 ?>
 
 <div class="content">
-    this levi, trying to test its template.
+    <table>
+        <tr>
+            th*
+        </tr>
+    </table>
 </div>
