@@ -1,6 +1,8 @@
 <?php 
 
 include('admin/includes/bootstrap.html');
+include('resources/database/config.php');
+
 
 if(isset($_POST['login'])){
     $username=trim($_POST['username']);
@@ -8,19 +10,36 @@ if(isset($_POST['login'])){
 
     try{
 
-        $sql="SELECT username, password FROM users WHERE username=? && password=? LIMIT 1";
+        $sql="SELECT account_id, role, status FROM account WHERE username=? && password=? LIMIT 1";
         $stmt=mysqli_prepare($conn,$sql);
         mysqli_stmt_bind_param($stmt,'ss',$username,$password);
-        mysqli_stmt_execute($smt);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        mysqli_stmt_bind_result($stmt,$ID,$role,$status);
+        
+        if(mysqli_stmt_num_rows($stmt)>0){
+            mysqli_stmt_fetch($stmt);
 
-        if(mysqli_stmt_affected_rows($stmt)===0){
-            $_SESSION['user'];
-            $_SESSION['ID'];
-            $_SESSION['role'];
+           if($role==='admin' && $status==='activate'){
+           echo $_SESSION['ID']=$ID;
+           echo $_SESSION['role']=$role;
+           echo $_SESSION['status']=$status;
             header('location:admin/index.php');
+           }elseif($role=='user' && $status=='activate'){
+            $_SESSION['ID']=$ID;
+            $_SESSION['role']=$role;
+            $_SESSION['status']=$status;
+            header('location:user/index.php');
+           }else{
+            echo $_SESSION['ID']=$ID;
+            echo $_SESSION['role']=$role;
+            echo $_SESSION['status']=$status;
+           }
+        }else{
+            throw new Exception("account doesnt exist!");
         }
 
-    }catch(Exception $e){
+    }catch(Exception $e){   
         mysqli_rollback($conn);
         echo $e->getMessage();
         // header('location:'.$_SERVER['PHP_SELF']);
@@ -65,7 +84,7 @@ form{
 </style>
 <body>
     <div class="container"> 
-        <form action="authentication.php" method="post">
+        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
             <div class="username">
                 <label for="" class="form-label">Username:</label>
                 <input type="text" name="username" class="form-control" placeholder="username" required>
