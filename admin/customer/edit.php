@@ -18,7 +18,7 @@ $_SESSION['update_id']=$id;
         width: 100%;
     }
    .content form .con1{
-    
+
         padding: 50px;
         display: flex;
         justify-content: center;
@@ -51,16 +51,16 @@ $_SESSION['update_id']=$id;
                 <label for="">Profile Photo:</label>
                 <img src="../../resources/assets/images/<?php echo $row['profile_img']?>" alt="../../resources/assets/images/<?php echo $row['profile_img']?>" >
                 <br>
-                <input type="file" name="pfp" class="form-control">
+                <input type="file" name="file" class="form-control">
             </div>
             <div class="div1">
                 <div class="firstname">
-                    <label for="" class="form-label">Firstname:</label>
+                    <label for="" class="form-label">First name:</label>
                     <input type="text" name="fname" class="form-control" value="<?php echo $row['fname'] ?>" required>
                 </div>
                 <br>
                 <div class="lastname">
-                    <label for="" class="form-label">Lastname:</label>
+                    <label for="" class="form-label">Last name:</label>
                     <input type="text" name="lname" class="form-control" value="<?php echo $row['lname'] ?>" required>
                 </div>
                 <br>
@@ -71,15 +71,24 @@ $_SESSION['update_id']=$id;
                 <br>
                 <div class="contact">
                     <label for="" class="form-label">Contact:</label>
-                    <input type="number" class="form-control" name="contact" value="<?php echo $row['contact'] ?>">
+                    <input type="text" class="form-control" name="contact" value="<?php echo $row['contact'] ?>">
                 </div>
             
             </div>
             <div class="div2">
+                <div class="gender">
+                    <label for="" class="form-label">Gender:</label>
+                <select name="gender" class="form-select">
+                        <option value="male" <?php echo ($row['gender']=='male' ? 'selected' : '') ?>>Male</option>
+                        <option value="female" <?php echo ($row['gender']=='female' ? 'selected' : '') ?>>Female</option>
+                    </select>
+                    <input type="text" name="current_img" value="<?php echo $row['profile_img'] ?>">
+                </div>  
+                <br>
                 <div class="username">
                     <label for="" class="form-label">Username:</label>
                     <input type="text" class="form-control" name="username" value="<?php echo $row['username'] ?>" required>
-                </div>
+            </div>
                 <br>
                 <div class="role">
                     <label for="" class="form-label">Role:</label>
@@ -89,23 +98,15 @@ $_SESSION['update_id']=$id;
                     </select>
                 </div>
                 <br>
-            <div class="status">
-                <label for="" class="form-label">Status:</label>
-            <select name="status" class="form-select">
-                    <option value="activate" <?php echo ($row['status']=='activate' ? 'selected' : '') ?>>Activate</option>
-                    <option value="deactivate" <?php echo ($row['status']=='deactivate' ? 'selected' : '') ?>>Deactivate</option>
-                </select>
-            </div>  
-            <br>
-            <br>
-            <div class="password" style="width:100%;" >
-                <a href="change_password.php" class="btn btn-primary" style="text-decoration: none; color:#ffff; width:100%;">Change Password</a>
+                <br>
+                <div class="password" style="width:100%;" >
+                    <a href="change_password.php" class="btn btn-primary" style="text-decoration: none; color:#ffff; width:100%;">Change Password</a>
+                </div>
+                <br>
             </div>
-            <br>
-        </div>
-        </div>
-        <div class="con2">
-            <input type="submit" name="update" class="btn btn-primary" value="Update">
-        </div>
+            </div>
+            <div class="con2">
+                <input type="submit" name="update" class="btn btn-primary" value="Update">
+            </div>
     </form>
 </div>
