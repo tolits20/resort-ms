@@ -11,7 +11,7 @@
      body {
     display: grid;
     grid-template-columns: 220px 100px 100px auto; 
-    grid-template-rows: 60px 100px auto 100px; 
+    grid-template-rows: 80px 100px auto 100px; 
     height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
@@ -63,21 +63,21 @@
 
 .header {
     grid-column: 2 / 5; 
+    grid-row: 1/2 ;
     background: #222;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 20px ;
     color: white;
+    
 }
 
 .content {
     grid-column: 2 / 5;
     grid-row: 2 / 5;
     padding: 20px;
-    margin-top: 20px;
-    text-align: center;
-    background: #1A1A1A;
+    background: #fff;
 }
 
 
@@ -89,7 +89,7 @@
         <ul>
             <li><a href="http:/resort-ms/admin/index.php"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="http:/resort-ms/admin/booking/index.php"><i class="fas fa-calendar-check"></i> Bookings</a></li>
-            <li><a href="http:/resort-ms/admin/rooms/index.php"><i class="fas fa-users"></i> Customers</a></li>
+            <li><a href="http:/resort-ms/admin/customer/index.php"><i class="fas fa-users"></i> Customers</a></li>
             <li><a href="http:/resort-ms/admin/rooms/index.php"><i class="fas fa-bed"></i> Rooms</a></li>
             <li><a href="http:/resort-ms/admin/payment/index.php"><i class="fas fa-credit-card"></i> Payments</a></li>
             <li><a href="http:/resort-ms/admin/reports/customer.php"><i class="fas fa-chart-bar"></i> Reports</a></li>
