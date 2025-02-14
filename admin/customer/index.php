@@ -2,8 +2,8 @@
 include ('../includes/template.html');
 include('../../resources/database/config.php');
 
-
-$sql1="SELECT * FROM account";
+$id=$_SESSION['ID'];
+$sql1="SELECT * FROM account WHERE account_id<>{$id}";
 $result=mysqli_query($conn,$sql1);
 
 if(mysqli_affected_rows($conn)>0){

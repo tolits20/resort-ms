@@ -3,7 +3,8 @@ include("../../resources/database/config.php");
 
 if(isset($_POST['create'])){
 
-echo $name=trim(ucwords($_POST['fname'])." ".ucwords($_POST['lname']));
+echo $fname=trim(ucwords($_POST['fname']));
+echo $lname=trim(ucwords($_POST['lname']));
 echo $age=$_POST['age'];
 echo $gender=$_POST['gender'];
 echo $contact=$_POST['contact'];
@@ -29,11 +30,11 @@ try{
             $extension=strtolower(end($file_ext));
             if(in_array($extension,$allowed)){
                 $newfile=uniqid('',true).".".$extension;
-                $location="../../resources/assets/images".$newfile;
+                $location="../../resources/assets/images/".$newfile;
 
-                $sql2="INSERT INTO user(account_id,name,age,gender,contact,profile_img,created_at)VALUES(?,?,?,?,?,?,now())";
+                $sql2="INSERT INTO user(account_id,fname,lname,age,gender,contact,profile_img,created_at)VALUES(?,?,?,?,?,?,?,now())";
                 $stmt2=mysqli_prepare($conn,$sql2);
-                mysqli_stmt_bind_param($stmt2,'isisis',$last_id,$name,$age,$gender,$contact,$newfile);
+                mysqli_stmt_bind_param($stmt2,'issisis',$last_id,$fname,$lname,$age,$gender,$contact,$newfile);
                 mysqli_stmt_execute($stmt2);
                 
                 if(mysqli_stmt_affected_rows($stmt2)>0){
@@ -54,10 +55,10 @@ try{
             }
 
         }else{
-            $sql2="INSERT INTO user(account_id,name,age,gender,contact,profile_img,created_at)VALUES(?,?,?,?,?,?,now())";
-            $stmt2=mysqli_prepare($conn,$sql2);
-            mysqli_stmt_bind_param($stmt2,'isisis',$last_id,$name,$age,$gender,$contact,$newfile);
-            mysqli_stmt_execute($stmt2);
+            $sql2="INSERT INTO user(account_id,fname,lname,age,gender,contact,profile_img,created_at)VALUES(?,?,?,?,?,?,?,now())";
+                $stmt2=mysqli_prepare($conn,$sql2);
+                mysqli_stmt_bind_param($stmt2,'issisis',$last_id,$fname,$lname,$age,$gender,$contact,$newfile);
+                mysqli_stmt_execute($stmt2);
             if(mysqli_stmt_affected_rows($stmt2)>0){
                 mysqli_commit($conn);
                 header("location:../../login.php");
