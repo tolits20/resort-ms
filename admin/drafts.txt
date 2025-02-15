@@ -1,0 +1,9 @@
+ $last_id=mysqli_insert_id($conn);
+        $sql2="INSERT INTO room_gallery (room_img,created_at) VALUES (?,now()) ";
+        $stmt2=mysqli_prepare($conn,$sql2);
+
+         print "<tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>";

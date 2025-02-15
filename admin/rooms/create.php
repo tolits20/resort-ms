@@ -54,7 +54,7 @@ include('../../resources/database/config.php');
                 <select name="status" class="form-select" required>
                     <option value="available">Available</option>
                     <option value="booked">Booked</option>
-                    <option value="under_maintenance">Under Maintenance</option>
+                    <option value="under maintenance">Under Maintenance</option>
                 </select>
             </div>
 

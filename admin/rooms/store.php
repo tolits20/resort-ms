@@ -2,6 +2,7 @@
 include('../../resources/database/config.php');
 print "<pre>";
 var_dump($_FILES);
+var_dump($_POST);
 print "</pre>";
 
 $room_num=trim($_POST['room_number']);
