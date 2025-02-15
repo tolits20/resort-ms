@@ -28,6 +28,8 @@ $_SESSION['update_id']=$id;
         height: 250px;
         width: 300px;
         border-radius: 10px;
+        box-shadow:  0 0 30px rgba(0, 0, 0, 0.5);
+
     }
 
     .content form .div3{
@@ -82,6 +84,7 @@ $_SESSION['update_id']=$id;
         <div class="con1">
             <div class="div3">
                 <label for="">Profile Photo:</label>
+                <br>
                 <img src="../../resources/assets/images/<?php echo $row['profile_img']?>" alt="../../resources/assets/images/<?php echo $row['profile_img']?>" >
                 <br>
                 <input type="file" name="file" class="form-control">
