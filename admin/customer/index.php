@@ -19,7 +19,6 @@ if (mysqli_num_rows($result) > 0) {
         text-align: center;
     }
 
-    /* Toggle Switch Styles */
     .switch {
         position: relative;
         display: inline-block;
@@ -66,8 +65,8 @@ if (mysqli_num_rows($result) > 0) {
     }
 
     .btn {
-        width: 40px; /* Fixed width */
-        height: 40px; /* Fixed height */
+        width: 40px;
+        height: 40px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -76,7 +75,7 @@ if (mysqli_num_rows($result) > 0) {
     }
 
     .btn i {
-        font-size: 16px; /* Icon size */
+        font-size: 16px;
     }
 
     .popup-overlay {
@@ -108,7 +107,7 @@ if (mysqli_num_rows($result) > 0) {
         background-color: red;
         color: #fff;
     }
-    .popup-content input[name='no']:hover{
+    .popup-content button[name='no']:hover{
         border:solid 1px;
         background-color: green;
         color: #fff;
@@ -166,7 +165,7 @@ if (mysqli_num_rows($result) > 0) {
                     <br>
                     <input type='submit' value='YES' class='form-control' name='yes'>
                     <hr> 
-                    <button type='button' class='form-control' onclick='closePopup({$row['account_id']})'>NO</button>
+                    <button type='submit' name='no' class='form-control' onclick='closePopup({$row['account_id']})'>NO</button>
                     <br>
                 </form>
             </div>
