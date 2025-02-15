@@ -124,4 +124,53 @@ if(isset($_POST['changepass'])){
 }
 
 }
+
+if(isset($_POST['status'])){
+    echo $ID=$_POST['account_id'];
+    echo $stat=trim($_POST['status']);
+    var_dump($_POST);
+   try{
+    mysqli_begin_transaction($conn);
+   echo $sql="UPDATE account SET status=? WHERE account_id=?";
+    $stmt=mysqli_prepare($conn,$sql);
+    mysqli_stmt_bind_param($stmt,'si',$stat,$ID);
+    mysqli_stmt_execute($stmt);
+
+    if(mysqli_stmt_affected_rows($stmt)>0){
+        mysqli_commit($conn);
+        header("location:index.php");
+        exit;
+    }else{
+        throw new Exception("failed to update the status of this account");
+    }
+   }catch(Exception $e){
+    mysqli_rollback($conn);
+    print $e->getMessage();
+   
+   }
+
+}else{
+    echo $ID=$_POST['account_id'];
+    echo $stat=trim($_POST['stat1']);
+    var_dump($_POST);
+   try{
+    mysqli_begin_transaction($conn);
+   echo $sql="UPDATE account SET status=? WHERE account_id=?";
+    $stmt=mysqli_prepare($conn,$sql);
+    mysqli_stmt_bind_param($stmt,'si',$stat,$ID);
+    mysqli_stmt_execute($stmt);
+
+    if(mysqli_stmt_affected_rows($stmt)>0){
+        mysqli_commit($conn);
+        header("location:index.php");
+        exit;
+    }else{
+        throw new Exception("failed to update the status of this account");
+    }
+   }catch(Exception $e){
+    mysqli_rollback($conn);
+    print $e->getMessage();
+   
+   }
+}
 ?>
