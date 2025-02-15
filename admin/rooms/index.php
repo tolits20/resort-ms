@@ -21,7 +21,7 @@ $result=mysqli_query($conn,$sql);
         <td>{$row['room_code']}</td>
         <td>{$row['status']}</td>
         <td><a href='edit.php?id={$row['room_id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
-        <a href='delete.php?id={$row['room_id']}' class='btn btn-danger'><i class='fas fa-trash'></i></a></td>
+        <a href='delete.php?id={$row['room_id']}&index_click=true' class='btn btn-danger'><i class='fas fa-trash'></i></a></td>
         
         </tr>";
        }
