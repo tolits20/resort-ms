@@ -187,8 +187,7 @@ $result1=mysqli_query($conn,$sql1)
 
 <script>
     function deleteImage(imageName) {
-        if (confirm("Are you sure you want to delete this image?")) {
-            window.location.href = "delete_image.php?image=" + imageName + "&room_id=<?php echo $room['room_id']; ?>";
-        }
+            window.location.href = "delete.php?image=" + imageName + "&room_id=<?php echo $room['room_id']; ?>&click=true";
+        
     }
 </script>
