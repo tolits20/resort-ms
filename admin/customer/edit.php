@@ -43,6 +43,39 @@ $_SESSION['update_id']=$id;
         outline: none;
         transition: all 0.3s ease-in-out;
     }
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 20px;
+        width: 400px;
+        text-align: start;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .popup-content input{
+        border:solid 1px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+        color: red;
+    }
 </style>
 <div class="content">
     <form action="update.php" method="post" enctype="multipart/form-data" class="form-control">
@@ -82,7 +115,7 @@ $_SESSION['update_id']=$id;
                         <option value="male" <?php echo ($row['gender']=='male' ? 'selected' : '') ?>>Male</option>
                         <option value="female" <?php echo ($row['gender']=='female' ? 'selected' : '') ?>>Female</option>
                     </select>
-                    <input type="text" name="current_img" value="<?php echo $row['profile_img'] ?>">
+                    <input type="hidden" name="current_img" value="<?php echo $row['profile_img'] ?>">
                 </div>  
                 <br>
                 <div class="username">
@@ -99,14 +132,38 @@ $_SESSION['update_id']=$id;
                 </div>
                 <br>
                 <br>
-                <div class="password" style="width:100%;" >
-                    <a href="change_password.php" class="btn btn-primary" style="text-decoration: none; color:#ffff; width:100%;">Change Password</a>
-                </div>
+            <div class="password" style="width:100%;" >
+                <button class="btn btn-primary" type="button" onclick="openPopup()">Change Password</button>
+            </div>
                 <br>
             </div>
-            </div>
-            <div class="con2">
-                <input type="submit" name="update" class="btn btn-primary" value="Update">
-            </div>
+        </div>
+        <div class="con2">
+            <input type="submit" name="update" class="btn btn-primary" value="Update">
+        </div>
+
+    <!-- POPUP -->
+    <div class="popup-overlay" id="popup">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h2>Change Password</h2>
+       <label for="" class="form-label">Enter a new password:</label>
+        <input type="password" class="form-control" name="newpass">
+        <br>
+        <label for="" class="form-label">Confirm the password:</label>
+        <input type="password" class="form-control" name="cpass">
+        <br>
+        <button class="btn btn-primary" name="changepass" onclick="closePopup()">Save</button>
+    </div>
+</div>
+<script>
+    function openPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+</script>
     </form>
 </div>
