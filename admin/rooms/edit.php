@@ -176,12 +176,12 @@ $result1=mysqli_query($conn,$sql1)
                         <img src="../../resources/assets/room_images/<?php echo $img['room_img']; ?>" alt="Room Image">
                         <button type="button" class="delete-icon" onclick="deleteImage('<?php echo $img['room_img']; ?>')">&times;</button>
                     </div>
-                <?php } ?>
+                <?php } ?> 
             </div>
             <input type="file" name="images[]" multiple class="form-control mt-2">
         </div>
         <br>
-        <button type="submit" class="btn btn-success">Save Changes</button>
+        <button type="submit" name="update" class="btn btn-success">Save Changes</button>
     </form>
 </div>
 
