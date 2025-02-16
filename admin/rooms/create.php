@@ -33,7 +33,7 @@ include('../../resources/database/config.php');
 
 <div class="container mt-5">
     <div class="card shadow p-4">
-        <h3 class="text-center mb-4">🛏️ Add Room</h3>
+        <h3 class="text-center mb-4">Add Room</h3>
         
         <form action="store.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">

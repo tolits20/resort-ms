@@ -2,14 +2,6 @@
 include ('../includes/template.html');
 include('../../resources/database/config.php');
 
-$id = $_SESSION['ID'];
-$sql1 = "SELECT * FROM account WHERE account_id <> ?";
-$stmt = mysqli_prepare($conn, $sql1);
-mysqli_stmt_bind_param($stmt, 'i', $id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-if (mysqli_num_rows($result) > 0) {
 ?>
 <style>
 
@@ -122,10 +114,15 @@ if (mysqli_num_rows($result) > 0) {
         cursor: pointer;
         color: red;
     }
+
 </style>
 
 <div class="content">
-   <table class='table table-striped'>
+    <?php include('filter.php');
+    var_dump($result);
+      ?>
+    <br>
+    <table class='table table-striped'>
         <tr>
             <th>Username</th>
             <th>Role</th>
@@ -188,4 +185,4 @@ print "<script>
         ?>
    </table>
 </div>
-<?php } ?>
+<?php   ?>

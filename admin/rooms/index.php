@@ -3,13 +3,14 @@
 include ('../includes/template.html');
 include('../../resources/database/config.php');
 
-$sql="SELECT * FROM room";
-$result=mysqli_query($conn,$sql);
-
-
 ?>
+<style>
+  
+</style>
 <div class="content" style="color:black;">
-    <table class="table table-striped">
+    <?php include ('filter.php'); ?>
+    <br>
+    <table class="table table-striped" style="text-align: center;">
         <tr>
         <th>Room Code</th>
         <th>Status</th>

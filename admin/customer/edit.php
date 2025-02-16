@@ -148,6 +148,7 @@ $_SESSION['update_id']=$id;
     <!-- POPUP -->
     <div class="popup-overlay" id="popup">
     <div class="popup-content">
+        <form action="update.php" method="post">
         <span class="close-btn" onclick="closePopup()">&times;</span>
         <h2>Change Password</h2>
        <label for="" class="form-label">Enter a new password:</label>
@@ -157,6 +158,7 @@ $_SESSION['update_id']=$id;
         <input type="password" class="form-control" name="cpass">
         <br>
         <button class="btn btn-primary" name="changepass" onclick="closePopup()">Save</button>
+        </form>
     </div>
 </div>
 <script>

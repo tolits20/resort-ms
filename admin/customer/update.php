@@ -110,8 +110,8 @@ if(isset($_POST['changepass'])){
 
         if(mysqli_stmt_affected_rows($stmt)){
             mysqli_commit($conn);
-            header("location:edit.php?id=$id");
-            exit;
+            header("location:edit.php?id=$ID");
+            exit;   
         }else{
             throw new Exception("failed to update the password");
         }
