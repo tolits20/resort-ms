@@ -39,7 +39,7 @@ if ($result->num_rows > 0) {
     <div class="profile-container">
         <h2>Edit Profile</h2>
         <form action="update.php" method="POST" enctype="multipart/form-data">
-            <img src="../../assets/<?php echo $user['profile_img']; ?>" class="profile-img" alt="Profile Image"><br>
+            <img src="../../resources/assets/images/<?php echo $user['profile_img']; ?>" class="profile-img" alt="Profile Image"><br>
             <label>Upload New Profile Picture:</label>
             <input type="file" name="profile_img"><br>
 

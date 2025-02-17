@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->query($sql);
     }
 
-    header("Location: profile.php");
+    header("Location: edit.php");
     exit;
 }
 

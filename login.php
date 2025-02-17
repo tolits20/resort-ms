@@ -1,6 +1,6 @@
 <?php 
 include('resources/database/config.php');
-
+// include('admin/includes/template    ')
 
 if(isset($_POST['login'])){
     $username=trim($_POST['username']);
