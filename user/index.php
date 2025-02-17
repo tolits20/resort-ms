@@ -127,7 +127,7 @@ $result = $conn->query($sql);
     <main class="room-container">
         <?php while ($row = $result->fetch_assoc()) { ?>
             <div class="room-card">
-                <img src="uploads/<?php echo $row['image']; ?>" alt="Room Image">
+                <img src="../resources/assets/images/<?php echo $row['image']; ?>" alt="Room Image">
                 <div class="content">
                     <h2><?php echo $row['room_name']; ?></h2>
                     <p><?php echo $row['description']; ?></p>
