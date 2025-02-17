@@ -119,7 +119,6 @@ include('../../resources/database/config.php');
 
 <div class="content">
     <?php include('filter.php');
-    var_dump($result);
       ?>
     <br>
     <table class='table table-striped'>

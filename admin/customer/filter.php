@@ -1,9 +1,9 @@
 <?php 
 $id = $_SESSION['ID'];
 $result;
-if(isset($_GET['search']) && isset($_GET['searchbar'])){
+if(isset($_GET['search']) && !empty($_GET['searchbar'])){
 echo $find=isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
-$sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ?";
+$sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ? ";
 $stmt = mysqli_prepare($conn, $sql1);
 $search="%$find%";
 mysqli_stmt_bind_param($stmt, 'is', $id,$search);
@@ -13,6 +13,17 @@ $result = mysqli_stmt_get_result($stmt);
 $sql1 = "SELECT * FROM account WHERE account_id <> ?";
 $stmt = mysqli_prepare($conn, $sql1);
 mysqli_stmt_bind_param($stmt, 'i', $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+}
+
+if(isset($_GET['sort'])){
+echo $sort=$_GET['sort'];
+echo $find=$_GET['searchbar'];
+ echo $sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ? ORDER BY username $sort";
+$stmt = mysqli_prepare($conn, $sql1);
+$search="%$find%";
+mysqli_stmt_bind_param($stmt, 'is', $id,$search);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 }
@@ -54,10 +65,14 @@ $result = mysqli_stmt_get_result($stmt);
     }
 </style>
 <div class="top-bar">
-    <button class="back-btn" onclick="history.back()">← Back</button>
-   <form action="<?php $_SERVER['PHP_SELF']?>" method="get">
-   <input type="text" class="search-bar" name="searchbar"  placeholder="Search...">
+    <button class="back-btn" onclick="history.back()">← </button>
+   <form action="<?php $_SERVER['PHP_SELF']?>" method="get" style="width: 100%; margin:0 20px; display:flex;">
+   <input type="text" class="search-bar" name="searchbar"  placeholder="Search..." value="<?php echo (isset($_GET['searchbar']) ? $_GET['searchbar'] : '') ?>">
    <button class="btn btn-primary" name="search" value="search"><i class="fas fa-magnifying-glass"></i></button>
+   <select name="sort" id="" class="form-select" onchange="this.form.submit()">
+    <option value="ASC" <?php echo (isset($_GET['sort']) && $_GET['sort']==='ASC' ? 'selected' : '' ) ?> >Ascending</option>
+    <option value="DESC" <?php echo (isset($_GET['sort']) && $_GET['sort']==='DESC' ? 'selected' : '' ) ?>>Descending</option>
+   </select>
    </form>
     <a href="create.php" class="btn btn-primary" style="text-decoration: none; color:white;"><i class="fas fa-add "></i></a>
 </div>
