@@ -66,9 +66,11 @@ $result = mysqli_stmt_get_result($stmt);
 </style>
 <div class="top-bar">
     <button class="back-btn" onclick="history.back()">← </button>
-   <form action="<?php $_SERVER['PHP_SELF']?>" method="get" style="width: 100%; margin:0 20px; display:flex;">
-   <input type="text" class="search-bar" name="searchbar"  placeholder="Search..." value="<?php echo (isset($_GET['searchbar']) ? $_GET['searchbar'] : '') ?>">
+   <form action="<?php $_SERVER['PHP_SELF']?>" method="get" style="width: 50%; margin:0 20px; display:flex; flex-direction:row; gap:100px;">
+  <div class="searchdiv" style="display: flex;">
+     <input type="text" class="search-bar" name="searchbar"  placeholder="Search..." value="<?php echo (isset($_GET['searchbar']) ? $_GET['searchbar'] : '') ?>">
    <button class="btn btn-primary" name="search" value="search"><i class="fas fa-magnifying-glass"></i></button>
+  </div>
    <select name="sort" id="" class="form-select" onchange="this.form.submit()">
     <option value="ASC" <?php echo (isset($_GET['sort']) && $_GET['sort']==='ASC' ? 'selected' : '' ) ?> >Ascending</option>
     <option value="DESC" <?php echo (isset($_GET['sort']) && $_GET['sort']==='DESC' ? 'selected' : '' ) ?>>Descending</option>
