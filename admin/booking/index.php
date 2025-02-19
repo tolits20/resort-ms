@@ -2,6 +2,10 @@
 include ('../includes/template.html');
 include('../../resources/database/config.php');
 
+$sql="SELECT * FROM customer_booking;";
+$result=mysqli_query($conn,$sql);
+
+
 ?>
 <style>
     .booking-table {
@@ -99,7 +103,30 @@ include('../../resources/database/config.php');
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <?php 
+                if(mysqli_num_rows($result)>0){
+                    while($row=mysqli_fetch_assoc($result)){
+                        print "<tr>
+                    <td>{$row['fname']} {$row['lname']}</td>
+                    <td>{$row['room_code']}</td>
+                    <td>{$row['check_in']}</td>
+                    <td>{$row['check_out']}</td>
+                    <td><span class='badge bg-success'>{$row['status']}</span></td>
+                    <td>
+                        <a href='edit.php?id={$row['id']}' class='btn btn-primary btn-sm'><i class='fas fa-edit'></i></a>
+                        <a href='delete.php?id={$row['id']}' class='btn btn-danger btn-sm'><i class='fas fa-trash'></i></a>
+
+                    </td>
+                </tr>";
+                    }
+                }
+                ?>
+            
+            
+            
+            
+            
+            <!-- <tr>
                     <td>John Doe</td>
                     <td>Deluxe</td>
                     <td>2025-03-10</td>
@@ -108,18 +135,7 @@ include('../../resources/database/config.php');
                     <td>
                         <button class="btn btn-primary btn-sm">Edit</button>
                         <button class="btn btn-danger btn-sm">Cancel</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Jane Smith</td>
-                    <td>Standard</td>
-                    <td>2025-03-12</td>
-                    <td>2025-03-18</td>
-                    <td><span class="badge bg-warning text-dark">Pending</span></td>
-                    <td>
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Cancel</button>
-                    </td>
+                    </td> -->
                 </tr>
             </tbody>
         </table>

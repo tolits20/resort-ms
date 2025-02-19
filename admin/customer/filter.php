@@ -18,9 +18,9 @@ $result = mysqli_stmt_get_result($stmt);
 }
 
 if(isset($_GET['sort'])){
-echo $sort=$_GET['sort'];
-echo $find=$_GET['searchbar'];
- echo $sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ? ORDER BY username $sort";
+ $sort=$_GET['sort'];
+ $find=$_GET['searchbar'];
+  $sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ? ORDER BY username $sort";
 $stmt = mysqli_prepare($conn, $sql1);
 $search="%$find%";
 mysqli_stmt_bind_param($stmt, 'is', $id,$search);
