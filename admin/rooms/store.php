@@ -8,14 +8,15 @@ print "</pre>";
 $room_num=trim($_POST['room_number']);
 $type=trim($_POST['type']);
 $status=trim($_POST['status']);
+$price=$_POST['price'];
 $allowed=array('jpg','jpeg','png','webp');
 $c;
 
 try{
     mysqli_begin_transaction($conn);
-    $sql1="INSERT INTO room(room_code,type,status,created_at)VALUES(?,?,?,now())  ";
+    $sql1="INSERT INTO room(room_code,type,status,price,created_at)VALUES(?,?,?,?,now())  ";
     $stmt1=mysqli_prepare($conn,$sql1);
-    mysqli_stmt_bind_param($stmt1,'sss',$room_num,$type,$status);
+    mysqli_stmt_bind_param($stmt1,'sssi',$room_num,$type,$status,$price);
     mysqli_stmt_execute($stmt1);
     $last_id=mysqli_insert_id($conn);
     if(mysqli_stmt_affected_rows($stmt1)>0){

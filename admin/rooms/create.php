@@ -59,6 +59,11 @@ include('../../resources/database/config.php');
             </div>
 
             <div class="mb-3">
+                <label class="form-label fw-bold">Room Price</label>
+                <input type="number" name="price" class="form-control"   required>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label fw-bold">Upload Room Images</label>
                 <input type="file" name="images[]" class="form-control" multiple id="imageUpload" required>
                 <div class="mt-2 preview-container" id="imagePreview"></div>

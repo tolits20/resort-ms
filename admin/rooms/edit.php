@@ -31,11 +31,15 @@ $result1=mysqli_query($conn,$sql1)
 .content .room-details {
     display: flex;
     gap: 20px;
-    justify-content: space-between;
+    justify-content: space space-evenly;
 }
 
-.content .room-details .form-group {
+.content .room-details .form-group .div1, .div2 {
     width: 32%;
+    justify-content: center;
+}
+.div1{
+    margin: 0 50px;
 }
 
 .content .form-label {
@@ -145,7 +149,8 @@ $result1=mysqli_query($conn,$sql1)
         <input type="hidden" name="room_id" value="<?php echo $room['room_id']; ?>">
 
         <div class="room-details">
-            <div class="form-group">
+          <div class="div1">
+          <div class="form-group">
                 <label for="room_number" class="form-label">Room Code</label>
                 <input type="text" class="form-control" name="room_code" value="<?php echo $room['room_code']; ?>" required>
             </div>
@@ -157,7 +162,9 @@ $result1=mysqli_query($conn,$sql1)
                     <option value="premium" <?php if($room['type'] == 'premium') echo 'selected'; ?>>Premium</option>
                 </select>
             </div>
+          </div>
 
+            <div class="div2">
             <div class="form-group">
                 <label for="status" class="form-label">Status</label>
                 <select class="form-select" name="status" required>
@@ -165,6 +172,11 @@ $result1=mysqli_query($conn,$sql1)
                     <option value="booked" <?php if($room['status'] == 'booked') echo 'selected'; ?>>Booked</option>
                     <option value="under maintenance" <?php if($room['status'] == 'under maintenance') echo 'selected'; ?>>Under Maintenance</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="price" class="form-label">Price:</label>
+                <input type="text" class="form-control" name="price" value="<?php echo $room['price']; ?>" required>
+            </div>
             </div>
         </div>
 

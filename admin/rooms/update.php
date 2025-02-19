@@ -6,14 +6,15 @@ if(isset($_POST['update'])){
     echo $type=trim($_POST['type']);
     echo $status=trim($_POST['status']);
     echo  $id=$_POST['room_id'];
+    echo $price=$_POST['price'];
     $allowed=array('jpg','jpeg','png','webp');
     $c;
 
     try{
         mysqli_begin_transaction($conn);
-        $sql1="UPDATE room SET room_code=?, type=?, status=?, updated_at=now() WHERE room_id=?";
+        $sql1="UPDATE room SET room_code=?, type=?, status=?, price=?, updated_at=now() WHERE room_id=?";
         $stmt1=mysqli_prepare($conn,$sql1);
-        mysqli_stmt_bind_param($stmt1,'sssi',$code,$type,$status,$id);
+        mysqli_stmt_bind_param($stmt1,'sssii',$code,$type,$status,$price,$id);
         mysqli_stmt_execute($stmt1);
         if(mysqli_stmt_affected_rows($stmt1)>0){
             if(!empty($_FILES['images']['name'][0])){
