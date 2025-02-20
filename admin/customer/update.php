@@ -108,7 +108,7 @@ if(isset($_POST['changepass'])){
         mysqli_stmt_bind_param($stmt,'si',$pass,$ID);
         mysqli_stmt_execute($stmt);
 
-        if(mysqli_stmt_affected_rows($stmt)){
+        if(mysqli_stmt_affected_rows($stmt)){   
             mysqli_commit($conn);
             header("location:edit.php?id=$ID");
             exit;   
