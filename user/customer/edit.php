@@ -213,6 +213,10 @@ select {
                             <option value="female" <?php echo ($row['gender']=='female' ? 'selected': ''); ?>>Female</option>
                         </select>
                     </div>
+                    <div class="contect">
+                        <label for="contact" class="form-label">Contact</label>
+                        <input type="number" name="contact" value="<?php echo $row['contact'] ?>" class="form-control">
+                    </div>
                     <div class="username">
                         <label for="username" class="form-label">Username</label>
                         <input type="email" class="form-control" name="username" value="<?php echo $row['username'] ?>" placeholder="User@example.com" >

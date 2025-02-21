@@ -6,56 +6,56 @@ if (!isset($_SESSION['ID'])){
     exit;
 }
 
-if (isset($_SESSION['ID'])){
-    if(isset($_POST['update_password'])){
-        mysqli_begin_transaction($conn);
-        try {
-            $old = sha1(trim($_POST['old_password']));
-            $ID = $_SESSION['ID'];
+// if (isset($_SESSION['ID'])){
+//     if(isset($_POST['update_password'])){
+//         mysqli_begin_transaction($conn);
+//         try {
+//             $old = sha1(trim($_POST['old_password']));
+//             $ID = $_SESSION['ID'];
 
-            // Fetch stored password for validation
-            $sql_fetch = "SELECT password FROM account WHERE account_id = ?";
-            $stmt_fetch = mysqli_prepare($conn, $sql_fetch);
-            if (!$stmt_fetch) throw new Exception("Failed to prepare statement for fetching password.");
+//             // Fetch stored password for validation
+//             $sql_fetch = "SELECT password FROM account WHERE account_id = ?";
+//             $stmt_fetch = mysqli_prepare($conn, $sql_fetch);
+//             if (!$stmt_fetch) throw new Exception("Failed to prepare statement for fetching password.");
 
-            mysqli_stmt_bind_param($stmt_fetch, 'i', $ID);
-            mysqli_stmt_execute($stmt_fetch);
-            $result = mysqli_stmt_get_result($stmt_fetch);
-            $row = mysqli_fetch_assoc($result);
+//             mysqli_stmt_bind_param($stmt_fetch, 'i', $ID);
+//             mysqli_stmt_execute($stmt_fetch);
+//             $result = mysqli_stmt_get_result($stmt_fetch);
+//             $row = mysqli_fetch_assoc($result);
 
-            if (!$row) throw new Exception("User not found.");
-            if ($row['password'] !== $old) throw new Exception("Current password didn't match.");
+//             if (!$row) throw new Exception("User not found.");
+//             if ($row['password'] !== $old) throw new Exception("Current password didn't match.");
 
-            $npass = trim($_POST['new_password']);
-            $cpass = trim($_POST['confirm_password']);
+//             $npass = trim($_POST['new_password']);
+//             $cpass = trim($_POST['confirm_password']);
 
-            if (preg_match("/[a-zA-Z0-9#%@_-]/", $cpass) && strlen($cpass) >= 8 && $npass == $cpass) {
-                $final = sha1($cpass);
-                $sql_pass = "UPDATE account SET password = ? WHERE account_id = ?";
-                $stmt_pass = mysqli_prepare($conn, $sql_pass);
-                if (!$stmt_pass) throw new Exception("Failed to prepare statement for updating password.");
+//             if (preg_match("/[a-zA-Z0-9#%@_-]/", $cpass) && strlen($cpass) >= 8 && $npass == $cpass) {
+//                 $final = sha1($cpass);
+//                 $sql_pass = "UPDATE account SET password = ? WHERE account_id = ?";
+//                 $stmt_pass = mysqli_prepare($conn, $sql_pass);
+//                 if (!$stmt_pass) throw new Exception("Failed to prepare statement for updating password.");
 
-                mysqli_stmt_bind_param($stmt_pass, 'si', $final, $ID);
-                if (!mysqli_stmt_execute($stmt_pass)) throw new Exception("Failed to update password.");
+//                 mysqli_stmt_bind_param($stmt_pass, 'si', $final, $ID);
+//                 if (!mysqli_stmt_execute($stmt_pass)) throw new Exception("Failed to update password.");
 
-                mysqli_commit($conn);
-                header("location: edit.php");
-                exit;
-            } else {
-                throw new Exception("New password didn't match.");
-            }
-        } catch (Exception $e) {
-            mysqli_rollback($conn);
-            echo "Error: " . $e->getMessage();
-        }
-    }
-}
+//                 mysqli_commit($conn);
+//                 header("location: edit.php");
+//                 exit;
+//             } else {
+//                 throw new Exception("New password didn't match.");
+//             }
+//         } catch (Exception $e) {
+//             mysqli_rollback($conn);
+//             echo "Error: " . $e->getMessage();
+//         }
+//     }
+// }
 
 if (isset($_POST['update'])){
     try {
         echo $_FILES['file']['error'];
         echo $UID = $_SESSION['update_id'];
-        echo $ID = $_POST['ID'];
+         $ID = $_POST['ID'];
         echo $fname = trim(ucwords($_POST['fname']));
         echo $lname = trim(ucwords($_POST['lname']));
         echo $age = trim($_POST['age']);
@@ -71,10 +71,11 @@ if (isset($_POST['update'])){
         if (
             preg_match("/^[a-zA-Z\s]+$/", $fname) &&
             preg_match("/^[a-zA-Z\s]+$/", $lname) &&
-            ($age >= 12 && $age <= 120) &&
-            strlen($contact) == 11 &&
-            preg_match("/[a-zA-Z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/", $username)
+            ($age >= 12 && $age <= 120) 
+            // strlen($contact) == 11 &&
+            // preg_match("/[a-zA-Z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}/", $username)
         ) {
+            echo 'Valid';
             mysqli_begin_transaction($conn);
 
             $sql2 = "UPDATE user SET fname = ?, lname = ?, age = ?, gender = ?, updated_at = NOW() WHERE account_id = ?";
@@ -95,25 +96,26 @@ if (isset($_POST['update'])){
 
                         $sql3 = "UPDATE account SET username = ? WHERE account_id = ?";
                         $stmt3 = mysqli_prepare($conn, $sql3);
-                        if (!$stmt3) throw new Exception("Failed to prepare statement for updating username.");
-
-                        mysqli_stmt_bind_param($stmt3, 'si', $username, $UID);
-                        if (!mysqli_stmt_execute($stmt3)) throw new Exception("Failed to execute username update.");
-
-                        if (mysqli_stmt_affected_rows($stmt3) > 0) {
-                            if (file_exists($current_path) && !unlink($current_path)) {
+                        
+                        mysqli_stmt_bind_param($stmt3, 'si', $username, $ID);
+                        mysqli_stmt_execute($stmt3);
+                        if (mysqli_stmt_affected_rows($stmt3)>0) {
+                            echo 'valid 2';
+                            if (file_exists($current_path) && unlink($current_path)) {
                                 throw new Exception("Failed to delete existing profile picture.");
                             }
 
                             if (!move_uploaded_file($file_tmp, $location)) {
                                 throw new Exception("Failed to move uploaded file.");
+                            }else{
+                                mysqli_commit($conn);
+                                header("location: edit.php");
                             }
 
-                            mysqli_commit($conn);
-                            header("location: edit.php");
+                           
                             exit;
                         } else {
-                            throw new Exception("Failed to update account.");
+                            throw new Exception("Failed to update account.$conn->error");
                         }
                     } else {
                         throw new Exception("Invalid image format.");
@@ -125,24 +127,11 @@ if (isset($_POST['update'])){
                 throw new Exception("User update failed.");
             }
         } else {
-            $sql3 = "UPDATE account SET username = ? WHERE account_id = ?";
-            $stmt3 = mysqli_prepare($conn, $sql3);
-            if (!$stmt3) throw new Exception("Failed to prepare statement for fallback update.");
-
-            mysqli_stmt_bind_param($stmt3, 'si', $username, $UID);
-            if (!mysqli_stmt_execute($stmt3)) throw new Exception("Failed to execute fallback update.");
-
-            if (mysqli_stmt_affected_rows($stmt3) >= 0) {
-                mysqli_commit($conn);
-                header("location: edit.php");
-                exit;
-            } else {
-                throw new Exception("Fallback update failed.");
-            }
+           throw new Exception("The Value is not valid");
         }
     } catch (Exception $e) {
         mysqli_rollback($conn);
-        echo "Error: " . $e->getMessage();
+        echo "Error: " . $e->getMessage(),$e->getFile().$e->getCode();
     }
 }
 ?>
