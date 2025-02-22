@@ -9,7 +9,6 @@ if (!isset($_SESSION['ID'])) {
 
 if (isset($_POST['update'])) {
     try {
-        // Debug output (you may want to remove these echo statements in production)
         echo $_FILES['file']['error'];
         echo $UID = $_SESSION['update_id'];
         $ID = $_POST['ID'];
@@ -30,18 +29,15 @@ if (isset($_POST['update'])) {
             preg_match("/^[a-zA-Z\s]+$/", $fname) &&
             preg_match("/^[a-zA-Z\s]+$/", $lname) &&
             ($age >= 12 && $age <= 120)
-            // Additional validations can go here...
         ) {
             mysqli_begin_transaction($conn);
             
-            // Update account table
             $sql_account = "UPDATE account SET username=?, updated_at=NOW() WHERE account_id=?";
             $stmt_account = mysqli_prepare($conn, $sql_account);
             mysqli_stmt_bind_param($stmt_account, 'si', $username, $ID);
             mysqli_stmt_execute($stmt_account);
 
             if (mysqli_stmt_affected_rows($stmt_account) > 0) {
-                // Check if a new file was uploaded
                 if ($_FILES['file']['error'] == 0) {
                     $file_ext = explode('.', $filename);
                     $extension = strtolower(end($file_ext));
@@ -50,7 +46,6 @@ if (isset($_POST['update'])) {
                         $newfile = uniqid('.', true) . "." . $extension;
                         $location = "../../resources/assets/images/" . $newfile;
 
-                        // Corrected SQL: added missing comma before profile_img
                         $sql_with_img = "UPDATE user
                                         SET fname=?, lname=?, age=?, gender=?, contact=?, profile_img=?, updated_at=NOW() 
                                         WHERE account_id=?";
@@ -59,7 +54,6 @@ if (isset($_POST['update'])) {
                         mysqli_stmt_execute($stmt_with_img);
 
                         if (mysqli_stmt_affected_rows($stmt_with_img) > 0) {
-                            // If there's an existing image, delete it
                             if (file_exists("../../resources/assets/images/" . $current_image)) {
                                 if (!unlink("../../resources/assets/images/" . $current_image)) {
                                     throw new Exception("Failed to delete the current profile picture");
@@ -80,7 +74,6 @@ if (isset($_POST['update'])) {
                         throw new Exception("Image type is invalid");
                     }
                 } else {
-                    // If no file uploaded (error code 4), update without image changes.
                     $sql_no_img = "UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=?, updated_at=NOW() WHERE account_id=?";
                     $stmt_no_img = mysqli_prepare($conn, $sql_no_img);
                     mysqli_stmt_bind_param($stmt_no_img, 'ssisii', $fname, $lname, $age, $gender, $contact, $ID);
@@ -101,7 +94,7 @@ if (isset($_POST['update'])) {
     } catch (Exception $e) {
         mysqli_rollback($conn);
         echo $e->getMessage();
-        header('location:'); // You may want to redirect to a specific error page
+        header('location:'); 
         exit;
     }
 }
@@ -112,7 +105,6 @@ if (isset($_SESSION['ID'])){
             $old = sha1(trim($_POST['old_password']));
             $ID = $_SESSION['ID'];
 
-            // Fetch stored password for validation
             $sql_fetch = "SELECT password FROM account WHERE account_id = ?";
             $stmt_fetch = mysqli_prepare($conn, $sql_fetch);
             if (!$stmt_fetch) throw new Exception("Failed to prepare statement for fetching password.");

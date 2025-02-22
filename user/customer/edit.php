@@ -179,7 +179,7 @@ select {
 <body> 
    <center><h2>Update Account</h2></center>
    <div class="container">
-        <a href="../shop.php" class="back-button">
+        <a href="../view/home.php" class="back-button">
             <i class="fas fa-arrow-left"></i> 
         </a>
         
