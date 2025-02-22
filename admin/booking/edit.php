@@ -64,7 +64,7 @@ if(mysqli_num_rows($result)>0){
 
             <div class="text-center mt-4">
                 <button type="submit" name="save" class="btn btn-success px-4 me-2"><i class="fas fa-save"></i> Save Changes</button>
-                <button type="button" class="btn btn-secondary px-4"><i class="fas fa-times"></i> Cancel</button>
+                <a type="button" href="index.php" class="btn btn-secondary px-4"><i class="fas fa-times"></i> Cancel</a>
             </div>
         </form>
     </div>
