@@ -51,13 +51,6 @@ if (isset($_GET['id'])) {
     padding-right: 20px;
 }
 
-h2 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-}
 
 .form-group {
     margin-bottom: 15px;
@@ -157,19 +150,19 @@ label {
 <div class="content">
     <!-- Left: Form Section -->
     <div class="form-section">
-        <h2><i class="fas fa-edit"></i> Edit Payment</h2>
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color:black; text-align: center;"><i class="fas fa-edit"></i> Edit Payment</h2>
         
-        <form action="update_payment.php" method="POST">
+        <form action="update.php" method="POST">
             <input type="hidden" name="payment_id" value="<?= $row['ID']; ?>">
 
             <div class="form-group">
                 <label>Customer Name</label>
-                <input type="text" class="form-control" name="customer_name" value="<?= $row['name']; ?>" required>
+                <input type="text" class="form-control" name="customer_name" value="<?= $row['name']; ?>" required disabled>
             </div>
 
             <div class="form-group">
                 <label>Amount</label>
-                <input type="number" class="form-control" name="amount" value="<?= $row['amount']; ?>" required>
+                <input type="number" class="form-control" name="amount" value="<?= $row['amount']; ?>" required disabled>
             </div>
 
             <div class="form-group">
@@ -191,7 +184,7 @@ label {
             </div>
 
             <div class="btn-container">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="submit" name="save" class="btn btn-primary">Save Changes</button>
                 <a href="index.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
