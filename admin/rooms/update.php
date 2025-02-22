@@ -12,7 +12,7 @@ if(isset($_POST['update'])){
 
     try{
         mysqli_begin_transaction($conn);
-        $sql1="UPDATE room SET room_code=?, type=?, status=?, price=?, updated_at=now() WHERE room_id=?";
+        $sql1="UPDATE room SET room_code=?, room_type=?, room_status=?, price=?, updated_at=now() WHERE room_id=?";
         $stmt1=mysqli_prepare($conn,$sql1);
         mysqli_stmt_bind_param($stmt1,'sssii',$code,$type,$status,$price,$id);
         mysqli_stmt_execute($stmt1);

@@ -158,8 +158,8 @@ $result1=mysqli_query($conn,$sql1)
             <div class="form-group">
                 <label for="type" class="form-label">Room Type</label>
                 <select class="form-select" name="type" required>
-                    <option value="standard" <?php if($room['type'] == 'standard') echo 'selected'; ?>>Standard</option>
-                    <option value="premium" <?php if($room['type'] == 'premium') echo 'selected'; ?>>Premium</option>
+                    <option value="standard" <?php if($room['room_type'] == 'standard') echo 'selected'; ?>>Standard</option>
+                    <option value="premium" <?php if($room['room_type'] == 'premium') echo 'selected'; ?>>Premium</option>
                 </select>
             </div>
           </div>
@@ -168,9 +168,9 @@ $result1=mysqli_query($conn,$sql1)
             <div class="form-group">
                 <label for="status" class="form-label">Status</label>
                 <select class="form-select" name="status" required>
-                    <option value="available" <?php if($room['status'] == 'available') echo 'selected'; ?>>Available</option>
-                    <option value="booked" <?php if($room['status'] == 'booked') echo 'selected'; ?>>Booked</option>
-                    <option value="under maintenance" <?php if($room['status'] == 'under maintenance') echo 'selected'; ?>>Under Maintenance</option>
+                    <option value="available" <?php if($room['room_status'] == 'available') echo 'selected'; ?>>Available</option>
+                    <option value="booked" <?php if($room['room_status'] == 'booked') echo 'selected'; ?>>Booked</option>
+                    <option value="under maintenance" <?php if($room['room_status'] == 'under maintenance') echo 'selected'; ?>>Under Maintenance</option>
                 </select>
             </div>
             <div class="form-group">
