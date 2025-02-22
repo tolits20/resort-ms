@@ -86,6 +86,54 @@ $result=mysqli_query($conn,$sql);
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+
+
+
+.popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 20px;
+        width: 400px;
+        text-align: start;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .popup-content input{
+        border:solid 1px;
+    }
+    .popup-content input[name='yes']:hover{
+        border:solid 1px;
+        background-color: red;
+        color: #fff;
+    }
+    .popup-content button[name='no']:hover{
+        border:solid 1px;
+        background-color: green;
+        color: #fff;
+    }
+
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+        color: red;
+    }
 </style>
 <div class="content">   
     <!-- Booking Table -->
@@ -114,7 +162,30 @@ $result=mysqli_query($conn,$sql);
                     <td><span class='badge bg-success'>{$row['status']}</span></td>
                     <td>
                         <a href='edit.php?id={$row['id']}' class='btn btn-primary btn-sm'><i class='fas fa-edit'></i></a>
-                        <a href='delete.php?id={$row['id']}' class='btn btn-danger btn-sm'><i class='fas fa-trash'></i></a>
+                        <button class='btn btn-danger' type='button' onclick='openPopup({$row['id']})'><i class ='fas fa-trash'></i></button>
+                             <div class='popup-overlay' id='popup-{$row['id']}' style='color: black; display: none;'>
+                                <div class='popup-content'>
+                                    <form action='delete.php?id={$row['id']}' method='post'>
+                                        <span class='close-btn' onclick='closePopup({$row['id']})'>&times;</span>
+                                        <h6>Are you sure you want to <strong style='color: red;'>Delete</strong> this Account?</h6>  
+                                        <input type='hidden' name='id' value='{$row['id']}'>
+                                        <br>
+                                        <input type='submit' value='YES' class='form-control' name='yes'>
+                                        <hr> 
+                                        <button type='submit' name='no' class='form-control' onclick='closePopup({$row['id']})'>NO</button>
+                                        <br>
+                                    </form>
+                                </div>
+                            </div>
+                            <script>
+                        function openPopup(accountId) {
+                            document.getElementById('popup-' + accountId).style.display = 'flex';
+                        }
+
+                        function closePopup(accountId) {
+                            document.getElementById('popup-' + accountId).style.display = 'none';
+                        }
+                        </script>
 
                     </td>
                 </tr>";

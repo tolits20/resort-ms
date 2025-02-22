@@ -1,7 +1,7 @@
 <?php 
 include('../../resources/database/config.php');
 
-if(isset($_GET['id'])){
+if(isset($_GET['id']) && isset($_POST['yes'])){
     $id=$_GET['id'];
     try{
         mysqli_begin_transaction($conn);
