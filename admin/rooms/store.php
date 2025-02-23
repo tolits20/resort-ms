@@ -14,7 +14,7 @@ $c;
 
 try{
     mysqli_begin_transaction($conn);
-    $sql1="INSERT INTO room(room_code,type,status,price,created_at)VALUES(?,?,?,?,now())  ";
+    $sql1="INSERT INTO room(room_code,room_type,room_status,price,created_at)VALUES(?,?,?,?,now())  ";
     $stmt1=mysqli_prepare($conn,$sql1);
     mysqli_stmt_bind_param($stmt1,'sssi',$room_num,$type,$status,$price);
     mysqli_stmt_execute($stmt1);
