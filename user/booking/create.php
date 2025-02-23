@@ -6,9 +6,8 @@ if (!isset($_SESSION['ID'])) {
     exit;
 }
 
-// Fetch available rooms from the room table, including price.
 $rooms = [];
-$result = mysqli_query($conn, "SELECT room_id, room_code, type, price FROM room WHERE status = 'available'");
+$result = mysqli_query($conn, "SELECT room_id, room_code, room_type, price FROM room WHERE room_status = 'available'");
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $rooms[] = $row;
@@ -54,37 +53,51 @@ if ($result) {
             <option value="">Choose a room</option>
             <?php foreach ($rooms as $room): ?>
                 <option value="<?php echo $room['room_id']; ?>" data-price="<?php echo $room['price']; ?>">
-                  Room <?php echo $room['room_code']; ?> - <?php echo ucfirst($room['type']); ?>
+                  Room <?php echo $room['room_code']; ?> - <?php echo ucfirst($room['room_type']); ?>
                 </option>
             <?php endforeach; ?>
           </select>
+        </div>
+        <div class="mb-3">
+          <label for="price_display" class="form-label">Price (USD)</label>
+
+          <input type="text" id="price_display" class="form-control" readonly>
+          <input type="hidden" name="price" id="price">
         </div>
         <div class="mb-3">
           <label for="check_in" class="form-label">Check-in Date</label>
           <input type="date" name="check_in" id="check_in" class="form-control" required>
         </div>
         <div class="mb-3">
-          <label for="check_out" class="form-label">Check-out Date</label>
-          <input type="date" name="check_out" id="check_out" class="form-control" required>
-        </div>
-        <!-- Price field auto-fills based on the selected room -->
-        <div class="mb-3">
-          <label for="price_display" class="form-label">Price (USD)</label>
-          <input type="text" id="price_display" class="form-control" readonly>
-          <input type="hidden" name="price" id="price">
+          <label for="check_out" class="form-label">Check-out Date (Automatically set to tomorrow)</label>
+          <input type="date" name="check_out" id="check_out" class="form-control" readonly required>
         </div>
         <div class="d-grid">
           <button type="submit" name="submit" class="btn btn-primary">Book Now</button>
         </div>
       </form>
+      <small class="text-muted">Booking is limited to one day only.</small>
     </div>
   </div>
 
   <script>
-    // When the room selection changes, update the price fields
+    document.getElementById("check_in").addEventListener("change", function() {
+      var checkInDate = new Date(this.value);
+      if (!isNaN(checkInDate)) {
+        checkInDate.setDate(checkInDate.getDate() + 1);
+        var year = checkInDate.getFullYear();
+        var month = ("0" + (checkInDate.getMonth() + 1)).slice(-2);
+        var day = ("0" + checkInDate.getDate()).slice(-2);
+        var tomorrow = year + '-' + month + '-' + day;
+        document.getElementById("check_out").value = tomorrow;
+      } else {
+        document.getElementById("check_out").value = '';
+      }
+    });
+
     document.getElementById("room_id").addEventListener("change", function() {
-      let selectedOption = this.options[this.selectedIndex];
-      let price = selectedOption.getAttribute("data-price") || 0;
+      var selectedOption = this.options[this.selectedIndex];
+      var price = selectedOption.getAttribute("data-price") || 0;
       document.getElementById("price_display").value = price;
       document.getElementById("price").value = price;
     });
