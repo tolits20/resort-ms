@@ -177,9 +177,9 @@ label {
             <div class="form-group">
                 <label>Status</label>
                 <select class="form-select" name="status" required>
-                    <option value="Pending" <?= ($row['payment_status'] == 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                    <option value="Completed" <?= ($row['payment_status'] == 'Completed') ? 'selected' : ''; ?>>Completed</option>
-                    <option value="Failed" <?= ($row['payment_status'] == 'Failed') ? 'selected' : ''; ?>>Failed</option>
+                    <option value="pending" <?= ($row['payment_status'] == 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                    <option value="completed" <?= ($row['payment_status'] == 'completed') ? 'selected' : ''; ?>>Completed</option>
+                    <option value="refunded" <?= ($row['payment_status'] == 'Failed') ? 'selected' : ''; ?>>Refunded</option>
                 </select>
             </div>
 
