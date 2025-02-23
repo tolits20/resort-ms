@@ -130,7 +130,7 @@ $result = $conn->query($sql);
             <div class="room-card">
                 <img src="uploads/<?php echo $row['image']; ?>" alt="Room Image">
                 <div class="content">
-                    <h2><?php echo $row['room_name']; ?></h2>
+                    <h2><?php echo $row['room_code']; ?></h2>
                     <p><?php echo $row['description']; ?></p>
                     <p class="price">$<?php echo $row['price']; ?> per night</p>
                     <a href="book.php?room_id=<?php echo $row['room_id']; ?>" class="book-btn">Book Now</a>

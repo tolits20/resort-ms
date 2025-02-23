@@ -2,53 +2,54 @@
 include ('../../resources/database/config.php');
 
 if (!isset($_SESSION['ID'])) {
-    header("Location: ../../login.php");
-    exit();
+    header("location: ../../login.php");
+    exit;
 }
 
-$user_id = $_SESSION['ID'];
+if (isset($_POST['submit'])) {
+    try {
+        $account_id = $_SESSION['ID'];
+        $room_id = $_POST['room_id'];
+        $check_in = $_POST['check_in'];
+        $check_out = $_POST['check_out'];
+        $price = $_POST['price'];
+        $status = "pending"; // Default booking status
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $room_id = $_POST['room_id'];
-    $check_in_date = $_POST['check_in'];
-    $check_in_time = $_POST['check_in_time'];
-    $check_out = $_POST['check_out'];
-    // $price = $_POST['price']; 
-
-    $check_in = $check_in_date . ' ' . $check_in_time;
-
-    $check_in_hour = (int)substr($check_in_time, 0, 2);
-    if (($check_in_hour >= 7 && $check_in_hour < 17) || ($check_in_hour >= 19 || $check_in_hour < 5)) {
-        $sql = "SELECT * FROM room WHERE room_id = ? AND status = 'available'";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $room_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, status) 
-                    VALUES (?, ?, ?, ?, 'pending')";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iiss", $user_id, $room_id, $check_in, $check_out);
-
-            if ($stmt->execute()) {
-                $sql = "UPDATE room SET status = 'confirmed' WHERE room_id = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $room_id);
-                $stmt->execute();
-
-                echo "Reservation successful. Please wait for confirmation.";
-            } else {
-                echo "Error: Could not make the reservation.";
-            }
-        } else {
-            echo "Sorry, the room is not available for the selected dates.";
+        // Validate required fields
+        if (empty($room_id) || empty($check_in) || empty($check_out)) {
+            throw new Exception("All fields are required.");
         }
-    } else {
-        echo "Invalid check-in time. Please select a time between 7:00 AM to 5:00 PM or 7:00 PM to 5:00 AM.";
+
+        // Validate that check-in date is before check-out date
+        if ($check_in >= $check_out) {
+            throw new Exception("Check-out date must be after check-in date.");
+        }
+
+        // Insert booking into the booking table
+        $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, status, price) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        if (!$stmt) {
+            throw new Exception("Failed to prepare booking statement: " . mysqli_error($conn));
+        }
+
+        mysqli_stmt_bind_param($stmt, "iisssd", $account_id, $room_id, $check_in, $check_out, $status, $price);
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception("Failed to insert booking: " . mysqli_stmt_error($stmt));
+        }
+
+        // Optionally update the room status to 'booked'
+        $sql_update = "UPDATE room SET status = 'booked', updated_at = NOW() WHERE room_id = ?";
+        $stmt_update = mysqli_prepare($conn, $sql_update);
+        mysqli_stmt_bind_param($stmt_update, "i", $room_id);
+        mysqli_stmt_execute($stmt_update);
+
+        header("location: index.php");
+        exit;
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
     }
+} else {
+    header("location: create.php");
+    exit;
 }
 ?>
-
-
-</form>
