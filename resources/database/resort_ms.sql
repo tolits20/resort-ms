@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 23, 2025 at 04:42 PM
+-- Generation Time: Feb 24, 2025 at 05:21 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `account` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account`
@@ -47,8 +47,31 @@ CREATE TABLE IF NOT EXISTS `account` (
 INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `created_at`, `updated_at`) VALUES
 (5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-14 15:10:14', '2025-02-14 15:10:14'),
 (9, 'tolits@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-15 05:24:00', '2025-02-23 14:46:27'),
-(10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-16 10:43:34', '2025-02-23 14:25:24'),
-(12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-23 15:06:58', NULL);
+(10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-16 10:43:34', '2025-02-24 15:43:24'),
+(12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-23 15:06:58', '2025-02-24 16:15:00'),
+(13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'activate', '2025-02-24 15:25:09', '2025-02-24 15:29:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_notification`
+--
+
+CREATE TABLE IF NOT EXISTS `account_notification` (
+  `account_id` int(11) NOT NULL,
+  `account_notification` enum('create','update') NOT NULL,
+  KEY `account_notification_fk` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `account_notification`
+--
+
+INSERT INTO `account_notification` (`account_id`, `account_notification`) VALUES
+(13, 'create'),
+(13, 'update'),
+(10, 'update'),
+(12, 'update');
 
 -- --------------------------------------------------------
 
@@ -186,6 +209,18 @@ INSERT INTO `room_gallery` (`room_id`, `room_img`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `room_notification`
+--
+
+CREATE TABLE IF NOT EXISTS `room_notification` (
+  `room_id` int(11) NOT NULL,
+  `room_notification` enum('create','update') NOT NULL,
+  KEY `room_notification_fk` (`room_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -205,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `contact` (`contact`),
   KEY `user_account_fk` (`account_id`),
   KEY `unique_fullname` (`fname`,`lname`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -214,8 +249,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, `contact`, `profile_img`, `created_at`, `updated_at`) VALUES
 (5, 5, 'Levi', 'Penaverde', 20, 'male', '987867546', '67af5cd6192634.90705227.jpg', '2025-02-14 15:10:14', '2025-02-21 15:03:19'),
 (9, 9, 'Angelito', 'Jacalan', 21, 'male', '09876544461', '67b195f85239c1.78592261.jpg', '2025-02-15 05:24:00', '2025-02-23 14:46:27'),
-(10, 10, 'Allan', 'Monforte', 20, 'female', '9112245667', '67b1c15630d272.47796055.png', '2025-02-16 10:43:34', '2025-02-23 14:25:24'),
-(12, 12, 'Melvin', 'Catuera', 20, 'male', '9123456789', '67bb3992d9f237.88543735.png', '2025-02-23 15:06:58', '2025-02-23 15:06:58');
+(10, 10, 'Allan', 'Monforte', 20, 'male', '9112245667', '67b1c15630d272.47796055.png', '2025-02-16 10:43:34', '2025-02-24 15:43:24'),
+(12, 12, 'Melvin', 'Catuera', 20, 'male', '9123456789', '67bc9b041413e9.81245551.png', '2025-02-23 15:06:58', '2025-02-24 16:15:00'),
+(13, 13, 'Ianzae', 'Ego', 25, 'female', '9876543211', '67bc8f552ae286.40054461.png', '2025-02-24 15:25:09', '2025-02-24 15:29:38');
 
 -- --------------------------------------------------------
 
@@ -240,6 +276,12 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 --
+-- Constraints for table `account_notification`
+--
+ALTER TABLE `account_notification`
+  ADD CONSTRAINT `account_notification_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `booking`
 --
 ALTER TABLE `booking`
@@ -257,6 +299,12 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `room_gallery`
   ADD CONSTRAINT `galley_room_fk` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `room_notification`
+--
+ALTER TABLE `room_notification`
+  ADD CONSTRAINT `room_notification_fk` FOREIGN KEY (`room_id`) REFERENCES `room` (`room_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user`
