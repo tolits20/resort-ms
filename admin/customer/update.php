@@ -36,8 +36,10 @@ if(isset($_POST['update'])){
                     $stmt2=mysqli_prepare($conn,$sql2);
                     mysqli_stmt_bind_param($stmt2,'ssisssi',$fname,$lname,$age,$gender,$contact,$newfile,$id);
                     mysqli_stmt_execute($stmt2);
+                    
+                    $notif="INSERT INTO account_notification(account_id,account_notification)values($id,'update')";
 
-                    if(mysqli_stmt_affected_rows($stmt2)>0){
+                    if(mysqli_stmt_affected_rows($stmt2)>0 && mysqli_query($conn,$notif)){
                         if(file_exists("../../resources/assets/images/".$current_img)){
                             if(unlink("../../resources/assets/images/".$current_img)){
                                 if(move_uploaded_file($img_tmp,$location)){
@@ -72,7 +74,10 @@ if(isset($_POST['update'])){
                 $stmt2=mysqli_prepare($conn,$sql2);
                 mysqli_stmt_bind_param($stmt2,'ssissi',$fname,$lname,$age,$gender,$contact,$id);
                 mysqli_stmt_execute($stmt2);
-                if(mysqli_stmt_affected_rows($stmt2)>0){
+
+                $notif="INSERT INTO account_notification(account_id,account_notification)values($id,'update')";
+
+                if(mysqli_stmt_affected_rows($stmt2)>0 && mysqli_query($conn,$notif)){
                     mysqli_commit($conn);
                     header("location:edit.php?id=$id");
                     unset($_SESSION['update_id']);

@@ -2,7 +2,7 @@
 $id = $_SESSION['ID'];
 $result;
 if(isset($_GET['search']) && !empty($_GET['searchbar'])){
-echo $find=isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
+ $find=isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
 $sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ? ";
 $stmt = mysqli_prepare($conn, $sql1);
 $search="%$find%";

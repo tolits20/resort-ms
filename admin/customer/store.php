@@ -37,7 +37,9 @@ try{
                 mysqli_stmt_bind_param($stmt2,'issisis',$last_id,$fname,$lname,$age,$gender,$contact,$newfile);
                 mysqli_stmt_execute($stmt2);
                 
-                if(mysqli_stmt_affected_rows($stmt2)>0){
+                $notif="INSERT INTO account_notification(account_id,account_notification)values($last_id,'create')";
+
+                if(mysqli_stmt_affected_rows($stmt2)>0 && mysqli_query($conn,$notif) ){
                     if(move_uploaded_file($img_tmp,$location)){
                         mysqli_commit($conn);
                         header("location:../../login.php");
@@ -59,7 +61,10 @@ try{
                 $stmt2=mysqli_prepare($conn,$sql2);
                 mysqli_stmt_bind_param($stmt2,'issisis',$last_id,$fname,$lname,$age,$gender,$contact,$newfile);
                 mysqli_stmt_execute($stmt2);
-            if(mysqli_stmt_affected_rows($stmt2)>0){
+
+                $notif="INSERT INTO account_notification(account_id,account_notification)values($last_id,'create')";
+
+            if(mysqli_stmt_affected_rows($stmt2)>0 && mysqli_query($conn,$notif)){
                 mysqli_commit($conn);
                 header("location:../../login.php");
             }
