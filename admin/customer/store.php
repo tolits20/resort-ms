@@ -57,7 +57,7 @@ try{
             }
 
         }else{
-            $sql2="INSERT INTO user(account_id,fname,lname,age,gender,contact,profile_img,created_at)VALUES(?,?,?,?,?,?,?,now())";
+            $sql2="INSERT INTO user(account_id,fname,lname,age,gender,contact,profile_img,)VALUES(?,?,?,?,?,?,?)";
                 $stmt2=mysqli_prepare($conn,$sql2);
                 mysqli_stmt_bind_param($stmt2,'issisis',$last_id,$fname,$lname,$age,$gender,$contact,$newfile);
                 mysqli_stmt_execute($stmt2);

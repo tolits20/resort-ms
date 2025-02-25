@@ -80,3 +80,63 @@
         cursor: pointer;
         color: red;
     }
+
+
+
+
+    SELECT concat(user.fname,' ',user.lname) as 'name', room.room_code, booking.check_in, booking.check_out, booking.created_at FROM account
+    INNER JOIN user USING(account_id) INNER JOIN booking USING(account_id) INNER JOIN room USING(room_id)
+
+
+    ($cnotif['status']=='create' ?  $cnotif['created_at'].': New user <strong>['.$cnotif['name'].']</strong> has been created! ' :
+                 $cnotif['updated_at'].': <strong>'.$cnotif['name'].'\'s</strong> Account has been updated successfully!');
+
+                    $to_print=($notif['name']=='room' ? ($notif['status']=='create' ? $notif['Date'].': New room has been added!' : $notif['Date'].': Room has been updated successfuly!') : ($cnotif['status']=='create' ?  $cnotif['created_at'].': New user <strong>['.$cnotif['name'].']</strong> has been created! ' :
+                $cnotif['updated_at'].': <strong>'.$cnotif['name'].'\'s</strong> Account has been updated successfully!'));
+
+
+                SELECT 
+        CONCAT(user.fname, ' ', user.lname) AS name,
+        account_notification.account_notification AS status,
+        account.created_at as c_created,
+        account.updated_at as c_updated,
+        account_notification.Date 
+    FROM account
+    INNER JOIN user USING(account_id)
+    INNER JOIN account_notification USING(account_id)
+    WHERE DATE(account_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+
+    UNION
+
+    SELECT 
+        'room' AS name, 
+        room_notification.room_notification AS status,
+        created_at as r_created,
+        updated_at as r_updated,
+        room_notification.Date 
+    FROM room
+    INNER JOIN room_notification USING(room_id)
+    WHERE DATE(room_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+
+    UNION 
+
+    SELECT concat(user.fname,' ',user.lname) AS name,
+    booking.check_in,
+    booking.check_out,
+    booking_notification.booking_status,
+    booking.created_at FROM account 
+    INNER JOIN user USING(account_id) 
+    INNER JOIN booking USING(account_id)
+    INNER JOIN booking_notification USING(book_id)
+     WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY  
+ORDER BY `Date` ASC;
+
+
+ while ($inotif =mysqli_fetch_assoc($notif)){
+            $to_print=($inotif['name']=='room' ? ($inotif['status']=='create' ? $inotif['Date'].': New room has been added!' : $inotif['Date'].': Room has been updated successfuly!') : ($inotif['status']=='create' ?  $inotif['c_created'].': New user <strong>['.$inotif['name'].']</strong> has been created! ' :
+                $inotif['c_updated'].': <strong>'.$inotif['name'].'\'s</strong> Account has been updated successfully!'));
+            echo "<div class='notification-item'>
+            <i class='fas fa-exclamation-triangle'></i> {$to_print}
+        </div>";
+        
+        }

@@ -26,10 +26,13 @@ if (isset($_POST['submit'])) {
         }
 
         mysqli_stmt_bind_param($stmt, "iisssd", $account_id, $room_id, $check_in, $check_out, $book_status, $price);
+        
         if (!mysqli_stmt_execute($stmt)) {
             throw new Exception("Failed to insert booking: " . mysqli_stmt_error($stmt));
         }
-
+        $last_id=mysqli_insert_id($conn);
+        $notif="INSERT INTO booking_notfication(book_id,booking_status,Date)values($last_id,'$book_status',now())";
+        mysqli_query($conn,$notif);
         $sql_update = "UPDATE room SET room_status = 'booked', updated_at = NOW() WHERE room_id = ?";
         $stmt_update = mysqli_prepare($conn, $sql_update);
         mysqli_stmt_bind_param($stmt_update, "i", $room_id);

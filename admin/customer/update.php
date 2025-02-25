@@ -32,7 +32,7 @@ if(isset($_POST['update'])){
                     $newfile=uniqid('',true).".".$extension;
                     $location="../../resources/assets/images/".$newfile;
 
-                    $sql2="UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=?,profile_img=?, updated_at=NOW() WHERE account_id=?";
+                    $sql2="UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=?,profile_img=? WHERE account_id=?";
                     $stmt2=mysqli_prepare($conn,$sql2);
                     mysqli_stmt_bind_param($stmt2,'ssisssi',$fname,$lname,$age,$gender,$contact,$newfile,$id);
                     mysqli_stmt_execute($stmt2);
@@ -70,14 +70,13 @@ if(isset($_POST['update'])){
                 }
                 
             }else{
-                $sql2="UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=?, updated_at=NOW() WHERE account_id=?";
+                $sql2="UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=? WHERE account_id=?";
                 $stmt2=mysqli_prepare($conn,$sql2);
                 mysqli_stmt_bind_param($stmt2,'ssissi',$fname,$lname,$age,$gender,$contact,$id);
-                mysqli_stmt_execute($stmt2);
 
                 $notif="INSERT INTO account_notification(account_id,account_notification)values($id,'update')";
-
-                if(mysqli_stmt_affected_rows($stmt2)>0 && mysqli_query($conn,$notif)){
+        
+                if(mysqli_stmt_execute($stmt2) &&  mysqli_query($conn,$notif)){
                     mysqli_commit($conn);
                     header("location:edit.php?id=$id");
                     unset($_SESSION['update_id']);
