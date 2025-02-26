@@ -22,6 +22,7 @@ if(isset($_POST['login'])){
            echo $_SESSION['ID']=$ID;
            echo $_SESSION['role']=$role;
            echo $_SESSION['status']=$status;
+           $_SESSION["login_success"]='yes';
             header('location:admin/index.php');
            }elseif($role=='user' && $status=='activate'){
             $_SESSION['ID']=$ID;
@@ -29,10 +30,13 @@ if(isset($_POST['login'])){
             $_SESSION['status']=$status;
             header('location:user/view/home.php');
            }else{
-           throw new Exception("Account is deactivated!");
+            $_SESSION["status_check"]="yes";
+             include("alert.php");
+
            }
         }else{
-            throw new Exception("account doesnt exist!");
+            $_SESSION["account_check"]="yes";
+            include("alert.php");
         }
 
     }catch(Exception $e){   
@@ -56,18 +60,20 @@ if(isset($_POST['login'])){
 <style>
 
 body{
-    margin: 0%;
+    margin: 0%; 
     display: flex;
-    justify-content: center;    
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     padding: 30px;
 }
 
 .container{
-    margin: 100px;
+    margin: 50px 100px 100px;
     width: 500px;
     height: 500px;
     padding: 0%;
-}
+}   
 
 form{
     display: flex;

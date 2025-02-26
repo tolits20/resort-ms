@@ -159,6 +159,8 @@ $notif=mysqli_query($conn,$_notif);
 </style>
 
 <div class="content">
+    <?php include('alert.php'); 
+    ?>
     <div class="dashboard-container">
         <div class="card">
             <i class="fas fa-user"></i>

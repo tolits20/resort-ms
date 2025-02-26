@@ -1,7 +1,6 @@
 <?php
 include ("../../resources/database/config.php");
 
-// Fetch available rooms from the database
 $sql = "SELECT * FROM room WHERE room_status = 'available'";
 $result = $conn->query($sql);
 ?>
