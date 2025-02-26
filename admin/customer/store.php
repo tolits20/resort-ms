@@ -32,7 +32,7 @@ try{
                 $newfile=uniqid('',true).".".$extension;
                 $location="../../resources/assets/images/".$newfile;
 
-                $sql2="INSERT INTO user(account_id,fname,lname,age,gender,contact,profile_img,created_at)VALUES(?,?,?,?,?,?,?,now())";
+                $sql2="INSERT INTO user(account_id,fname,lname,age,gender,contact,profile_img)VALUES(?,?,?,?,?,?,?)";
                 $stmt2=mysqli_prepare($conn,$sql2);
                 mysqli_stmt_bind_param($stmt2,'issisis',$last_id,$fname,$lname,$age,$gender,$contact,$newfile);
                 mysqli_stmt_execute($stmt2);
@@ -45,7 +45,7 @@ try{
                         header("location:../../login.php");
                         exit;
                     }else{
-                        throw new Exception("falied to move the file");
+                        throw new Exception("failed to move the file");
                     }
                 }else{
                     throw new  Exception("failed to insert in user table");
