@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2025 at 04:42 PM
+-- Generation Time: Feb 26, 2025 at 06:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,10 @@ INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `
 (9, 'tolits@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-15 05:24:00', '2025-02-25 08:15:56'),
 (10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-16 10:43:34', '2025-02-26 00:15:13'),
 (12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-23 15:06:58', '2025-02-25 04:30:37'),
-(13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-24 15:25:09', '2025-02-25 01:32:39');
+(13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-24 15:25:09', '2025-02-25 01:32:39'),
+(27, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', 'activate', '2025-02-26 16:17:06', NULL),
+(28, 'admin@example.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', 'admin', 'activate', '2025-02-26 16:24:26', NULL),
+(30, 'user2@example.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', 'user', 'activate', '2025-02-26 16:51:32', NULL);
 
 -- --------------------------------------------------------
 
@@ -72,7 +75,10 @@ INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `account_notifica
 (5, 12, 'update', '2025-02-25 11:35:03'),
 (6, 12, 'update', '2025-02-25 12:30:37'),
 (7, 9, 'update', '2025-02-25 16:15:56'),
-(8, 10, 'update', '2025-02-26 08:15:13');
+(8, 10, 'update', '2025-02-26 08:15:13'),
+(9, 27, 'create', '2025-02-27 00:17:06'),
+(10, 28, 'create', '2025-02-27 00:24:26'),
+(11, 30, 'create', '2025-02-27 00:51:32');
 
 -- --------------------------------------------------------
 
@@ -96,8 +102,10 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`book_id`, `account_id`, `room_id`, `check_in`, `check_out`, `book_status`, `price`, `created_at`) VALUES
-(5, 12, 15, '2025-02-25', '2025-02-27', 'pending', 5000.00, '2025-02-25 12:32:02'),
-(6, 10, 12, '2025-02-26', '2025-02-27', 'confirmed', 4500.00, '2025-02-25 12:37:19');
+(5, 12, 15, '2025-02-25', '2025-02-27', 'confirmed', 5000.00, '2025-02-25 12:32:02'),
+(6, 10, 12, '2025-02-26', '2025-02-27', 'confirmed', 4500.00, '2025-02-25 12:37:19'),
+(7, 27, 9, '2025-02-28', '2025-03-01', 'confirmed', 500.00, '2025-02-27 00:23:31'),
+(8, 30, 14, '2025-02-28', '2025-03-01', 'confirmed', 5000.00, '2025-02-27 00:52:03');
 
 -- --------------------------------------------------------
 
@@ -118,7 +126,9 @@ CREATE TABLE `booking_notification` (
 
 INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_status`, `Date`) VALUES
 (1, 5, 'pending', '2025-02-25 12:32:28'),
-(2, 6, 'confirmed', '2025-02-25 12:37:34');
+(2, 6, 'confirmed', '2025-02-25 12:37:34'),
+(3, 7, 'pending', '2025-02-27 00:23:31'),
+(4, 8, 'pending', '2025-02-27 00:52:03');
 
 -- --------------------------------------------------------
 
@@ -162,8 +172,16 @@ CREATE TABLE `feedback` (
   `account_id` int(11) NOT NULL,
   `rating` int(1) NOT NULL,
   `comment` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `feedback`
+--
+
+INSERT INTO `feedback` (`feedback_id`, `account_id`, `rating`, `comment`, `created_at`, `updated_at`) VALUES
+(2, 27, 3, 'k lang', '2025-02-26 16:36:43', '2025-02-26 17:01:16');
 
 -- --------------------------------------------------------
 
@@ -199,9 +217,9 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `price`, `created_at`, `updated_at`) VALUES
-(9, 'room101', 'premium', 'available', 500, '2025-02-15 15:37:50', '2025-02-26 00:15:26'),
+(9, 'room101', 'premium', 'booked', 500, '2025-02-15 15:37:50', '2025-02-26 16:23:31'),
 (12, 'room102', 'premium', 'booked', 1000, '2025-02-19 12:40:06', '2025-02-25 04:39:53'),
-(14, 'room103', 'premium', 'available', 5000, '2025-02-22 03:31:37', '2025-02-25 03:35:59'),
+(14, 'room103', 'premium', 'booked', 5000, '2025-02-22 03:31:37', '2025-02-26 16:52:03'),
 (15, 'room104', 'premium', 'booked', 6000, '2025-02-25 01:27:38', '2025-02-25 04:40:00');
 
 -- --------------------------------------------------------
@@ -285,7 +303,10 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 (9, 9, 'Angelito', 'Jacalan', 21, 'female', '09876544461', '67b195f85239c1.78592261.jpg'),
 (10, 10, 'Allan', 'Monforte', 98, 'male', '9112245667', '67b1c15630d272.47796055.png'),
 (12, 12, 'Melvin', 'Catuera', 20, 'female', '9123456789', '67bc9b041413e9.81245551.png'),
-(13, 13, 'Ianzae', 'Ego', 21, 'female', '9876543211', '67bc8f552ae286.40054461.png');
+(13, 13, 'Ianzae', 'Ego', 21, 'female', '9876543211', '67bc8f552ae286.40054461.png'),
+(14, 27, 'Fname', 'Lname', 98, 'male', '9231231236', '67bf3e820512d9.05980251.png'),
+(15, 28, 'Admin', 'Admin', 20, 'male', '9141541478', '67bf403ac326f9.36027168.png'),
+(17, 30, 'Asd', 'Lname', 98, 'male', '9121251254', '67bf469401d450.78560708.png');
 
 -- --------------------------------------------------------
 
@@ -388,31 +409,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `account_notification`
 --
 ALTER TABLE `account_notification`
-  MODIFY `cnotif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `cnotif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `booking_notification`
 --
 ALTER TABLE `booking_notification`
-  MODIFY `booking_notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `booking_notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `room`
@@ -430,7 +451,7 @@ ALTER TABLE `room_notification`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
