@@ -19,7 +19,7 @@ if (isset($_POST['submit'])) {
             throw new Exception("Room selection and check-in/out dates are required.");
         }
 
-        $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, price) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, price, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) {
             throw new Exception("Failed to prepare booking statement: " . mysqli_error($conn));
@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
             throw new Exception("Failed to insert booking: " . mysqli_stmt_error($stmt));
         }
         $last_id=mysqli_insert_id($conn);
-        $notif="INSERT INTO booking_notfication(book_id,booking_status,Date)values($last_id,'$book_status',now())";
+        $notif="INSERT INTO booking_notification(book_id,booking_status,Date)values($last_id,'$book_status',now())";
         mysqli_query($conn,$notif);
         $sql_update = "UPDATE room SET room_status = 'booked', updated_at = NOW() WHERE room_id = ?";
         $stmt_update = mysqli_prepare($conn, $sql_update);

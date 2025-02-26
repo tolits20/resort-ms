@@ -1,6 +1,6 @@
 <?php
 include('../../resources/database/config.php');
-include('../../bootstrap.php');
+include('../../user/bootstrap.php');
 
 if (!isset($_SESSION['ID'])) {
     header("location: ../../login.php");
@@ -9,7 +9,7 @@ if (!isset($_SESSION['ID'])) {
 
 $user_id = $_SESSION['ID'];
 
-$sql = "SELECT * FROM booking WHERE account_id = ? AND status = 'confirmed' LIMIT 1";
+$sql = "SELECT * FROM booking WHERE account_id = ? AND book_status = 'confirmed' LIMIT 1";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
@@ -44,9 +44,9 @@ if (mysqli_num_rows($result) == 0) {
         </div>
         <div class="mb-3">
             <label class="form-label">Your Feedback:</label>
-            <textarea name="feedback" class="form-control" rows="4" required></textarea>
+            <textarea name="comment" class="form-control" rows="4" required></textarea>
         </div>
-        <input type="hidden" name="account_id" value="<?php echo $user_id; ?>">
+        <input type="hidden" name="account_id" value="<?php echo $account_id=$_SESSION['ID']; ?>">
         <button type="submit" class="btn btn-primary w-100">Submit Feedback</button>
     </form>
 </body>
