@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2025 at 06:03 PM
+-- Generation Time: Feb 26, 2025 at 06:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -94,18 +94,19 @@ CREATE TABLE `booking` (
   `check_out` date NOT NULL,
   `book_status` enum('pending','confirmed','cancelled') NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`book_id`, `account_id`, `room_id`, `check_in`, `check_out`, `book_status`, `price`, `created_at`) VALUES
-(5, 12, 15, '2025-02-25', '2025-02-27', 'confirmed', 5000.00, '2025-02-25 12:32:02'),
-(6, 10, 12, '2025-02-26', '2025-02-27', 'confirmed', 4500.00, '2025-02-25 12:37:19'),
-(7, 27, 9, '2025-02-28', '2025-03-01', 'confirmed', 500.00, '2025-02-27 00:23:31'),
-(8, 30, 14, '2025-02-28', '2025-03-01', 'confirmed', 5000.00, '2025-02-27 00:52:03');
+INSERT INTO `booking` (`book_id`, `account_id`, `room_id`, `check_in`, `check_out`, `book_status`, `price`, `created_at`, `updated_at`) VALUES
+(5, 12, 15, '2025-02-25', '2025-02-27', 'pending', 5000.00, '2025-02-25 12:32:02', '2025-02-26 17:19:16'),
+(6, 10, 12, '2025-02-26', '2025-02-27', 'confirmed', 4500.00, '2025-02-25 12:37:19', '2025-02-26 17:19:16'),
+(7, 27, 9, '2025-02-28', '2025-03-01', 'confirmed', 500.00, '2025-02-27 00:23:31', '2025-02-26 17:19:16'),
+(8, 30, 14, '2025-02-28', '2025-03-01', 'confirmed', 5000.00, '2025-02-27 00:52:03', '2025-02-26 17:19:16');
 
 -- --------------------------------------------------------
 
@@ -217,7 +218,7 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `price`, `created_at`, `updated_at`) VALUES
-(9, 'room101', 'premium', 'booked', 500, '2025-02-15 15:37:50', '2025-02-26 16:23:31'),
+(9, 'room101', 'premium', 'available', 500, '2025-02-15 15:37:50', '2025-02-26 16:23:31'),
 (12, 'room102', 'premium', 'booked', 1000, '2025-02-19 12:40:06', '2025-02-25 04:39:53'),
 (14, 'room103', 'premium', 'booked', 5000, '2025-02-22 03:31:37', '2025-02-26 16:52:03'),
 (15, 'room104', 'premium', 'booked', 6000, '2025-02-25 01:27:38', '2025-02-25 04:40:00');
