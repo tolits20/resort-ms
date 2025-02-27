@@ -8,7 +8,9 @@ include('../../resources/database/config.php');
   
 </style>
 <div class="content" style="color:black;">
-    <?php include ('filter.php'); ?>
+    <?php
+    include ('alert.php');
+    include ('filter.php'); ?>
     <br>
     <table class="table table-striped" style="text-align: center;">
         <tr>

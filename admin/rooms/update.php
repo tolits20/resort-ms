@@ -49,11 +49,13 @@ if(isset($_POST['update'])){
     
                 }
                 if($c>=1){
+                    $_SESSION['room_update']="yes";
                     mysqli_commit($conn);
                     header('location:index.php');
                     exit;
                 }
            }else{
+            $_SESSION['room_update']="yes";
             mysqli_commit($conn);
             header("location:edit.php?id=$id");
             exit;

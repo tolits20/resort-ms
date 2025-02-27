@@ -2,6 +2,27 @@
 include ('../resources/database/config.php');
 include('includes/template.html');
 
+
+
+$check="SELECT * FROM booking";
+$check_set=mysqli_query($conn,$check);
+echo $today = date("Y-m-d");
+while($check_record=mysqli_fetch_assoc($check_set)){
+    if($check_record['check_out']==$today && $check_record['book_status']=="confirmed"){
+        echo $set="UPDATE booking SET book_status='completed' WHERE book_id={$check_record['book_id']}";
+        $set1=mysqli_query($conn,$set); 
+        if(mysqli_affected_rows($conn)>0){
+           echo $set2="UPDATE room SET room_status='available' WHERE room_id={$check_record['room_id']}";
+            if (!mysqli_query($conn, $set2)) {
+                echo "Error updating room status: " . mysqli_error($conn);
+            }
+        }
+    }
+}
+
+
+
+
 $sql="SELECT COUNT(account_id) as 'cnew' FROM account INNER JOIN user USING(account_id)
     WHERE DATE(account.created_at) >= CURDATE() - INTERVAL 7 DAY";
 $result=mysqli_query($conn,$sql);
@@ -12,7 +33,7 @@ $ctmr_count_notif="SELECT
      FROM account
      INNER JOIN user USING(account_id)
      INNER JOIN account_notification USING(account_id)
-     WHERE DATE(account_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+     WHERE DATE(account_notification.Date) >= CURDATE() 
     ) 
     + 
     (SELECT COUNT(*) 
@@ -21,7 +42,7 @@ $ctmr_count_notif="SELECT
     ) +
     (SELECT COUNT(*)
     FROM booking_notification
-    WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+    WHERE DATE(booking_notification.Date) >= CURDATE() 
     ) 
 AS total_count";
 $c_count=mysqli_query($conn,$ctmr_count_notif);
@@ -75,6 +96,12 @@ $bookings=mysqli_fetch_assoc($result2);
      WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY  
 ORDER BY `Date` DESC;";
 $notif=mysqli_query($conn,$_notif);
+
+
+
+
+
+
 
 
 ?>

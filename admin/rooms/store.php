@@ -52,11 +52,13 @@ try{
 
             }
             if($c>=1){
+                $_SESSION['room_create']="yes";
                 mysqli_commit($conn);
                 header('location:index.php');
                 exit;
             }
        }else{
+        $_SESSION['room_create']="yes";
         mysqli_commit($conn);
         header('location:index.php');
         exit;

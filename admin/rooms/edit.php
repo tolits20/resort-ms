@@ -144,6 +144,7 @@ $result1=mysqli_query($conn,$sql1)
 </head>
 <body>
 <div class="content">
+    <?php include("alert.php") ?>
     <h2>Edit Room</h2>
     <form action="update.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="room_id" value="<?php echo $room['room_id']; ?>">
