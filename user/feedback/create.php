@@ -9,7 +9,7 @@ if (!isset($_SESSION['ID'])) {
 
 $user_id = $_SESSION['ID'];
 
-$sql = "SELECT * FROM booking WHERE account_id = ? AND book_status = 'confirmed' LIMIT 1";
+$sql = "SELECT * FROM booking WHERE account_id = ? AND book_status = 'confirmed' || book_status = 'completed' LIMIT 1";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
