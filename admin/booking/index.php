@@ -2,7 +2,7 @@
 include ('../includes/template.html');
 include('../../resources/database/config.php');
 
-$sql="SELECT * FROM customer_booking;";
+$sql="SELECT * FROM customer_booking ORDER BY id DESC;";
 $result=mysqli_query($conn,$sql);
 
 
