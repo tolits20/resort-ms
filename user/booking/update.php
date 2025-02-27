@@ -8,7 +8,7 @@ if (!isset($_SESSION['ID'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        $booking_id = $_POST['booking_id'];
+        $booking_id = $_POST['book_id'];
         $account_id = $_SESSION['ID'];
         $room_id = $_POST['room_id'];
         $check_in = $_POST['check_in'];
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             throw new Exception("All fields are required.");
         }
 
-        $sql_old = "SELECT room_id FROM booking WHERE booking_id = ? AND account_id = ?";
+        $sql_old = "SELECT room_id FROM booking WHERE book_id = ? AND account_id = ?";
         $stmt_old = $conn->prepare($sql_old);
         $stmt_old->bind_param("ii", $booking_id, $account_id);
         $stmt_old->execute();
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $old_room_id = $old_booking['room_id'];
 
         $sql_update = "UPDATE booking SET room_id = ?, check_in = ?, check_out = ?, price = ?, updated_at = NOW()
-                       WHERE booking_id = ? AND account_id = ?";
+                       WHERE book_id = ? AND account_id = ?";
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param("issdii", $room_id, $check_in, $check_out, $price, $booking_id, $account_id);
         

@@ -8,13 +8,20 @@ if (!isset($_SESSION['ID'])) {
 }
 
 $account_id = $_SESSION['ID'];
-$booking_id = $_GET['id'] ?? 0;
+$book_id = $_GET['id'] ?? 0;
 
-$sql = "SELECT b.*, r.room_code, r.price FROM booking b
+if (!is_numeric($book_id) || $book_id <= 0) {
+    die("Invalid booking ID.");
+}
+
+$sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, b.price, 
+               r.room_code, r.price as room_price
+        FROM booking b
         JOIN room r ON b.room_id = r.room_id
         WHERE b.book_id = ? AND b.account_id = ?";
+
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $booking_id, $account_id);
+$stmt->bind_param("ii", $book_id, $account_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -40,7 +47,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <div class="container mt-5">
     <h2>Edit Booking</h2>
     <form action="update.php" method="POST">
-        <input type="hidden" name="booking_id" value="<?php echo $booking['book_id']; ?>">
+        <input type="hidden" name="book_id" value="<?php echo $booking['book_id']; ?>">
 
         <div class="mb-3">
             <label class="form-label">Select Room</label>
@@ -55,7 +62,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Price</label>
+            <label class="form-label">Price (USD)</label>
             <input type="text" id="price_display" class="form-control" value="<?php echo $booking['price']; ?>" readonly>
             <input type="hidden" name="price" id="price" value="<?php echo $booking['price']; ?>">
         </div>
@@ -78,23 +85,27 @@ while ($row = mysqli_fetch_assoc($result)) {
 </div>
 
 <script>
-    document.getElementById("check_in").addEventListener("change", function() {
+    document.getElementById("room_id").addEventListener("change", function () {
+        var selectedOption = this.options[this.selectedIndex];
+        var price = selectedOption.getAttribute("data-price") || 0;
+        document.getElementById("price_display").value = price;
+        document.getElementById("price").value = price;
+    });
+
+    document.getElementById("check_in").addEventListener("change", function () {
         var checkInDate = new Date(this.value);
         if (!isNaN(checkInDate)) {
             checkInDate.setDate(checkInDate.getDate() + 1);
             var year = checkInDate.getFullYear();
             var month = ("0" + (checkInDate.getMonth() + 1)).slice(-2);
             var day = ("0" + checkInDate.getDate()).slice(-2);
-            document.getElementById("check_out").value = year + '-' + month + '-' + day;
+            var tomorrow = year + '-' + month + '-' + day;
+            document.getElementById("check_out").value = tomorrow;
+        } else {
+            document.getElementById("check_out").value = '';
         }
     });
-
-    document.getElementById("room_id").addEventListener("change", function() {
-        var selectedOption = this.options[this.selectedIndex];
-        var price = selectedOption.getAttribute("data-price") || 0;
-        document.getElementById("price_display").value = price;
-        document.getElementById("price").value = price;
-    });
 </script>
+
 </body>
 </html>
