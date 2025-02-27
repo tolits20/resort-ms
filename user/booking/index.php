@@ -7,7 +7,7 @@ if (!isset($_SESSION['ID'])) {
 }
 
 $account_id = $_SESSION['ID'];
-$sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, b.price, b.book_status, 
+$sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, r.price, b.book_status, 
                r.room_code, r.room_type 
         FROM booking b 
         JOIN room r ON b.room_id = r.room_id 

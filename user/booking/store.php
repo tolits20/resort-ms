@@ -15,17 +15,17 @@ if (isset($_POST['submit'])) {
         $price = $_POST['price'];
         $book_status = "pending";
 
-        if (empty($room_id) || empty($check_in) || empty($check_out)) {
+        if (empty($room_id) || empty($check_in)) {
             throw new Exception("Room selection and check-in/out dates are required.");
         }
 
-        $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, price, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) {
             throw new Exception("Failed to prepare booking statement: " . mysqli_error($conn));
         }
 
-        mysqli_stmt_bind_param($stmt, "iisssd", $account_id, $room_id, $check_in, $check_out, $book_status, $price);
+        mysqli_stmt_bind_param($stmt, "iisss", $account_id, $room_id, $check_in, $check_out, $book_status);
         
         if (!mysqli_stmt_execute($stmt)) {
             throw new Exception("Failed to insert booking: " . mysqli_stmt_error($stmt));

@@ -93,7 +93,8 @@ if(isset($_POST['update'])){
     }catch(Exception $e){
         mysqli_rollback($conn);
         echo $e->getMessage();
-        header('location:');
+        $_SESSION['customer_error']="yes";
+        header("location:edit.php?id=$id");
         exit;
     }
 
