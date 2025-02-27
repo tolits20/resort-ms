@@ -79,6 +79,7 @@ while ($row = mysqli_fetch_array($result)) {
                                         $status = strtolower($booking['book_status']);
                                         $badge_class = "secondary";
                                         if ($status == "pending") $badge_class = "warning";
+                                        if ($status == "completed") $badge_class = "primary";
                                         if ($status == "confirmed") $badge_class = "success";
                                         if ($status == "cancelled") $badge_class = "danger";
                                     ?>
