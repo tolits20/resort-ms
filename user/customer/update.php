@@ -74,7 +74,7 @@ if (isset($_POST['update'])) {
                         throw new Exception("Image type is invalid");
                     }
                 } else {
-                    $sql_no_img = "UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=?, updated_at=NOW() WHERE account_id=?";
+                    $sql_no_img = "UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=? WHERE account_id=?";
                     $stmt_no_img = mysqli_prepare($conn, $sql_no_img);
                     mysqli_stmt_bind_param($stmt_no_img, 'ssisii', $fname, $lname, $age, $gender, $contact, $ID);
                     mysqli_stmt_execute($stmt_no_img);
