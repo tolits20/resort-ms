@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2025 at 02:43 PM
+-- Generation Time: Feb 27, 2025 at 04:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -51,7 +51,7 @@ INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `
 (12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-23 15:06:58', '2025-02-25 04:30:37'),
 (13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-24 15:25:09', '2025-02-25 01:32:39'),
 (27, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', 'activate', '2025-02-26 16:17:06', NULL),
-(34, 'adora@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'activate', '2025-02-27 05:15:39', '2025-02-27 06:00:50');
+(34, 'adora@example.com', '803e4a8e0a6f26ec9fa75321c0d551a83b9a075d', 'user', 'activate', '2025-02-27 05:15:39', '2025-02-27 13:56:43');
 
 -- --------------------------------------------------------
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `account_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`cnotif_id`),
   KEY `account_notification_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account_notification`
@@ -98,7 +98,9 @@ INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `account_notifica
 (28, 10, 'update', '2025-02-27 21:38:04'),
 (29, 10, 'update', '2025-02-27 21:41:47'),
 (30, 10, 'update', '2025-02-27 21:42:04'),
-(31, 10, 'update', '2025-02-27 21:42:18');
+(31, 10, 'update', '2025-02-27 21:42:18'),
+(32, 34, 'update', '2025-02-27 21:50:58'),
+(33, 34, 'update', '2025-02-27 21:51:50');
 
 -- --------------------------------------------------------
 
@@ -112,23 +114,25 @@ CREATE TABLE IF NOT EXISTS `booking` (
   `room_id` int(11) NOT NULL,
   `check_in` date NOT NULL,
   `check_out` date NOT NULL,
-  `book_status` enum('pending','confirmed','cancelled') NOT NULL,
+  `book_status` enum('pending','confirmed','cancelled','completed') NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`book_id`),
   KEY `book_room_fk` (`room_id`),
   KEY `book_account_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
 INSERT INTO `booking` (`book_id`, `account_id`, `room_id`, `check_in`, `check_out`, `book_status`, `created_at`, `updated_at`) VALUES
-(5, 12, 15, '2025-02-25', '2025-02-27', 'pending', '2025-02-25 12:32:02', '2025-02-26 17:19:16'),
-(6, 10, 12, '2025-02-26', '2025-02-27', 'confirmed', '2025-02-25 12:37:19', '2025-02-26 17:19:16'),
+(5, 12, 15, '2025-02-25', '2025-02-27', 'completed', '2025-02-25 12:32:02', '2025-02-27 15:10:32'),
+(6, 10, 12, '2025-02-26', '2025-02-27', 'completed', '2025-02-25 12:37:19', '2025-02-27 14:47:43'),
 (7, 27, 9, '2025-03-01', '2025-04-02', 'pending', '2025-02-27 00:23:31', '2025-02-27 05:05:18'),
-(9, 27, 9, '2025-02-28', '2025-03-01', 'pending', '2025-02-27 01:23:54', '2025-02-26 17:23:54');
+(9, 27, 9, '2025-02-28', '2025-03-29', 'pending', '2025-02-27 01:23:54', '2025-02-27 14:48:52'),
+(11, 34, 15, '2025-02-26', '2025-02-27', 'completed', '2025-02-27 23:30:17', '2025-02-27 15:32:03'),
+(12, 34, 12, '2025-02-27', '2025-02-28', 'confirmed', '2025-02-27 23:36:05', '2025-02-27 15:37:04');
 
 -- --------------------------------------------------------
 
@@ -143,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`booking_notif_id`),
   KEY `booking_notif_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_notification`
@@ -153,7 +157,9 @@ INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_stat
 (1, 5, 'pending', '2025-02-25 12:32:28'),
 (2, 6, 'confirmed', '2025-02-25 12:37:34'),
 (3, 7, 'pending', '2025-02-27 00:23:31'),
-(5, 9, 'pending', '2025-02-27 01:23:54');
+(5, 9, 'pending', '2025-02-27 01:23:54'),
+(7, 11, 'pending', '2025-02-27 23:30:17'),
+(8, 12, 'pending', '2025-02-27 23:36:05');
 
 -- --------------------------------------------------------
 
@@ -168,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `customer_booking` (
 ,`room_code` varchar(50)
 ,`check_in` date
 ,`check_out` date
-,`status` enum('pending','confirmed','cancelled')
+,`status` enum('pending','confirmed','cancelled','completed')
 );
 
 -- --------------------------------------------------------
@@ -186,14 +192,15 @@ CREATE TABLE IF NOT EXISTS `feedback` (
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`feedback_id`),
   KEY `feedback_account_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `feedback`
 --
 
 INSERT INTO `feedback` (`feedback_id`, `account_id`, `rating`, `comment`, `created_at`, `updated_at`) VALUES
-(2, 27, 3, 'k lang', '2025-02-26 16:36:43', '2025-02-26 17:01:16');
+(2, 27, 3, 'k lang', '2025-02-26 16:36:43', '2025-02-26 17:01:16'),
+(3, 34, 5, 'pota ang angas!!!!', '2025-02-27 15:37:20', '2025-02-27 15:37:20');
 
 -- --------------------------------------------------------
 
@@ -211,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `room` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`room_id`),
   UNIQUE KEY `room_ code` (`room_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room`
@@ -219,9 +226,10 @@ CREATE TABLE IF NOT EXISTS `room` (
 
 INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `price`, `created_at`, `updated_at`) VALUES
 (9, 'room101', 'premium', 'booked', 500, '2025-02-15 15:37:50', '2025-02-26 17:23:54'),
-(12, 'room102', 'premium', 'booked', 1000, '2025-02-19 12:40:06', '2025-02-25 04:39:53'),
-(14, 'room103', 'premium', 'booked', 5000, '2025-02-22 03:31:37', '2025-02-26 16:52:03'),
-(15, 'room104', 'premium', 'booked', 6000, '2025-02-25 01:27:38', '2025-02-25 04:40:00');
+(12, 'room102', 'premium', 'booked', 1000, '2025-02-19 12:40:06', '2025-02-27 15:36:05'),
+(14, 'room103', 'premium', 'under maintenance', 5000, '2025-02-22 03:31:37', '2025-02-27 15:03:28'),
+(15, 'room104', 'premium', 'available', 6000, '2025-02-25 01:27:38', '2025-02-27 15:30:17'),
+(17, 'room105', 'standard', 'booked', 4000, '2025-02-27 15:05:15', '2025-02-27 15:18:05');
 
 -- --------------------------------------------------------
 
@@ -250,7 +258,9 @@ INSERT INTO `room_gallery` (`room_id`, `room_img`, `created_at`) VALUES
 (14, '167b945193958b.png', '2025-02-22 03:31:37'),
 (15, '167bd1c8aaebb9.png', '2025-02-25 01:27:38'),
 (15, '167bd1c8aaf9c6.png', '2025-02-25 01:27:38'),
-(15, '167bd1c8ab0c5a.png', '2025-02-25 01:27:38');
+(15, '167bd1c8ab0c5a.png', '2025-02-25 01:27:38'),
+(17, '167c07f2bcbcae.png', '2025-02-27 15:05:15'),
+(17, '167c07f2bcc28c.png', '2025-02-27 15:05:15');
 
 -- --------------------------------------------------------
 
@@ -265,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `room_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`rnotif_id`),
   KEY `room_notification_fk` (`room_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_notification`
@@ -279,7 +289,11 @@ INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `D
 (5, 14, 'update', '2025-02-25 11:35:59'),
 (6, 12, 'update', '2025-02-25 12:39:53'),
 (7, 15, 'update', '2025-02-25 12:40:00'),
-(8, 9, 'update', '2025-02-26 08:15:26');
+(8, 9, 'update', '2025-02-26 08:15:26'),
+(9, 14, 'update', '2025-02-27 23:03:28'),
+(11, 17, 'create', '2025-02-27 23:05:15'),
+(12, 17, 'update', '2025-02-27 23:07:48'),
+(13, 17, 'update', '2025-02-27 23:07:56');
 
 -- --------------------------------------------------------
 
@@ -314,7 +328,7 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 (12, 12, 'Melvin', 'Catuera', 20, 'female', '9123456789', '67bc9b041413e9.81245551.png'),
 (13, 13, 'Ianzae', 'Ego', 21, 'female', '9876543211', '67bc8f552ae286.40054461.png'),
 (14, 27, 'Fname', 'Lname', 98, 'male', '9231231236', '67bf3e820512d9.05980251.png'),
-(21, 34, 'Joena', 'Adora', 20, 'female', '5678908765', '67bff4fb4bb388.15415444.jpg');
+(21, 34, 'Joena', 'Adora', 20, 'female', '5678908765', '.67c06f1bd62cb5.27601441.png');
 
 -- --------------------------------------------------------
 
