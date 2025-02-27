@@ -14,8 +14,8 @@ if (!is_numeric($book_id) || $book_id <= 0) {
     die("Invalid booking ID.");
 }
 
-$sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, b.price, 
-               r.room_code, r.price as room_price
+$sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, 
+               r.room_code, r.price as room_price 
         FROM booking b
         JOIN room r ON b.room_id = r.room_id
         WHERE b.book_id = ? AND b.account_id = ?";
@@ -63,8 +63,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <div class="mb-3">
             <label class="form-label">Price (USD)</label>
-            <input type="text" id="price_display" class="form-control" value="<?php echo $booking['price']; ?>" readonly>
-            <input type="hidden" name="price" id="price" value="<?php echo $booking['price']; ?>">
+            <input type="text" id="price_display" class="form-control" value="<?php echo number_format((float)$booking['room_price'], 2); ?>" readonly>
+            <input type="hidden" name="price" id="price" value="<?php echo $booking['room_price']; ?>">
         </div>
 
         <div class="mb-3">
@@ -85,27 +85,35 @@ while ($row = mysqli_fetch_assoc($result)) {
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date().toISOString().split("T")[0]; // Get today's date (YYYY-MM-DD)
+        var checkInInput = document.getElementById("check_in");
+        checkInInput.setAttribute("min", today); // Restrict past dates
+
+        // Auto-update checkout date when check-in changes
+        checkInInput.addEventListener("change", function () {
+            var checkInDate = new Date(this.value);
+            if (!isNaN(checkInDate)) {
+                checkInDate.setDate(checkInDate.getDate() + 1);
+                var year = checkInDate.getFullYear();
+                var month = ("0" + (checkInDate.getMonth() + 1)).slice(-2);
+                var day = ("0" + checkInDate.getDate()).slice(-2);
+                var tomorrow = year + '-' + month + '-' + day;
+                document.getElementById("check_out").value = tomorrow;
+            } else {
+                document.getElementById("check_out").value = '';
+            }
+        });
+    });
+
     document.getElementById("room_id").addEventListener("change", function () {
         var selectedOption = this.options[this.selectedIndex];
         var price = selectedOption.getAttribute("data-price") || 0;
-        document.getElementById("price_display").value = price;
+        document.getElementById("price_display").value = parseFloat(price).toFixed(2);
         document.getElementById("price").value = price;
     });
-
-    document.getElementById("check_in").addEventListener("change", function () {
-        var checkInDate = new Date(this.value);
-        if (!isNaN(checkInDate)) {
-            checkInDate.setDate(checkInDate.getDate() + 1);
-            var year = checkInDate.getFullYear();
-            var month = ("0" + (checkInDate.getMonth() + 1)).slice(-2);
-            var day = ("0" + checkInDate.getDate()).slice(-2);
-            var tomorrow = year + '-' + month + '-' + day;
-            document.getElementById("check_out").value = tomorrow;
-        } else {
-            document.getElementById("check_out").value = '';
-        }
-    });
 </script>
+
 
 </body>
 </html>

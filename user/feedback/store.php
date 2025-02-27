@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, 'iis', $account_id, $rating, $comment);
         if (mysqli_stmt_execute($stmt)) {
-            header("location: ../home.php"); 
+            header("location: index.php"); 
             exit;
         } else {
             echo "<div class='alert alert-danger'>Error submitting feedback.</div>";

@@ -59,7 +59,7 @@ if ($result) {
           </select>
         </div>
         <div class="mb-3">
-          <label for="price_display" class="form-label">Price (USD)</label>
+          <label for="price_display" class="form-label">Price</label>
 
           <input type="text" id="price_display" class="form-control" readonly>
           <input type="hidden" name="price" id="price">
@@ -80,27 +80,33 @@ if ($result) {
     </div>
   </div>
 
-  <script>
-    document.getElementById("check_in").addEventListener("change", function() {
-      var checkInDate = new Date(this.value);
-      if (!isNaN(checkInDate)) {
-        checkInDate.setDate(checkInDate.getDate() + 1);
-        var year = checkInDate.getFullYear();
-        var month = ("0" + (checkInDate.getMonth() + 1)).slice(-2);
-        var day = ("0" + checkInDate.getDate()).slice(-2);
-        var tomorrow = year + '-' + month + '-' + day;
-        document.getElementById("check_out").value = tomorrow;
-      } else {
-        document.getElementById("check_out").value = '';
-      }
-    });
+  <<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var today = new Date().toISOString().split("T")[0]; 
+    document.getElementById("check_in").setAttribute("min", today);
+  });
 
-    document.getElementById("room_id").addEventListener("change", function() {
-      var selectedOption = this.options[this.selectedIndex];
-      var price = selectedOption.getAttribute("data-price") || 0;
-      document.getElementById("price_display").value = price;
-      document.getElementById("price").value = price;
-    });
-  </script>
+  document.getElementById("check_in").addEventListener("change", function () {
+    var checkInDate = new Date(this.value);
+    if (!isNaN(checkInDate)) {
+      checkInDate.setDate(checkInDate.getDate() + 1);
+      var year = checkInDate.getFullYear();
+      var month = ("0" + (checkInDate.getMonth() + 1)).slice(-2);
+      var day = ("0" + checkInDate.getDate()).slice(-2);
+      var tomorrow = year + '-' + month + '-' + day;
+      document.getElementById("check_out").value = tomorrow;
+    } else {
+      document.getElementById("check_out").value = '';
+    }
+  });
+
+  document.getElementById("room_id").addEventListener("change", function () {
+    var selectedOption = this.options[this.selectedIndex];
+    var price = selectedOption.getAttribute("data-price") || 0;
+    document.getElementById("price_display").value = price;
+    document.getElementById("price").value = price;
+  });
+</script>
+
 </body>
 </html>
