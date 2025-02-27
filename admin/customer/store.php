@@ -43,8 +43,13 @@ try{
                     if(move_uploaded_file($img_tmp,$location)){
                         $_SESSION['create_success']='yes';
                         mysqli_commit($conn);
-                        header("location:../../login.php");
-                        exit;
+                        if(isset($_SESSION['ID'])){
+                            header("location:index.php");
+                            exit;
+                        }else{  
+                            header("location:../../login.php");
+                            exit; 
+                        }
                     }else{
                         throw new Exception("failed to move the file");
                     }

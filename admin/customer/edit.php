@@ -80,6 +80,7 @@ $_SESSION['update_id']=$id;
     }
 </style>
 <div class="content">
+    <?php include("alert.php") ?>
     <form action="update.php" method="post" enctype="multipart/form-data" class="form-control">
         <div class="con1">
             <div class="div3">

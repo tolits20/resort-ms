@@ -2,7 +2,6 @@
 include ('../includes/template.html');
 include('../../resources/database/config.php');
 
-
 ?>
 <style>
 
@@ -119,11 +118,13 @@ include('../../resources/database/config.php');
 </style>
 
 <div class="content">
-    <?php include('filter.php');
+    <?php
+    include("alert.php");
+    include('filter.php');
       ?>
     <br>
     <table class='table table-striped'>
-        <tr>
+        <tr>    
             <th>Username</th>
             <th>Role</th>
             <th>Status</th>
@@ -172,7 +173,7 @@ include('../../resources/database/config.php');
 
 print "<script>
     function openPopup(accountId) {
-        document.getElementById('popup-' + accountId).style.display = 'flex';
+        document.getElement ById('popup-' + accountId).style.display = 'flex';
     }
 
     function closePopup(accountId) {
@@ -180,7 +181,6 @@ print "<script>
     }
 </script>";
 
-            print "";
         }
         ?>
    </table>

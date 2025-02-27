@@ -45,6 +45,7 @@ if(isset($_POST['update'])){
                                 if(move_uploaded_file($img_tmp,$location)){
                                     mysqli_commit($conn);
                                     header("location:edit.php?id=$id");
+                                    $_SESSION['customer_update_success']='yes';
                                     unset($_SESSION['update_id']);
                                     exit;
                                 }else{
@@ -79,6 +80,7 @@ if(isset($_POST['update'])){
                 if(mysqli_stmt_execute($stmt2) &&  mysqli_query($conn,$notif)){
                     mysqli_commit($conn);
                     header("location:edit.php?id=$id");
+                    $_SESSION['customer_update_success']='yes';
                     unset($_SESSION['update_id']);
                     exit;
                 }else{
@@ -112,7 +114,8 @@ if(isset($_POST['changepass'])){
         mysqli_stmt_bind_param($stmt,'si',$pass,$ID);
         mysqli_stmt_execute($stmt);
 
-        if(mysqli_stmt_affected_rows($stmt)){   
+        if(mysqli_stmt_affected_rows($stmt)){ 
+            $_SESSION['change_pass_success']='yes';  
             mysqli_commit($conn);
             header("location:edit.php?id=$ID");
             exit;   
