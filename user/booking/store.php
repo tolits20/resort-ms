@@ -18,17 +18,12 @@ if (isset($_POST['submit'])) {
             throw new Exception("Room selection and check-in/out dates are required.");
         }
 
-<<<<<<< HEAD
-        // Prevent past dates in the backend
         $today = date("Y-m-d");
         if ($check_in < $today) {
             throw new Exception("Check-in date cannot be in the past.");
         }
 
         $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
-=======
-        $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
->>>>>>> 714494e1d3f36d2c3d5e9e3fdbc422cbda9e6153
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) {
             throw new Exception("Failed to prepare booking statement: " . mysqli_error($conn));
