@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2025 at 01:41 PM
+-- Generation Time: Feb 27, 2025 at 02:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `account` (
 INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `created_at`, `updated_at`) VALUES
 (5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-14 15:10:14', '2025-02-14 15:10:14'),
 (9, 'tolits@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-15 05:24:00', '2025-02-25 08:15:56'),
-(10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-16 10:43:34', '2025-02-26 00:15:13'),
+(10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-16 10:43:34', '2025-02-27 13:42:18'),
 (12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-23 15:06:58', '2025-02-25 04:30:37'),
 (13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-24 15:25:09', '2025-02-25 01:32:39'),
 (27, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', 'activate', '2025-02-26 16:17:06', NULL),
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `account_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`cnotif_id`),
   KEY `account_notification_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account_notification`
@@ -91,7 +91,14 @@ INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `account_notifica
 (21, 34, 'update', '2025-02-27 13:39:14'),
 (22, 34, 'update', '2025-02-27 13:48:20'),
 (23, 34, 'update', '2025-02-27 13:48:46'),
-(24, 34, 'update', '2025-02-27 14:00:50');
+(24, 34, 'update', '2025-02-27 14:00:50'),
+(25, 10, 'update', '2025-02-27 21:37:20'),
+(26, 10, 'update', '2025-02-27 21:37:24'),
+(27, 10, 'update', '2025-02-27 21:37:31'),
+(28, 10, 'update', '2025-02-27 21:38:04'),
+(29, 10, 'update', '2025-02-27 21:41:47'),
+(30, 10, 'update', '2025-02-27 21:42:04'),
+(31, 10, 'update', '2025-02-27 21:42:18');
 
 -- --------------------------------------------------------
 
@@ -106,7 +113,6 @@ CREATE TABLE IF NOT EXISTS `booking` (
   `check_in` date NOT NULL,
   `check_out` date NOT NULL,
   `book_status` enum('pending','confirmed','cancelled') NOT NULL,
-  `price` decimal(10,2) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`book_id`),
@@ -118,11 +124,11 @@ CREATE TABLE IF NOT EXISTS `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`book_id`, `account_id`, `room_id`, `check_in`, `check_out`, `book_status`, `price`, `created_at`, `updated_at`) VALUES
-(5, 12, 15, '2025-02-25', '2025-02-27', 'pending', 5000.00, '2025-02-25 12:32:02', '2025-02-26 17:19:16'),
-(6, 10, 12, '2025-02-26', '2025-02-27', 'confirmed', 4500.00, '2025-02-25 12:37:19', '2025-02-26 17:19:16'),
-(7, 27, 9, '2025-03-01', '2025-04-02', 'pending', 500.00, '2025-02-27 00:23:31', '2025-02-27 05:05:18'),
-(9, 27, 9, '2025-02-28', '2025-03-01', 'pending', 500.00, '2025-02-27 01:23:54', '2025-02-26 17:23:54');
+INSERT INTO `booking` (`book_id`, `account_id`, `room_id`, `check_in`, `check_out`, `book_status`, `created_at`, `updated_at`) VALUES
+(5, 12, 15, '2025-02-25', '2025-02-27', 'pending', '2025-02-25 12:32:02', '2025-02-26 17:19:16'),
+(6, 10, 12, '2025-02-26', '2025-02-27', 'confirmed', '2025-02-25 12:37:19', '2025-02-26 17:19:16'),
+(7, 27, 9, '2025-03-01', '2025-04-02', 'pending', '2025-02-27 00:23:31', '2025-02-27 05:05:18'),
+(9, 27, 9, '2025-02-28', '2025-03-01', 'pending', '2025-02-27 01:23:54', '2025-02-26 17:23:54');
 
 -- --------------------------------------------------------
 
@@ -152,20 +158,6 @@ INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_stat
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `book_payment`
--- (See below for the actual view)
---
-CREATE TABLE IF NOT EXISTS `book_payment` (
-`ID` int(11)
-,`name` varchar(101)
-,`amount` decimal(10,2)
-,`payment_method` enum('cash','credit card','e-payment')
-,`payment_status` enum('pending','completed','refunded')
-);
-
--- --------------------------------------------------------
-
---
 -- Stand-in structure for view `customer_booking`
 -- (See below for the actual view)
 --
@@ -177,7 +169,6 @@ CREATE TABLE IF NOT EXISTS `customer_booking` (
 ,`check_in` date
 ,`check_out` date
 ,`status` enum('pending','confirmed','cancelled')
-,`price` decimal(10,2)
 );
 
 -- --------------------------------------------------------
@@ -203,20 +194,6 @@ CREATE TABLE IF NOT EXISTS `feedback` (
 
 INSERT INTO `feedback` (`feedback_id`, `account_id`, `rating`, `comment`, `created_at`, `updated_at`) VALUES
 (2, 27, 3, 'k lang', '2025-02-26 16:36:43', '2025-02-26 17:01:16');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `payments`
---
-
-CREATE TABLE IF NOT EXISTS `payments` (
-  `book_id` int(11) NOT NULL,
-  `payment_method` enum('cash','credit card','e-payment') NOT NULL,
-  `payment_status` enum('pending','completed','refunded') NOT NULL,
-  `payment_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  KEY `payment_book_fk` (`book_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -342,20 +319,11 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 -- --------------------------------------------------------
 
 --
--- Structure for view `book_payment`
---
-DROP TABLE IF EXISTS `book_payment`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `book_payment`  AS SELECT `booking`.`book_id` AS `ID`, concat(`user`.`fname`,' ',`user`.`lname`) AS `name`, `booking`.`price` AS `amount`, `payments`.`payment_method` AS `payment_method`, `payments`.`payment_status` AS `payment_status` FROM ((((`account` join `user` on(`account`.`account_id` = `user`.`account_id`)) join `booking` on(`account`.`account_id` = `booking`.`account_id`)) join `room` on(`booking`.`room_id` = `room`.`room_id`)) join `payments` on(`booking`.`book_id` = `payments`.`book_id`)) ;
-
--- --------------------------------------------------------
-
---
 -- Structure for view `customer_booking`
 --
 DROP TABLE IF EXISTS `customer_booking`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `customer_booking`  AS SELECT `b`.`book_id` AS `id`, `u`.`fname` AS `fname`, `u`.`lname` AS `lname`, `r`.`room_code` AS `room_code`, `b`.`check_in` AS `check_in`, `b`.`check_out` AS `check_out`, `b`.`book_status` AS `status`, `b`.`price` AS `price` FROM (((`booking` `b` join `account` on(`b`.`account_id` = `account`.`account_id`)) join `user` `u` on(`b`.`account_id` = `u`.`account_id`)) join `room` `r` on(`b`.`room_id` = `r`.`room_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `customer_booking`  AS SELECT `b`.`book_id` AS `id`, `u`.`fname` AS `fname`, `u`.`lname` AS `lname`, `r`.`room_code` AS `room_code`, `b`.`check_in` AS `check_in`, `b`.`check_out` AS `check_out`, `b`.`book_status` AS `status` FROM (((`booking` `b` join `account` on(`b`.`account_id` = `account`.`account_id`)) join `user` `u` on(`b`.`account_id` = `u`.`account_id`)) join `room` `r` on(`b`.`room_id` = `r`.`room_id`)) ;
 
 --
 -- Constraints for dumped tables
@@ -385,12 +353,6 @@ ALTER TABLE `booking_notification`
 --
 ALTER TABLE `feedback`
   ADD CONSTRAINT `feedback_account_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `payments`
---
-ALTER TABLE `payments`
-  ADD CONSTRAINT `payment_book_fk` FOREIGN KEY (`book_id`) REFERENCES `booking` (`book_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `room_gallery`
