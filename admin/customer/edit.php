@@ -124,7 +124,7 @@ $_SESSION['update_id']=$id;
                 <br>
                 <div class="username">
                     <label for="" class="form-label">Username:</label>
-                    <input type="text" class="form-control" name="username" value="<?php echo $row['username'] ?>" required>
+                    <input type="email" class="form-control" name="username" value="<?php echo $row['username'] ?>" required>
             </div>
                 <br>
                 <div class="role">

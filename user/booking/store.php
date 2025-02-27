@@ -14,10 +14,11 @@ if (isset($_POST['submit'])) {
         $check_out = $_POST['check_out'];
         $book_status = "pending";
 
-        if (empty($room_id) || empty($check_in) || empty($check_out)) {
+        if (empty($room_id) || empty($check_in)) {
             throw new Exception("Room selection and check-in/out dates are required.");
         }
 
+<<<<<<< HEAD
         // Prevent past dates in the backend
         $today = date("Y-m-d");
         if ($check_in < $today) {
@@ -25,6 +26,9 @@ if (isset($_POST['submit'])) {
         }
 
         $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+=======
+        $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+>>>>>>> 714494e1d3f36d2c3d5e9e3fdbc422cbda9e6153
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) {
             throw new Exception("Failed to prepare booking statement: " . mysqli_error($conn));

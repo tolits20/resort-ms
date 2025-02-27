@@ -47,7 +47,7 @@ if (isset($_POST['update'])) {
                         $location = "../../resources/assets/images/" . $newfile;
 
                         $sql_with_img = "UPDATE user
-                                        SET fname=?, lname=?, age=?, gender=?, contact=?, profile_img=?, updated_at=NOW() 
+                                        SET fname=?, lname=?, age=?, gender=?, contact=?, profile_img=?
                                         WHERE account_id=?";
                         $stmt_with_img = mysqli_prepare($conn, $sql_with_img);
                         mysqli_stmt_bind_param($stmt_with_img, 'ssisisi', $fname, $lname, $age, $gender, $contact, $newfile, $ID);

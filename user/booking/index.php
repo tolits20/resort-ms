@@ -7,8 +7,13 @@ if (!isset($_SESSION['ID'])) {
 }
 
 $account_id = $_SESSION['ID'];
+<<<<<<< HEAD
 $sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, b.book_status, 
                r.room_code, r.room_type, r.price 
+=======
+$sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, r.price, b.book_status, 
+               r.room_code, r.room_type 
+>>>>>>> 714494e1d3f36d2c3d5e9e3fdbc422cbda9e6153
         FROM booking b 
         JOIN room r ON b.room_id = r.room_id 
         WHERE b.account_id = ?";
