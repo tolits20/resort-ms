@@ -1,7 +1,6 @@
 <?php 
 include('resources/database/config.php');
-// include('admin/includes/template    ')
-
+include("admin/customer/alert.php");
 if(isset($_POST['login'])){
     $username=trim($_POST['username']);
     $password=trim(sha1($_POST['password']));

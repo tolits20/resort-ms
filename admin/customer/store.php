@@ -41,6 +41,7 @@ try{
 
                 if(mysqli_stmt_affected_rows($stmt2)>0 && mysqli_query($conn,$notif) ){
                     if(move_uploaded_file($img_tmp,$location)){
+                        $_SESSION['create_success']='yes';
                         mysqli_commit($conn);
                         header("location:../../login.php");
                         exit;
@@ -65,6 +66,7 @@ try{
                 $notif="INSERT INTO account_notification(account_id,account_notification)values($last_id,'create')";
 
             if(mysqli_stmt_affected_rows($stmt2)>0 && mysqli_query($conn,$notif)){
+                $_SESSION['create_success']='yes';
                 mysqli_commit($conn);
                 header("location:../../login.php");
             }

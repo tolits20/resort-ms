@@ -10,7 +10,7 @@ if(isset($_POST['save'])){
 
       try{
         mysqli_begin_transaction($conn);
-        $sql='UPDATE booking SET check_in=? , check_out= ? , book_status= ? WHERE book_id=?';
+        $sql='UPDATE booking SET check_in=? , check_out= ? , book_status= ?,updated_at=now() WHERE book_id=?';
         $stmt=mysqli_prepare($conn,$sql);
         mysqli_stmt_bind_param($stmt,'sssi',$check_in,$check_out,$book_status,$id);
         mysqli_stmt_execute($stmt);
