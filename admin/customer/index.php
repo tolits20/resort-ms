@@ -57,8 +57,8 @@ include('../../resources/database/config.php');
     }
 
     .btn {
-        width: 40px;
-        height: 40px;
+        width: 40px; /* Fixed width */
+        height: 40px; /* Fixed height */
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -67,7 +67,7 @@ include('../../resources/database/config.php');
     }
 
     .btn i {
-        font-size: 16px;
+        font-size: 16px; /* Icon size */
     }
 
     .popup-overlay {
@@ -99,7 +99,7 @@ include('../../resources/database/config.php');
         background-color: red;
         color: #fff;
     }
-    .popup-content button[name='no']:hover{
+    .popup-content input[name='no']:hover{
         border:solid 1px;
         background-color: green;
         color: #fff;
@@ -152,7 +152,7 @@ include('../../resources/database/config.php');
     <td>
         <a href='view.php?id={$row['account_id']}' class='btn btn-primary btn-sm'><i class='fas fa-eye'></i></a>
         <a href='edit.php?id={$row['account_id']}' class='btn btn-primary btn-sm'><i class='fas fa-edit'></i></a>
-        <button class='btn btn-danger' type='button' onclick='openPopup({$row['account_id']})'><i class ='fas fa-trash'></i></button>
+       <button class='btn btn-danger' type='button' onclick='openPopup({$row['account_id']})'><i class ='fas fa-trash'></i></button>
         
         <div class='popup-overlay' id='popup-{$row['account_id']}' style='color: black; display: none;'>
             <div class='popup-content'>
@@ -163,7 +163,7 @@ include('../../resources/database/config.php');
                     <br>
                     <input type='submit' value='YES' class='form-control' name='yes'>
                     <hr> 
-                    <button type='submit' name='no' class='form-control' onclick='closePopup({$row['account_id']})'>NO</button>
+                    <button type='button' class='form-control' onclick='closePopup({$row['account_id']})'>NO</button>
                     <br>
                 </form>
             </div>
@@ -173,7 +173,7 @@ include('../../resources/database/config.php');
 
 print "<script>
     function openPopup(accountId) {
-        document.getElement ById('popup-' + accountId).style.display = 'flex';
+        document.getElementById('popup-' + accountId).style.display = 'flex';
     }
 
     function closePopup(accountId) {
