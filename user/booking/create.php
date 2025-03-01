@@ -7,7 +7,7 @@ if (!isset($_SESSION['ID'])) {
 }
 
 $rooms = [];
-$result = mysqli_query($conn, "SELECT room_id, room_code, room_type, price FROM room WHERE room_status = 'available'");
+$result = mysqli_query($conn, "SELECT room_id, room_code, room_type, price FROM room WHERE room_status = 'available' || room_status = 'pending'");
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $rooms[] = $row;
@@ -60,7 +60,6 @@ if ($result) {
         </div>
         <div class="mb-3">
           <label for="price_display" class="form-label">Price</label>
-
           <input type="text" id="price_display" class="form-control" readonly>
           <input type="hidden" name="price" id="price">
         </div>
@@ -69,44 +68,81 @@ if ($result) {
           <input type="date" name="check_in" id="check_in" class="form-control" required>
         </div>
         <div class="mb-3">
-          <label for="check_out" class="form-label">Check-out Date (Automatically set to tomorrow)</label>
-          <input type="date" name="check_out" id="check_out" class="form-control" readonly required>
+          <label for="time_slot" class="form-label">Select Time Slot</label>
+          <select name="time_slot" id="time_slot" class="form-select" required>
+            <option value="">Choose a time slot</option>
+            <option value="7:00 AM - 5:00 PM">7:00 AM - 5:00 PM (10 hrs)</option>
+            <option value="7:00 PM - 5:00 AM">7:00 PM - 5:00 AM (10 hrs)</option>
+            <option value="7:00 PM - 5:00 PM">7:00 PM - 5:00 PM (22 hrs)</option>
+            <option value="7:00 AM - 5:00 AM">7:00 AM - 5:00 AM (22 hrs)</option>
+          </select>
         </div>
+
+        <input type="hidden" name="check_out" id="check_out">
+        <input type="hidden" name="check_in_time" id="check_in_time">
+        <input type="hidden" name="check_out_time" id="check_out_time">
+
         <div class="d-grid">
           <button type="submit" name="submit" class="btn btn-primary">Book Now</button>
         </div>
       </form>
-      <small class="text-muted">Booking is limited to one day only.</small>
     </div>
   </div>
 
-  <<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var today = new Date().toISOString().split("T")[0]; 
-    document.getElementById("check_in").setAttribute("min", today);
-  });
-
-  document.getElementById("check_in").addEventListener("change", function () {
-    var checkInDate = new Date(this.value);
-    if (!isNaN(checkInDate)) {
-      checkInDate.setDate(checkInDate.getDate() + 1);
-      var year = checkInDate.getFullYear();
-      var month = ("0" + (checkInDate.getMonth() + 1)).slice(-2);
-      var day = ("0" + checkInDate.getDate()).slice(-2);
-      var tomorrow = year + '-' + month + '-' + day;
-      document.getElementById("check_out").value = tomorrow;
-    } else {
-      document.getElementById("check_out").value = '';
-    }
-  });
+  <script>
+  document.getElementById("time_slot").addEventListener("change", updateCheckOut);
+  document.getElementById("check_in").addEventListener("change", updateCheckOut);
 
   document.getElementById("room_id").addEventListener("change", function () {
-    var selectedOption = this.options[this.selectedIndex];
-    var price = selectedOption.getAttribute("data-price") || 0;
-    document.getElementById("price_display").value = price;
-    document.getElementById("price").value = price;
+      var selectedOption = this.options[this.selectedIndex];
+      var price = selectedOption.getAttribute("data-price") || 0;
+      document.getElementById("price_display").value = price;
+      document.getElementById("price").value = price;
   });
-</script>
+  
+  function updateCheckOut() {
+      var checkInDate = document.getElementById("check_in").value;
+      var timeSlot = document.getElementById("time_slot").value;
+      var checkOutField = document.getElementById("check_out");
+      var checkInTimeField = document.getElementById("check_in_time");
+      var checkOutTimeField = document.getElementById("check_out_time");
+
+      if (checkInDate && timeSlot) {
+          var checkInDateTime = new Date(checkInDate);
+
+          var checkInTime, checkOutTime;
+          switch (timeSlot) {
+              case "7:00 AM - 5:00 PM":
+                  checkInTime = "07:00:00";
+                  checkOutTime = "17:00:00";
+                  break;
+              case "7:00 PM - 5:00 AM":
+                  checkInTime = "19:00:00";
+                  checkInDateTime.setDate(checkInDateTime.getDate() + 1);
+                  checkOutTime = "05:00:00";
+                  break;
+              case "7:00 PM - 5:00 PM":
+                  checkInTime = "19:00:00";
+                  checkInDateTime.setDate(checkInDateTime.getDate() + 1);
+                  checkOutTime = "17:00:00";
+                  break;
+              case "7:00 AM - 5:00 AM":
+                  checkInTime = "07:00:00";
+                  checkInDateTime.setDate(checkInDateTime.getDate() + 1);
+                  checkOutTime = "05:00:00";
+                  break;
+              default:
+                  return;
+          }
+
+          var formattedCheckOut = checkInDateTime.toISOString().split("T")[0];
+
+          checkOutField.value = formattedCheckOut;
+          checkInTimeField.value = checkInTime;
+          checkOutTimeField.value = checkOutTime;
+      }
+  }
+  </script>
 
 </body>
 </html>
