@@ -14,7 +14,8 @@ if (isset($_POST['submit'])) {
         $check_out = $_POST['check_out'];
         $check_in_time = $_POST['check_in_time'];
         $check_out_time = $_POST['check_out_time'];
-        $book_status = "pending"; 
+        $price = $_POST['price'];
+        $book_status = "pending";
 
         if (empty($room_id) || empty($check_in) || empty($check_in_time) || empty($check_out) || empty($check_out_time)) {
             throw new Exception("All booking fields are required.");
