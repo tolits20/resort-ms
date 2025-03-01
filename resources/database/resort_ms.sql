@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2025 at 11:09 AM
+-- Generation Time: Mar 01, 2025 at 02:30 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,15 +29,16 @@ USE `resort_ms`;
 -- Table structure for table `account`
 --
 
-CREATE TABLE `account` (
-  `account_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `account` (
+  `account_id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `role` enum('user','admin') NOT NULL,
   `status` enum('activate','deactivate') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account`
@@ -58,12 +59,14 @@ INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `
 -- Table structure for table `account_notification`
 --
 
-CREATE TABLE `account_notification` (
-  `cnotif_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `account_notification` (
+  `cnotif_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `account_notification` enum('create','update') NOT NULL,
-  `Date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `Date` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`cnotif_id`),
+  KEY `account_notification_fk` (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account_notification`
@@ -95,8 +98,8 @@ INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `account_notifica
 -- Table structure for table `booking`
 --
 
-CREATE TABLE `booking` (
-  `book_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `booking` (
+  `book_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
   `guest_id` int(11) DEFAULT NULL,
   `room_id` int(11) NOT NULL,
@@ -104,8 +107,12 @@ CREATE TABLE `booking` (
   `check_out` datetime NOT NULL,
   `book_status` enum('pending','confirmed','cancelled','completed') NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
-) ;
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`book_id`),
+  KEY `book_room_fk` (`room_id`),
+  KEY `book_account_fk` (`account_id`),
+  KEY `book_guest_fk` (`guest_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
@@ -122,12 +129,14 @@ INSERT INTO `booking` (`book_id`, `account_id`, `guest_id`, `room_id`, `check_in
 -- Table structure for table `booking_notification`
 --
 
-CREATE TABLE `booking_notification` (
-  `booking_notif_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `booking_notification` (
+  `booking_notif_id` int(11) NOT NULL AUTO_INCREMENT,
   `book_id` int(11) NOT NULL,
   `booking_status` varchar(50) NOT NULL,
-  `Date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `Date` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`booking_notif_id`),
+  KEY `booking_notif_id` (`book_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_notification`
@@ -142,7 +151,7 @@ INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_stat
 -- Stand-in structure for view `customer_booking`
 -- (See below for the actual view)
 --
-CREATE TABLE `customer_booking` (
+CREATE TABLE IF NOT EXISTS `customer_booking` (
 `id` int(11)
 ,`fname` varchar(50)
 ,`lname` varchar(50)
@@ -158,23 +167,25 @@ CREATE TABLE `customer_booking` (
 -- Table structure for table `discount`
 --
 
-CREATE TABLE `discount` (
-  `discount_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `discount` (
+  `discount_id` int(11) NOT NULL AUTO_INCREMENT,
   `discount_name` varchar(50) NOT NULL,
   `discount_percentage` int(11) NOT NULL,
   `discount_start` date NOT NULL,
   `discount_end` date NOT NULL,
+  `discount_status` enum('activate','deactivate') NOT NULL,
   `applicable_room` enum('premium','deluxe','standard') NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`discount_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `discount`
 --
 
-INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percentage`, `discount_start`, `discount_end`, `applicable_room`, `created_at`, `updated_at`) VALUES
-(1, 'promo 50%', 50, '2025-02-28', '2025-03-31', 'standard', '2025-02-28 15:28:13', '2025-02-28 15:28:13');
+INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percentage`, `discount_start`, `discount_end`, `discount_status`, `applicable_room`, `created_at`, `updated_at`) VALUES
+(1, 'promo 50%', 50, '2025-03-01', '2025-03-02', 'activate', 'standard', '2025-02-28 15:28:13', '2025-02-28 15:28:13');
 
 -- --------------------------------------------------------
 
@@ -182,15 +193,18 @@ INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percentage`, `
 -- Table structure for table `feedback`
 --
 
-CREATE TABLE `feedback` (
-  `feedback_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `feedback_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `book_id` int(11) DEFAULT NULL,
   `rating` int(1) NOT NULL,
   `comment` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`feedback_id`),
+  KEY `feedback_account_fk` (`account_id`),
+  KEY `feedback_book_fk` (`book_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -198,16 +212,17 @@ CREATE TABLE `feedback` (
 -- Table structure for table `guest`
 --
 
-CREATE TABLE `guest` (
-  `guest_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `guest` (
+  `guest_id` int(11) NOT NULL AUTO_INCREMENT,
   `fname` varchar(50) NOT NULL,
   `lname` varchar(50) NOT NULL,
   `gender` enum('Male','Female','','') NOT NULL,
   `contact` varchar(15) NOT NULL,
   `email` varchar(50) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`guest_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `guest`
@@ -222,8 +237,8 @@ INSERT INTO `guest` (`guest_id`, `fname`, `lname`, `gender`, `contact`, `email`,
 -- Table structure for table `payment`
 --
 
-CREATE TABLE `payment` (
-  `payment_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `payment` (
+  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
   `book_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `payment_type` enum('cash','credit card','e-payment') NOT NULL,
@@ -231,7 +246,9 @@ CREATE TABLE `payment` (
   `transaction_id` varchar(255) NOT NULL,
   `payment_status` enum('pending','paid','refunded') NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`payment_id`),
+  KEY `payment_book_fk` (`book_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -240,25 +257,27 @@ CREATE TABLE `payment` (
 -- Table structure for table `room`
 --
 
-CREATE TABLE `room` (
-  `room_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `room` (
+  `room_id` int(11) NOT NULL AUTO_INCREMENT,
   `room_code` varchar(50) NOT NULL,
   `room_type` enum('standard','premium','deluxe') NOT NULL,
   `room_status` enum('available','booked','under maintenance') NOT NULL,
-  `price` decimal(10,0) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`room_id`),
+  UNIQUE KEY `room_ code` (`room_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room`
 --
 
 INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `price`, `created_at`, `updated_at`) VALUES
-(9, 'room101', 'premium', 'available', 500, '2025-02-15 15:37:50', '2025-02-28 04:04:14'),
-(12, 'room102', 'premium', 'booked', 1000, '2025-02-19 12:40:06', '2025-02-28 04:04:14'),
-(14, 'room103', 'premium', 'under maintenance', 5000, '2025-02-22 03:31:37', '2025-02-27 15:03:28'),
-(15, 'room104', 'premium', 'available', 6000, '2025-02-25 01:27:38', '2025-02-27 15:30:17');
+(9, 'room101', 'standard', 'available', 500.00, '2025-02-15 15:37:50', '2025-03-01 13:27:58'),
+(12, 'room102', 'premium', 'booked', 1000.00, '2025-02-19 12:40:06', '2025-02-28 04:04:14'),
+(14, 'room103', 'premium', 'under maintenance', 5000.00, '2025-02-22 03:31:37', '2025-02-27 15:03:28'),
+(15, 'room104', 'premium', 'available', 6000.00, '2025-02-25 01:27:38', '2025-02-27 15:30:17');
 
 -- --------------------------------------------------------
 
@@ -266,10 +285,11 @@ INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `price`,
 -- Table structure for table `room_gallery`
 --
 
-CREATE TABLE `room_gallery` (
+CREATE TABLE IF NOT EXISTS `room_gallery` (
   `room_id` int(11) NOT NULL,
   `room_img` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  KEY `galley_room_fk` (`room_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -294,12 +314,14 @@ INSERT INTO `room_gallery` (`room_id`, `room_img`, `created_at`) VALUES
 -- Table structure for table `room_notification`
 --
 
-CREATE TABLE `room_notification` (
-  `rnotif_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `room_notification` (
+  `rnotif_id` int(11) NOT NULL AUTO_INCREMENT,
   `room_id` int(11) NOT NULL,
   `room_notification` enum('create','update') NOT NULL,
-  `Date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `Date` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`rnotif_id`),
+  KEY `room_notification_fk` (`room_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_notification`
@@ -314,7 +336,8 @@ INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `D
 (6, 12, 'update', '2025-02-25 12:39:53'),
 (7, 15, 'update', '2025-02-25 12:40:00'),
 (8, 9, 'update', '2025-02-26 08:15:26'),
-(9, 14, 'update', '2025-02-27 23:03:28');
+(9, 14, 'update', '2025-02-27 23:03:28'),
+(15, 9, 'update', '2025-03-01 21:27:58');
 
 -- --------------------------------------------------------
 
@@ -322,16 +345,21 @@ INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `D
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `fname` varchar(50) NOT NULL,
   `lname` varchar(50) NOT NULL,
   `age` int(11) NOT NULL,
   `gender` enum('male','female') NOT NULL,
   `contact` varchar(15) NOT NULL,
-  `profile_img` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `profile_img` varchar(255) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `name` (`fname`),
+  UNIQUE KEY `contact` (`contact`),
+  KEY `user_account_fk` (`account_id`),
+  KEY `unique_fullname` (`fname`,`lname`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -354,166 +382,6 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 DROP TABLE IF EXISTS `customer_booking`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `customer_booking`  AS SELECT `b`.`book_id` AS `id`, `u`.`fname` AS `fname`, `u`.`lname` AS `lname`, `r`.`room_code` AS `room_code`, `b`.`check_in` AS `check_in`, `b`.`check_out` AS `check_out`, `b`.`book_status` AS `status` FROM (((`booking` `b` join `account` on(`b`.`account_id` = `account`.`account_id`)) join `user` `u` on(`b`.`account_id` = `u`.`account_id`)) join `room` `r` on(`b`.`room_id` = `r`.`room_id`)) ;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `account`
---
-ALTER TABLE `account`
-  ADD PRIMARY KEY (`account_id`);
-
---
--- Indexes for table `account_notification`
---
-ALTER TABLE `account_notification`
-  ADD PRIMARY KEY (`cnotif_id`),
-  ADD KEY `account_notification_fk` (`account_id`);
-
---
--- Indexes for table `booking`
---
-ALTER TABLE `booking`
-  ADD PRIMARY KEY (`book_id`),
-  ADD KEY `book_room_fk` (`room_id`),
-  ADD KEY `book_account_fk` (`account_id`),
-  ADD KEY `book_guest_fk` (`guest_id`);
-
---
--- Indexes for table `booking_notification`
---
-ALTER TABLE `booking_notification`
-  ADD PRIMARY KEY (`booking_notif_id`),
-  ADD KEY `booking_notif_id` (`book_id`);
-
---
--- Indexes for table `discount`
---
-ALTER TABLE `discount`
-  ADD PRIMARY KEY (`discount_id`);
-
---
--- Indexes for table `feedback`
---
-ALTER TABLE `feedback`
-  ADD PRIMARY KEY (`feedback_id`),
-  ADD KEY `feedback_account_fk` (`account_id`),
-  ADD KEY `feedback_book_fk` (`book_id`);
-
---
--- Indexes for table `guest`
---
-ALTER TABLE `guest`
-  ADD PRIMARY KEY (`guest_id`);
-
---
--- Indexes for table `payment`
---
-ALTER TABLE `payment`
-  ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `payment_book_fk` (`book_id`);
-
---
--- Indexes for table `room`
---
-ALTER TABLE `room`
-  ADD PRIMARY KEY (`room_id`),
-  ADD UNIQUE KEY `room_ code` (`room_code`);
-
---
--- Indexes for table `room_gallery`
---
-ALTER TABLE `room_gallery`
-  ADD KEY `galley_room_fk` (`room_id`);
-
---
--- Indexes for table `room_notification`
---
-ALTER TABLE `room_notification`
-  ADD PRIMARY KEY (`rnotif_id`),
-  ADD KEY `room_notification_fk` (`room_id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `name` (`fname`),
-  ADD UNIQUE KEY `contact` (`contact`),
-  ADD KEY `user_account_fk` (`account_id`),
-  ADD KEY `unique_fullname` (`fname`,`lname`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `account`
---
-ALTER TABLE `account`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
-
---
--- AUTO_INCREMENT for table `account_notification`
---
-ALTER TABLE `account_notification`
-  MODIFY `cnotif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
-
---
--- AUTO_INCREMENT for table `booking`
---
-ALTER TABLE `booking`
-  MODIFY `book_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `booking_notification`
---
-ALTER TABLE `booking_notification`
-  MODIFY `booking_notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `discount`
---
-ALTER TABLE `discount`
-  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `feedback`
---
-ALTER TABLE `feedback`
-  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `guest`
---
-ALTER TABLE `guest`
-  MODIFY `guest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `payment`
---
-ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `room`
---
-ALTER TABLE `room`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT for table `room_notification`
---
-ALTER TABLE `room_notification`
-  MODIFY `rnotif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables
