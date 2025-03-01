@@ -6,92 +6,69 @@ include("../includes/system_update.php");
 $sql="SELECT * FROM customer_booking ORDER BY id DESC;";
 $result=mysqli_query($conn,$sql);
 
-
+if(isset($_GET['switch'])){
+    if($_GET['switch']=='user'){
+        $sql="SELECT * FROM customer_booking ORDER BY id DESC;";
+        $result=mysqli_query($conn,$sql);
+    }elseif($_GET['switch']=='guest'){
+        $sql="SELECT * FROM guest_booking ORDER BY id DESC;";
+        $result=mysqli_query($conn,$sql);
+    }
+}
 ?>
 <style>
+    .content {
+        padding: 20px;
+    }
     .booking-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.booking-table thead {
-    background: #222;
-    color: white;
-}
-
-.booking-table th, .booking-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.booking-table tbody tr:hover {
-    background: #f9f9f9;
-}
-
-/* Buttons */
-.btn-primary {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background 0.3s;
-}
-
-.btn-primary:hover {
-    background: #0056b3;
-}
-
-.btn-danger {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background 0.3s;
-}
-
-.btn-danger:hover {
-    background: #b02a37;
-}
-
-/* Form Styling */
-.booking-form {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.booking-form label {
-    font-weight: bold;
-}
-
-.booking-form input, .booking-form select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Cards */
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-
-
-
-.popup-overlay {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .booking-table thead {
+        background: #222;
+        color: white;
+    }
+    .booking-table th, .booking-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .booking-table tbody tr:hover {
+        background: #f9f9f9;
+    }
+    .form-select {
+        width: 200px;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .btn-success { background: #28a745; color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-primary { background: #007bff; color: white; }
+    .btn-primary:hover { background: #0056b3; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-danger:hover { background: #b02a37; }
+    
+    /* Popup Styles */
+    .popup-overlay {
         display: none;
         position: fixed;
         top: 0;
@@ -102,31 +79,14 @@ $result=mysqli_query($conn,$sql);
         justify-content: center;
         align-items: center;
     }
-
     .popup-content {
         background: white;
         padding: 20px;
         width: 400px;
-        text-align: start;
+        text-align: center;
         border-radius: 8px;
         position: relative;
     }
-
-    .popup-content input{
-        border:solid 1px;
-    }
-    .popup-content input[name='yes']:hover{
-        border:solid 1px;
-        background-color: red;
-        color: #fff;
-    }
-    .popup-content button[name='no']:hover{
-        border:solid 1px;
-        background-color: green;
-        color: #fff;
-    }
-
-
     .close-btn {
         position: absolute;
         top: 10px;
@@ -136,7 +96,13 @@ $result=mysqli_query($conn,$sql);
         color: red;
     }
 </style>
-<div class="content">   
+<div class="content"> 
+   <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
+   <select name="switch" id="" class="form-select" onchange="this.form.submit()">
+        <option value="user" <?php echo ($_GET['switch']=='user' ? 'selected' : '') ?>>User <i class="fas fa-user"></i></option>
+        <option value="guest" <?php echo ($_GET['switch']=='guest' ? 'selected' : '') ?>>Guest</option>
+    </select> 
+   </form>
     <!-- Booking Table -->
     <div class="card">
         <h4 class="mb-3">Existing Bookings</h4>
@@ -162,6 +128,7 @@ $result=mysqli_query($conn,$sql);
                     <td>{$row['check_out']}</td>
                     <td><span class='badge bg-success'>{$row['status']}</span></td>
                     <td>
+                        <a href='../payment/index.php?id={$row['id']}' class='btn btn-success'><i class='fas fa-credit-card'></i></a>
                         <a href='edit.php?id={$row['id']}' class='btn btn-primary btn-sm'><i class='fas fa-edit'></i></a>
                         <button class='btn btn-danger' type='button' onclick='openPopup({$row['id']})'><i class ='fas fa-trash'></i></button>
                              <div class='popup-overlay' id='popup-{$row['id']}' style='color: black; display: none;'>

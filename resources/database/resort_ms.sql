@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2025 at 02:30 PM
+-- Generation Time: Mar 01, 2025 at 03:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -234,6 +234,22 @@ INSERT INTO `guest` (`guest_id`, `fname`, `lname`, `gender`, `contact`, `email`,
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `guest_booking`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `guest_booking` (
+`id` int(11)
+,`fname` varchar(50)
+,`lname` varchar(50)
+,`room_code` varchar(50)
+,`check_in` datetime
+,`check_out` datetime
+,`status` enum('pending','confirmed','cancelled','completed')
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `payment`
 --
 
@@ -275,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `room` (
 
 INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `price`, `created_at`, `updated_at`) VALUES
 (9, 'room101', 'standard', 'available', 500.00, '2025-02-15 15:37:50', '2025-03-01 13:27:58'),
-(12, 'room102', 'premium', 'booked', 1000.00, '2025-02-19 12:40:06', '2025-02-28 04:04:14'),
+(12, 'room102', 'standard', 'booked', 1000.00, '2025-02-19 12:40:06', '2025-03-01 13:33:44'),
 (14, 'room103', 'premium', 'under maintenance', 5000.00, '2025-02-22 03:31:37', '2025-02-27 15:03:28'),
 (15, 'room104', 'premium', 'available', 6000.00, '2025-02-25 01:27:38', '2025-02-27 15:30:17');
 
@@ -321,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `room_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`rnotif_id`),
   KEY `room_notification_fk` (`room_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_notification`
@@ -337,7 +353,8 @@ INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `D
 (7, 15, 'update', '2025-02-25 12:40:00'),
 (8, 9, 'update', '2025-02-26 08:15:26'),
 (9, 14, 'update', '2025-02-27 23:03:28'),
-(15, 9, 'update', '2025-03-01 21:27:58');
+(15, 9, 'update', '2025-03-01 21:27:58'),
+(16, 12, 'update', '2025-03-01 21:33:44');
 
 -- --------------------------------------------------------
 
@@ -382,6 +399,15 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 DROP TABLE IF EXISTS `customer_booking`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `customer_booking`  AS SELECT `b`.`book_id` AS `id`, `u`.`fname` AS `fname`, `u`.`lname` AS `lname`, `r`.`room_code` AS `room_code`, `b`.`check_in` AS `check_in`, `b`.`check_out` AS `check_out`, `b`.`book_status` AS `status` FROM (((`booking` `b` join `account` on(`b`.`account_id` = `account`.`account_id`)) join `user` `u` on(`b`.`account_id` = `u`.`account_id`)) join `room` `r` on(`b`.`room_id` = `r`.`room_id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `guest_booking`
+--
+DROP TABLE IF EXISTS `guest_booking`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `guest_booking`  AS SELECT `b`.`book_id` AS `id`, `g`.`fname` AS `fname`, `g`.`lname` AS `lname`, `r`.`room_code` AS `room_code`, `b`.`check_in` AS `check_in`, `b`.`check_out` AS `check_out`, `b`.`book_status` AS `status` FROM (((`booking` `b` join `guest` on(`b`.`guest_id` = `guest`.`guest_id`)) join `guest` `g` on(`b`.`guest_id` = `g`.`guest_id`)) join `room` `r` on(`b`.`room_id` = `r`.`room_id`)) ;
 
 --
 -- Constraints for dumped tables
