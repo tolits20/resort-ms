@@ -16,7 +16,7 @@ if(isset($_POST['create'])){
         $sql="INSERT INTO discount (discount_name,discount_percentage,discount_start,discount_end,discount_status,applicable_room )
             VALUES(?,?,?,?,'active',?)";
             $stmt=mysqli_prepare($conn,$sql);
-            mysqli_stmt_bind_param($stmt,"sidds",$name,$percentage,$start,$end,$type);
+            mysqli_stmt_bind_param($stmt,"sisss",$name,$percentage,$start,$end,$type);
             mysqli_stmt_execute($stmt);
 
             if(mysqli_stmt_affected_rows($stmt)){
