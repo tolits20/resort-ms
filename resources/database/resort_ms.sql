@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2025 at 03:59 PM
+-- Generation Time: Mar 01, 2025 at 05:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -119,7 +119,6 @@ CREATE TABLE IF NOT EXISTS `booking` (
 --
 
 INSERT INTO `booking` (`book_id`, `account_id`, `guest_id`, `room_id`, `check_in`, `check_out`, `book_status`, `created_at`, `updated_at`) VALUES
-(3, 5, NULL, 9, '2025-03-14 18:00:00', '2025-03-18 10:00:00', 'pending', '2025-03-03 08:45:00', '2025-03-01 09:29:21'),
 (4, NULL, 1, 9, '2025-03-14 18:00:00', '2025-03-18 10:00:00', 'pending', '2025-03-03 08:45:00', '2025-03-01 09:29:34'),
 (5, 12, NULL, 15, '2025-02-25 00:00:00', '2025-02-27 00:00:00', 'confirmed', '2025-02-25 12:32:02', '2025-02-28 06:24:42');
 
@@ -265,7 +264,15 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`payment_id`),
   KEY `payment_book_fk` (`book_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payment`
+--
+
+INSERT INTO `payment` (`payment_id`, `book_id`, `amount`, `payment_type`, `payment_img`, `transaction_id`, `payment_status`, `created_at`, `updated_at`) VALUES
+(1, 5, 6000.00, 'e-payment', '', '', 'pending', '2025-03-01 23:33:59', '2025-03-01 23:33:59'),
+(3, 4, 500.00, 'cash', '', '', 'pending', '2025-03-02 00:19:30', '2025-03-02 00:19:30');
 
 -- --------------------------------------------------------
 
@@ -359,6 +366,27 @@ INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `D
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `summary_payment`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `summary_payment` (
+`booking_id` int(11)
+,`booking_type` varchar(5)
+,`name` varchar(101)
+,`room_code` varchar(50)
+,`room_type` varchar(8)
+,`price` decimal(10,2)
+,`check_in` datetime
+,`check_out` datetime
+,`book_status` varchar(9)
+,`amount_paid` decimal(10,2)
+,`payment_status` varchar(8)
+,`payment_created_at` datetime
+);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -408,6 +436,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `guest_booking`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `guest_booking`  AS SELECT `b`.`book_id` AS `id`, `g`.`fname` AS `fname`, `g`.`lname` AS `lname`, `r`.`room_code` AS `room_code`, `b`.`check_in` AS `check_in`, `b`.`check_out` AS `check_out`, `b`.`book_status` AS `status` FROM (((`booking` `b` join `guest` on(`b`.`guest_id` = `guest`.`guest_id`)) join `guest` `g` on(`b`.`guest_id` = `g`.`guest_id`)) join `room` `r` on(`b`.`room_id` = `r`.`room_id`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `summary_payment`
+--
+DROP TABLE IF EXISTS `summary_payment`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `summary_payment`  AS SELECT `cb`.`id` AS `booking_id`, 'User' AS `booking_type`, concat(`cb`.`fname`,' ',`cb`.`lname`) AS `name`, `cb`.`room_code` AS `room_code`, `r`.`room_type` AS `room_type`, `r`.`price` AS `price`, `cb`.`check_in` AS `check_in`, `cb`.`check_out` AS `check_out`, `cb`.`status` AS `book_status`, coalesce(`p`.`amount`,0) AS `amount_paid`, coalesce(`p`.`payment_status`,'Pending') AS `payment_status`, `p`.`created_at` AS `payment_created_at` FROM ((`customer_booking` `cb` left join `payment` `p` on(`cb`.`id` = `p`.`book_id`)) join `room` `r` on(`cb`.`room_code` = `r`.`room_code`))union all select `gb`.`id` AS `booking_id`,'Guest' AS `booking_type`,concat(`gb`.`fname`,' ',`gb`.`lname`) AS `name`,`gb`.`room_code` AS `room_code`,`r`.`room_type` AS `room_type`,`r`.`price` AS `price`,`gb`.`check_in` AS `check_in`,`gb`.`check_out` AS `check_out`,`gb`.`status` AS `book_status`,coalesce(`p`.`amount`,0) AS `amount_paid`,coalesce(`p`.`payment_status`,'Pending') AS `payment_status`,`p`.`created_at` AS `payment_created_at` from ((`guest_booking` `gb` left join `payment` `p` on(`gb`.`id` = `p`.`book_id`)) join `room` `r` on(`gb`.`room_code` = `r`.`room_code`))  ;
 
 --
 -- Constraints for dumped tables
