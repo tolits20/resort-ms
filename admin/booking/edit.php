@@ -1,6 +1,8 @@
 <?php 
 include ('../includes/template.html');
 include('../../resources/database/config.php');
+include("../includes/system_update.php");
+
 $id=$_GET['id'];
 $sql="SELECT * FROM booking left join account using(account_id) left join user using(account_id) left join room using (room_id)
     WHERE booking.book_id= {$id}";

@@ -1,5 +1,6 @@
 <?php 
 include('../../resources/database/config.php');
+include("../includes/system_update.php");
 
 if(isset($_GET['id']) && isset($_POST['yes'])){
     $id=$_GET['id'];

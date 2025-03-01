@@ -1,26 +1,7 @@
 <?php 
 include ('../resources/database/config.php');
 include('includes/template.html');
-
-
-
-$check="SELECT * FROM booking";
-$check_set=mysqli_query($conn,$check);
-echo $today = date("Y-m-d");
-while($check_record=mysqli_fetch_assoc($check_set)){
-    if($check_record['check_out']==$today && $check_record['book_status']=="confirmed"){
-        echo $set="UPDATE booking SET book_status='completed' WHERE book_id={$check_record['book_id']}";
-        $set1=mysqli_query($conn,$set); 
-        if(mysqli_affected_rows($conn)>0){
-           echo $set2="UPDATE room SET room_status='available' WHERE room_id={$check_record['room_id']}";
-            if (!mysqli_query($conn, $set2)) {
-                echo "Error updating room status: " . mysqli_error($conn);
-            }
-        }
-    }
-}
-
-
+include("includes/system_update.php");
 
 
 $sql="SELECT COUNT(account_id) as 'cnew' FROM account INNER JOIN user USING(account_id)
@@ -52,7 +33,7 @@ $sql1="SELECT COUNT(room_id) as 'available' FROM room WHERE room_status = 'avail
 $result1=mysqli_query($conn,$sql1);
 $available_room=mysqli_fetch_assoc($result1);
 
-$sql2="SELECT COUNT(*) as 'books' FROM booking WHERE DATE(created_at) = CURDATE()";
+$sql2="SELECT COUNT(*) as 'books' FROM booking WHERE book_status='pending' || book_status='confirmed' ";
 $result2=mysqli_query($conn,$sql2);
 $bookings=mysqli_fetch_assoc($result2);
 

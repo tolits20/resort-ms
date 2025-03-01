@@ -1,6 +1,7 @@
 <?php 
 include ('../includes/template.html');
 include('../../resources/database/config.php');
+include("../includes/system_update.php");
 
 ?>
 <style>
