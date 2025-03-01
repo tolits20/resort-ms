@@ -71,16 +71,19 @@ $track=mysqli_fetch_assoc($track_result);
                         <tbody>
                            
                             <?php while($row=mysqli_fetch_assoc($result)){
+                                $status=($row['discount_status'] == 'activate') ? 'selected' : '';
                                 echo " <tr>
                                             <td>{$row['discount_name']}</td>
                                             <td>{$row['discount_percentage']}%</td>
                                             <td>{$row['discount_start']}</td>
                                             <td>{$row['discount_end']}</td>
                                             <td>{$row['applicable_room']}</td>
-                                            <td><select class='form-select' name='status'>
-                                                <option value='activate'>Activate</option>
-                                                <option value='deactivate'>Deactivate</option>
+                                            <td><form action='update.php?id={$row['discount_id']}' method='POST'>
+                                                <select class='form-select' name='status' onchange='this.form.submit()'>
+                                                <option value='activate' ". ($status ? "selected" : "") .">Activate</option>
+                                                <option value='deactivate' ". ($status ? "" : "selected") .">Deactivate</option>
                                                 </select>
+                                            </form>
                                             </td>
                                             <td>
                                                 <a class='btn btn-sm btn-warning' href='edit.php?id={$row['discount_id']}'><i class='fas fa-edit'></i></a>

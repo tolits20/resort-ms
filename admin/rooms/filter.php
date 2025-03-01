@@ -3,13 +3,38 @@
 $result;
 
 if(isset($_GET['search']) && isset($_GET['searchbar'])){
-    echo $find=isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
+     $find=isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
     $search="'%$find%'";
-    $sql1 = "SELECT * FROM room WHERE room_code LIKE $search ";
+    $sql1 = "SELECT 
+    room.room_status,
+    room.room_id,
+    room.price,
+    room.room_code,
+    discount.discount_name,
+    discount.discount_percentage,
+    ROUND(room.price - (room.price * (discount.discount_percentage / 100)), 2) AS discounted_price
+FROM room
+LEFT JOIN discount 
+    ON room.room_type = discount.applicable_room 
+    AND discount.discount_status = 'activate'
+    AND NOW() BETWEEN discount.discount_start AND discount.discount_end
+WHERE room.room_code LIKE $search;";
     $result = mysqli_query($conn, $sql1);
 
     }else{
-    $sql1 = "SELECT * FROM room";
+    $sql1 = "SELECT 
+    room.room_status,
+    room.room_id,
+    room.price,
+    room.room_code,
+    discount.discount_name,
+    discount.discount_percentage,
+    ROUND(room.price - (room.price * (discount.discount_percentage / 100)), 2) AS discounted_price
+FROM room
+LEFT JOIN discount 
+    ON room.room_type = discount.applicable_room 
+    AND discount.discount_status = 'activate'
+    AND NOW() BETWEEN discount.discount_start AND discount.discount_end";
     $result = mysqli_query($conn, $sql1);
     
     }
@@ -53,7 +78,7 @@ if(isset($_GET['search']) && isset($_GET['searchbar'])){
     <button class="back-btn" onclick="history.back()">← Back</button>
     <form action="<?php $_SERVER['PHP_SELF']?>" method="get">
    <input type="text" class="search-bar" name="searchbar"  placeholder="Search...">
-   <button class="btn btn-primary" name="search" value="search"><i class="fas fa-magnifying-glass"></i></button>
+   <button class="btn btn-primary" name="search" ><i class="fas fa-magnifying-glass"></i></button>
    </form>
     <a href="create.php" class="btn btn-primary" style="text-decoration: none; color:white;"><i class="fas fa-add "></i></a>
 </div>

@@ -17,11 +17,18 @@ while($check_record=mysqli_fetch_assoc($check_set)){
     }
 }
 
+
 //realtime discount tracking
 $track_query="SELECT 
 (SELECT COUNT(*) FROM discount WHERE discount_start<=CURDATE() && discount_end>=CURDATE()) AS active_discount,
 (SELECT COUNT(*) FROM discount WHERE discount_start<CURDATE() && discount_end<CURDATE()) AS expired_discount,
 (SELECT COUNT(*) FROM discount WHERE discount_start>CURDATE() && discount_end>CURDATE()) AS upcoming_discount;";
+
+
+$room_discount="SELECT
+room.room_status, discount.discount_status FROM room UNION discount
+WHERE
+";
 
 
 ?>

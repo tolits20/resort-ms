@@ -34,6 +34,12 @@ if (isset($_POST['update'])) {
         mysqli_rollback($conn);
         echo "Error: " . $e->getMessage();
     }
+}elseif(isset($_POST['status'])){
+    $sql="UPDATE discount SET discount_status='{$_POST['status']}' WHERE discount_id={$_GET['id']}";
+    mysqli_query($conn,$sql);
+    if(mysqli_affected_rows($conn)>0){
+        header("location:index.php");
+    }
 }
 ?>
 
