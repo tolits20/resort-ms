@@ -3,87 +3,88 @@ include ('../resources/database/config.php');
 include('includes/template.html');
 include("includes/system_update.php");
 
-
-$sql="SELECT COUNT(account_id) as 'cnew' FROM account INNER JOIN user USING(account_id)
-    WHERE DATE(account.created_at) >= CURDATE() - INTERVAL 7 DAY";
+// Count new customers in the last 7 days
+$sql="SELECT COUNT(account_id) as 'cnew' 
+      FROM account 
+      INNER JOIN user USING(account_id)
+      WHERE DATE(account.created_at) >= CURDATE() - INTERVAL 7 DAY";
 $result=mysqli_query($conn,$sql);
 $new_customer=mysqli_fetch_assoc($result);
 
+// Count total notifications in the last 7 days
 $ctmr_count_notif="SELECT 
     (SELECT COUNT(*) 
      FROM account
      INNER JOIN user USING(account_id)
      INNER JOIN account_notification USING(account_id)
-     WHERE DATE(account_notification.Date) >= CURDATE() 
+     WHERE DATE(account_notification.Date) >= CURDATE() - INTERVAL 2 DAY
     ) 
     + 
     (SELECT COUNT(*) 
      FROM room
      INNER JOIN room_notification USING(room_id)
+     WHERE DATE(room_notification.Date) >= CURDATE() - INTERVAL 2 DAY
     ) +
     (SELECT COUNT(*)
-    FROM booking_notification
-    WHERE DATE(booking_notification.Date) >= CURDATE() 
+     FROM booking_notification
+     WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY
     ) 
 AS total_count";
 $c_count=mysqli_query($conn,$ctmr_count_notif);
 $c_final_count=mysqli_fetch_assoc($c_count);
 
+// Count available rooms
 $sql1="SELECT COUNT(room_id) as 'available' FROM room WHERE room_status = 'available'";
 $result1=mysqli_query($conn,$sql1);
 $available_room=mysqli_fetch_assoc($result1);
 
-$sql2="SELECT COUNT(*) as 'books' FROM booking WHERE book_status='pending' || book_status='confirmed' ";
+// Count pending & confirmed bookings
+$sql2="SELECT COUNT(*) as 'books' FROM booking WHERE book_status='pending' OR book_status='confirmed'";
 $result2=mysqli_query($conn,$sql2);
 $bookings=mysqli_fetch_assoc($result2);
 
-    $_notif="SELECT 
-		'customer' as indicator, 
-        CONCAT(user.fname, ' ', user.lname) AS name,
-        account_notification.account_notification AS status,
-        account.created_at as c_created,
-        account.updated_at as c_updated,
-        account_notification.Date 
-    FROM account
-    INNER JOIN user USING(account_id)
-    INNER JOIN account_notification USING(account_id)
-    WHERE DATE(account_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+// Fetch notifications for the last 7 days
+$_notif="SELECT 
+    'customer' as indicator, 
+    CONCAT(user.fname, ' ', user.lname) AS name,
+    account_notification.account_notification AS status,
+    account.created_at as c_created,
+    account.updated_at as c_updated,
+    account_notification.Date 
+FROM account
+INNER JOIN user USING(account_id)
+INNER JOIN account_notification USING(account_id)
+WHERE DATE(account_notification.Date) >= CURDATE() - INTERVAL 2 DAY
 
-    UNION
+UNION
 
-    SELECT 
-   		'room' as indicator, 	
-        room.room_code AS name, 
-        room_notification.room_notification AS status,
-        created_at as r_created,
-        updated_at as r_updated,
-        room_notification.Date 
-    FROM room
-    INNER JOIN room_notification USING(room_id)
-    WHERE DATE(room_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+SELECT 
+    'room' as indicator, 	
+    room.room_code AS name, 
+    room_notification.room_notification AS status,
+    created_at as r_created,
+    updated_at as r_updated,
+    room_notification.Date 
+FROM room
+INNER JOIN room_notification USING(room_id)
+WHERE DATE(room_notification.Date) >= CURDATE() - INTERVAL 2 DAY
 
-    UNION 
+UNION 
 
-    SELECT
+SELECT
     'book' as indicator, 
-    concat(user.fname,' ',user.lname) AS name,
+    CONCAT(user.fname, ' ', user.lname) AS name,
     booking_notification.booking_status,
     booking.check_in,
     booking.check_out,
-    booking.created_at FROM account 
-    INNER JOIN user USING(account_id) 
-    INNER JOIN booking USING(account_id)
-    INNER JOIN booking_notification USING(book_id)
-     WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY  
-ORDER BY `Date` DESC;";
+    booking.created_at 
+FROM account 
+INNER JOIN user USING(account_id) 
+INNER JOIN booking USING(account_id)
+INNER JOIN booking_notification USING(book_id)
+WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY   
+ORDER BY `Date` DESC";
 $notif=mysqli_query($conn,$_notif);
-
-
-
-
-
-
-
 
 ?>
 <style>
@@ -167,8 +168,7 @@ $notif=mysqli_query($conn,$_notif);
 </style>
 
 <div class="content">
-    <?php include('alert.php'); 
-    ?>
+    <?php include('alert.php'); ?>
     <div class="dashboard-container">
         <div class="card">
             <i class="fas fa-user"></i>
@@ -179,13 +179,13 @@ $notif=mysqli_query($conn,$_notif);
         <div class="card">
             <i class="fas fa-bed"></i>
             <h3>Rooms Available</h3>
-            <p><?php echo (empty($available_room['available']) ? 0 : $available_room['available'] ) ?></p>
+            <p><?php echo (empty($available_room['available']) ? 0 : $available_room['available']) ?></p>
         </div>
 
         <div class="card">
             <i class="fas fa-calendar-check"></i>
             <h3>Bookings</h3>
-            <p><?php echo (empty($bookings['books']) ? 0 : $bookings['books'] ) ?></p>
+            <p><?php echo (empty($bookings['books']) ? 0 : $bookings['books']) ?></p>
         </div>
 
         <div class="card">
@@ -199,32 +199,20 @@ $notif=mysqli_query($conn,$_notif);
     <div class="notifications">
         <h3><i class="fas fa-bell"></i> Notifications</h3>
        <?php
-       $to_print;
        while ($inotif=mysqli_fetch_assoc($notif)){
            if($inotif['indicator']=='customer'){
-            if($inotif['status']=='create'){
-                $to_print=  $inotif['c_created'].': New user <strong>['.$inotif['name'].']</strong> has been created!'; 
-            }else{
-                $to_print= $inotif['c_updated'].': <strong>'.$inotif['name'].'\'s</strong> Account has been updated successfully!';
-            }
-           }elseif($inotif['indicator']=='room'){
-            if($inotif['status']=='create'){
-                $to_print= $inotif['Date'].": ".$inotif['name']." has successfully added to the system.";
-            }else{
-                $to_print= $inotif['Date'].": ".$inotif['name']." is updated successfully";
-            }
-           }elseif($inotif['indicator']=='book'){
-                if($inotif['status']=='pending'){
-                    $to_print= $inotif['Date'].": ".$inotif['name']." has a <strong>Pending</strong> book to room#, ".$inotif['c_created']." to ".$inotif['c_updated'].".";
-                }elseif($inotif['status']=='confirmed'){
-                    $to_print= $inotif['Date'].": ".$inotif['name']." <strong>Confirmed</strong> his/her booking to a room#, ".$inotif['c_created']." to ".$inotif['c_updated'].".";
-                }elseif($inotif['status']=='cancelled'){
-                    $to_print= $inotif['Date'].": ".$inotif['name']." <strong>Cancelled</strong> his/her booking to room#, ".$inotif['c_created']." to ".$inotif['c_updated'].".";
-                }
+               $to_print = ($inotif['status']=='create') ? 
+                   "{$inotif['c_created']}: New user <strong>[{$inotif['name']}]</strong> has been created!" : 
+                   "{$inotif['c_updated']}: <strong>{$inotif['name']}'s</strong> Account has been updated successfully!";
+           } elseif ($inotif['indicator']=='room') {
+               $to_print = ($inotif['status']=='create') ? 
+                   "{$inotif['Date']}: Room <strong>{$inotif['name']}</strong> has been added to the system." : 
+                   "{$inotif['Date']}: Room <strong>{$inotif['name']}</strong> was updated successfully.";
+           } elseif ($inotif['indicator']=='book') {
+               $to_print = "{$inotif['Date']}: <strong>{$inotif['name']}</strong> has a <strong>{$inotif['status']}</strong> booking.";
            }
-           echo "<div class='notification-item'>
-           <i class='fas fa-bell'></i> {$to_print}
-       </div>";
-        }?>
+           echo "<div class='notification-item'><i class='fas fa-bell'></i> {$to_print}</div>";
+       }
+       ?>
     </div>
 </div>

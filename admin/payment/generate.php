@@ -4,7 +4,6 @@ include('../../resources/database/config.php');
 
 class PDF extends FPDF
 {
-    // Page header
     function Header()
     {
         if (file_exists('../../resources/images/logo.png')) {
@@ -34,13 +33,11 @@ class PDF extends FPDF
 $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
-
 $pdf->SetFont('Arial', 'B', 16);
 $pdf->Cell(190, 10, 'INVOICE', 0, 1, 'C');
 $pdf->Ln(5);
 
-// Fetch booking details from summary_payment
-$booking_id =$_GET['id'];
+$booking_id = $_GET['id'];
 $sql = "SELECT * FROM summary_payment WHERE booking_id = $booking_id";
 $result = $conn->query($sql);
 
@@ -53,7 +50,7 @@ if ($row = $result->fetch_assoc()) {
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(100, 7, 'Billed To:', 0, 1, 'L');
     $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(100, 7, 'Customer Name: '.$row['NAME'], 0, 1, 'L');
+    $pdf->Cell(100, 7, 'Customer Name: ' . $row['NAME'], 0, 1, 'L');
     $pdf->Cell(100, 7, 'Room: ' . $row['room_code'] . ' (' . $row['room_type'] . ')', 0, 1, 'L');
     $pdf->Cell(100, 7, 'Check-in: ' . $row['check_in'], 0, 1, 'L');
     $pdf->Cell(100, 7, 'Check-out: ' . $row['check_out'], 0, 1, 'L');
@@ -67,36 +64,36 @@ if ($row = $result->fetch_assoc()) {
 
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(130, 10, 'Room Booking - ' . $row['room_type'], 1);
-    $pdf->Cell(30, 10, '$' . number_format($row['price'], 2), 1, 0, 'C');
-    $pdf->Cell(30, 10, '$' . number_format($row['price'], 2), 1, 1, 'C');
+    $pdf->Cell(30, 10, "PHP " . number_format($row['price'], 2), 1, 0, 'C');
+    $pdf->Cell(30, 10, "PHP " . number_format($row['price'], 2), 1, 1, 'C');
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(130, 10, 'Total Amount Due:', 1, 0, 'R');
-    $pdf->Cell(60, 10, '$' . number_format($row['price'], 2), 1, 1, 'C');
+    $pdf->Cell(60, 10, "PHP " . number_format($row['price'], 2), 1, 1, 'C');
 
     $pdf->Cell(130, 10, 'Amount Paid:', 1, 0, 'R');
-    $pdf->Cell(60, 10, '$' . number_format($row['amount_paid'], 2), 1, 1, 'C');
+    $pdf->Cell(60, 10, "PHP " . number_format($row['amount_paid'], 2), 1, 1, 'C');
 
     $balance = $row['price'] - $row['amount_paid'];
     $pdf->Cell(130, 10, 'Balance Due:', 1, 0, 'R', true);
-    $pdf->Cell(60, 10, '$' . number_format($balance, 2), 1, 1, 'C', true);
+    $pdf->Cell(60, 10, "PHP " . number_format($balance, 2), 1, 1, 'C', true);
 
     $pdf->Ln(10);
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(190, 10, 'Payment Status: ' . strtoupper($row['payment_status']), 0, 1, 'C');
-
 } else {
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(190, 10, 'No invoice found.', 1, 1, 'C');
 }
 
 $conn->close();
+
 $download = isset($_GET['download']) ? $_GET['download'] : 0;
-$filename = 'Invoice_'.$row['NAME'].'.pdf';
+$filename = isset($row['NAME']) ? 'Invoice_' . $row['NAME'] . '.pdf' : 'Invoice.pdf';
 
 if ($download) {
     $pdf->Output('D', $filename);
 } else {
     $pdf->Output();
-}   
+}
 ?>
