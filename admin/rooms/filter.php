@@ -34,7 +34,10 @@ FROM room
 LEFT JOIN discount 
     ON room.room_type = discount.applicable_room 
     AND discount.discount_status = 'activate'
-    AND NOW() BETWEEN discount.discount_start AND discount.discount_end";
+    AND NOW() >= discount.discount_start 
+    AND NOW() <= discount.discount_end;
+
+";                                                               
     $result = mysqli_query($conn, $sql1);
     
     }

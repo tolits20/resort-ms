@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2025 at 05:43 PM
+-- Generation Time: Mar 02, 2025 at 04:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -170,21 +170,21 @@ CREATE TABLE IF NOT EXISTS `discount` (
   `discount_id` int(11) NOT NULL AUTO_INCREMENT,
   `discount_name` varchar(50) NOT NULL,
   `discount_percentage` int(11) NOT NULL,
-  `discount_start` date NOT NULL,
-  `discount_end` date NOT NULL,
+  `discount_start` datetime NOT NULL,
+  `discount_end` datetime NOT NULL,
   `discount_status` enum('activate','deactivate') NOT NULL,
   `applicable_room` enum('premium','deluxe','standard') NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`discount_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `discount`
 --
 
 INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percentage`, `discount_start`, `discount_end`, `discount_status`, `applicable_room`, `created_at`, `updated_at`) VALUES
-(1, 'promo 50%', 50, '2025-03-01', '2025-03-02', 'activate', 'standard', '2025-02-28 15:28:13', '2025-02-28 15:28:13');
+(2, 'summer sale ', 25, '2025-03-02 11:14:00', '2025-03-02 13:14:00', 'activate', 'standard', '2025-03-02 11:15:12', '2025-03-02 11:15:12');
 
 -- --------------------------------------------------------
 
