@@ -146,17 +146,17 @@ $_SESSION['update_id']=$id;
         <div class="con2">
             <input type="submit" name="update" class="btn btn-primary" value="Update">
         </div>
-
+        </form>
     <!-- POPUP -->
     <div class="popup-overlay" id="popup">
     <div class="popup-content">
-        <form action="update.php" method="post">
+        <form action="update.php?id=<?php echo $_GET['id'] ?>" method="post">
         <span class="close-btn" onclick="closePopup()">&times;</span>
-        <h2>Change Password</h2>
-       <label for="" class="form-label">Enter a new password:</label>
+        <h2 style="color: black;">Change Password</h2>
+       <label for="" class="form-label" style="color: black;">Enter a new password:</label>
         <input type="password" class="form-control" name="newpass">
         <br>
-        <label for="" class="form-label">Confirm the password:</label>
+        <label for="" class="form-label" style="color: black;">Confirm the password:</label>
         <input type="password" class="form-control" name="cpass">
         <br>
         <button class="btn btn-primary" name="changepass" onclick="closePopup()">Save</button>
@@ -172,5 +172,4 @@ $_SESSION['update_id']=$id;
         document.getElementById('popup').style.display = 'none';
     }
 </script>
-    </form>
 </div>

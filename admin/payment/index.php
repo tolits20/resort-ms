@@ -65,7 +65,6 @@ label {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    background:rgba(249, 249, 249, 0.44);
     transition: 0.3s ease-in-out;
 }
 
@@ -149,12 +148,12 @@ label {
     <div class="form-section">
         <h2><i class="fas fa-edit"></i> Edit Payment</h2>
         
-        <form action="update_payment.php" method="POST">
+        <form action="update.php?id=<?php echo $_GET['id'] ?>" method="POST">
             <input type="hidden" name="payment_id" value="<?= $res2['ID']; ?>">
 
             <div class="form-group">
                 <label>Customer Name</label>
-                <input type="text" class="form-control" name="customer_name" value="<?= $res2['name']; ?>" required>
+                <input type="text" class="form-control" name="customer_name" value="<?= $res2['NAME']; ?>" required>
             </div>
 
             <div class="form-group">
@@ -165,10 +164,10 @@ label {
             <div class="form-group">
                 <label>Payment Method</label>
                 <select class="form-select" name="payment_method" required>
-                    <option value="">N/A</option>
-                    <option value="credit card" <?= ($res2['payment_method'] == 'credit card') ? 'selected' : ''; ?>>Credit Card</option>
-                    <option value="e-payment" <?= ($res2['payment_method'] == 'e-payment') ? 'selected' : ''; ?>>E payment</option>
-                    <option value="cash" <?= ($res2['payment_method'] == 'cash') ? 'selected' : ''; ?>>Cash</option>
+                    <option value="none" <?= (empty($res2['payment_type'])) ? 'selected' : ''; ?>>N/A</option>
+                    <option value="credit card" <?= ($res2['payment_type'] == 'credit card') ? 'selected' : ''; ?>>Credit Card</option>
+                    <option value="e-payment" <?= ($res2['payment_type'] == 'e-payment') ? 'selected' : ''; ?>>E payment</option>
+                    <option value="cash" <?= ($res2['payment_type'] == 'cash') ? 'selected' : ''; ?>>Cash</option>
                 </select>
             </div>
 
@@ -182,7 +181,7 @@ label {
             </div>
 
             <div class="btn-container">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="submit" class="btn btn-primary" name="save" value="save">Save Changes</button>
                 <button onclick="history.back()" class="btn btn-secondary">Cancel</button>
             </div>
         </form>
@@ -192,13 +191,13 @@ label {
     <div class="summary-section">
         <center><h3>Payment Details</h3></center>
         <div class="summary-box">
-            <p><strong>Customer:</strong> <?= $res2['name']; ?></p>
+            <p><strong>Customer:</strong> <?= $res2['NAME']; ?></p>
             <p><strong>Room:</strong> <?= $res2['room_code']; ?></p>
             <p><strong>Check In:</strong> <?= $res2['check_in']; ?></p>
             <p><strong>Check Out:</strong> <?= $res2['check_out']; ?></p>
             <p><strong>Book Status:</strong> <?= $res2['book_status']; ?></p>
             <p><strong>Amount:</strong> <?= $res2['amount_paid']; ?>php</p>
-            <p><strong>Method:</strong> <?= (empty($res2['payment_method']) ? 'N/A' : $res2['payment_method']); ?></p>
+            <p><strong>Method:</strong> <?= (empty($res2['payment_type']) ? 'N/A' : $res2['payment_type']); ?></p>
             <p><strong>Status:</strong> <?= $res2['payment_status']; ?></p>
         </div>
     </div>

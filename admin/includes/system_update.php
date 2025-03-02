@@ -20,9 +20,9 @@ while($check_record=mysqli_fetch_assoc($check_set)){
 
 //realtime discount tracking
 $track_query="SELECT 
-(SELECT COUNT(*) FROM discount WHERE discount_start<=CURDATE() && discount_end>=CURDATE()) AS active_discount,
-(SELECT COUNT(*) FROM discount WHERE discount_start<CURDATE() && discount_end<CURDATE()) AS expired_discount,
-(SELECT COUNT(*) FROM discount WHERE discount_start>CURDATE() && discount_end>CURDATE()) AS upcoming_discount;";
+(SELECT COUNT(*) FROM discount WHERE discount_start<=NOW() && discount_end>=NOW()) AS active_discount,
+(SELECT COUNT(*) FROM discount WHERE discount_start<NOW() && discount_end<NOW()) AS expired_discount,
+(SELECT COUNT(*) FROM discount WHERE discount_start>NOW() && discount_end>NOW()) AS upcoming_discount;";
 
 
 

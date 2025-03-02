@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2025 at 04:18 AM
+-- Generation Time: Mar 02, 2025 at 05:20 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,12 +46,11 @@ CREATE TABLE IF NOT EXISTS `account` (
 
 INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `created_at`, `updated_at`) VALUES
 (5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-14 15:10:14', '2025-02-14 15:10:14'),
-(9, 'tolits@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-15 05:24:00', '2025-02-28 03:53:06'),
+(9, 'tolits@example.com', '21a2f903885172b4503e6f5eaf6b78880f4712cc', 'admin', 'activate', '2025-02-15 05:24:00', '2025-02-28 03:53:06'),
 (10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'activate', '2025-02-16 10:43:34', '2025-02-27 13:42:18'),
-(12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-23 15:06:58', '2025-02-25 04:30:37'),
+(12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-23 15:06:58', '2025-03-02 03:45:02'),
 (13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-24 15:25:09', '2025-02-25 01:32:39'),
-(27, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', 'activate', '2025-02-26 16:17:06', NULL),
-(36, 'levi@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', 'activate', '2025-02-28 04:01:54', NULL);
+(27, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', 'activate', '2025-02-26 16:17:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -66,31 +65,14 @@ CREATE TABLE IF NOT EXISTS `account_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`cnotif_id`),
   KEY `account_notification_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account_notification`
 --
 
 INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `account_notification`, `Date`) VALUES
-(1, 13, 'update', '2025-02-25 09:32:39'),
-(2, 10, 'update', '2025-02-25 09:41:55'),
-(4, 10, 'update', '2025-02-25 09:47:19'),
-(5, 12, 'update', '2025-02-25 11:35:03'),
-(6, 12, 'update', '2025-02-25 12:30:37'),
-(7, 9, 'update', '2025-02-25 16:15:56'),
-(8, 10, 'update', '2025-02-26 08:15:13'),
-(9, 27, 'create', '2025-02-27 00:17:06'),
-(25, 10, 'update', '2025-02-27 21:37:20'),
-(26, 10, 'update', '2025-02-27 21:37:24'),
-(27, 10, 'update', '2025-02-27 21:37:31'),
-(28, 10, 'update', '2025-02-27 21:38:04'),
-(29, 10, 'update', '2025-02-27 21:41:47'),
-(30, 10, 'update', '2025-02-27 21:42:04'),
-(31, 10, 'update', '2025-02-27 21:42:18'),
-(34, 9, 'update', '2025-02-28 11:52:14'),
-(35, 9, 'update', '2025-02-28 11:53:06'),
-(36, 36, 'create', '2025-02-28 12:01:54');
+(1, 12, 'update', '2025-03-02 11:45:02');
 
 -- --------------------------------------------------------
 
@@ -135,14 +117,7 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`booking_notif_id`),
   KEY `booking_notif_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `booking_notification`
---
-
-INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_status`, `Date`) VALUES
-(1, 5, 'pending', '2025-02-25 12:32:28');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -184,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `discount` (
 --
 
 INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percentage`, `discount_start`, `discount_end`, `discount_status`, `applicable_room`, `created_at`, `updated_at`) VALUES
-(2, 'summer sale ', 25, '2025-03-02 11:14:00', '2025-03-02 13:14:00', 'activate', 'standard', '2025-03-02 11:15:12', '2025-03-02 11:15:12');
+(2, 'summer sale ', 20, '2025-03-02 11:14:00', '2025-03-02 13:14:00', 'activate', 'standard', '2025-03-02 11:15:12', '2025-03-02 11:15:12');
 
 -- --------------------------------------------------------
 
@@ -256,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `payment_id` int(11) NOT NULL AUTO_INCREMENT,
   `book_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `payment_type` enum('cash','credit card','e-payment') NOT NULL,
+  `payment_type` enum('cash','credit card','e-payment') DEFAULT NULL,
   `payment_img` varchar(255) NOT NULL,
   `transaction_id` varchar(255) NOT NULL,
   `payment_status` enum('pending','paid','refunded') NOT NULL,
@@ -272,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
 
 INSERT INTO `payment` (`payment_id`, `book_id`, `amount`, `payment_type`, `payment_img`, `transaction_id`, `payment_status`, `created_at`, `updated_at`) VALUES
 (1, 5, 6000.00, 'e-payment', '', '', 'pending', '2025-03-01 23:33:59', '2025-03-01 23:33:59'),
-(3, 4, 500.00, 'cash', '', '', 'pending', '2025-03-02 00:19:30', '2025-03-02 00:19:30');
+(3, 4, 200.00, 'credit card', '', '', 'pending', '2025-03-02 00:19:30', '2025-03-02 00:19:30');
 
 -- --------------------------------------------------------
 
@@ -344,24 +319,7 @@ CREATE TABLE IF NOT EXISTS `room_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`rnotif_id`),
   KEY `room_notification_fk` (`room_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `room_notification`
---
-
-INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `Date`) VALUES
-(1, 15, 'create', '2025-02-25 09:29:05'),
-(2, 15, 'update', '2025-02-25 09:49:20'),
-(3, 15, 'update', '2025-02-25 09:49:48'),
-(4, 14, 'update', '2025-02-25 11:35:38'),
-(5, 14, 'update', '2025-02-25 11:35:59'),
-(6, 12, 'update', '2025-02-25 12:39:53'),
-(7, 15, 'update', '2025-02-25 12:40:00'),
-(8, 9, 'update', '2025-02-26 08:15:26'),
-(9, 14, 'update', '2025-02-27 23:03:28'),
-(15, 9, 'update', '2025-03-01 21:27:58'),
-(16, 12, 'update', '2025-03-01 21:33:44');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -372,7 +330,7 @@ INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `D
 CREATE TABLE IF NOT EXISTS `summary_payment` (
 `booking_id` int(11)
 ,`booking_type` varchar(5)
-,`name` varchar(101)
+,`NAME` varchar(101)
 ,`room_code` varchar(50)
 ,`room_type` varchar(8)
 ,`price` decimal(10,2)
@@ -381,6 +339,7 @@ CREATE TABLE IF NOT EXISTS `summary_payment` (
 ,`book_status` varchar(9)
 ,`amount_paid` decimal(10,2)
 ,`payment_status` varchar(8)
+,`payment_type` varchar(11)
 ,`payment_created_at` datetime
 );
 
@@ -414,10 +373,9 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 (5, 5, 'Levi', 'Penaverde', 20, 'male', '987867546', '67af5cd6192634.90705227.jpg'),
 (9, 9, 'Angelito', 'Jacalan', 21, 'female', '09876544461', '67c132eeec0432.70170810.png'),
 (10, 10, 'Allan', 'Monforte', 98, 'male', '9112245667', '67b1c15630d272.47796055.png'),
-(12, 12, 'Melvin', 'Catuera', 20, 'female', '9123456789', '67bc9b041413e9.81245551.png'),
+(12, 12, 'Melvin', 'Catuera', 20, 'female', '9123456789', '67c3d43e7168e3.93428308.png'),
 (13, 13, 'Ianzae', 'Ego', 21, 'female', '9876543211', '67bc8f552ae286.40054461.png'),
-(14, 27, 'Fname', 'Lname', 98, 'male', '9231231236', '67bf3e820512d9.05980251.png'),
-(23, 36, 'Adora', 'Shor', 20, 'male', '9501841852', '67c13532cda582.10582847.png');
+(14, 27, 'Fname', 'Lname', 98, 'male', '9231231236', '67bf3e820512d9.05980251.png');
 
 -- --------------------------------------------------------
 
@@ -444,7 +402,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `summary_payment`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `summary_payment`  AS SELECT `cb`.`id` AS `booking_id`, 'User' AS `booking_type`, concat(`cb`.`fname`,' ',`cb`.`lname`) AS `name`, `cb`.`room_code` AS `room_code`, `r`.`room_type` AS `room_type`, `r`.`price` AS `price`, `cb`.`check_in` AS `check_in`, `cb`.`check_out` AS `check_out`, `cb`.`status` AS `book_status`, coalesce(`p`.`amount`,0) AS `amount_paid`, coalesce(`p`.`payment_status`,'Pending') AS `payment_status`, `p`.`created_at` AS `payment_created_at` FROM ((`customer_booking` `cb` left join `payment` `p` on(`cb`.`id` = `p`.`book_id`)) join `room` `r` on(`cb`.`room_code` = `r`.`room_code`))union all select `gb`.`id` AS `booking_id`,'Guest' AS `booking_type`,concat(`gb`.`fname`,' ',`gb`.`lname`) AS `name`,`gb`.`room_code` AS `room_code`,`r`.`room_type` AS `room_type`,`r`.`price` AS `price`,`gb`.`check_in` AS `check_in`,`gb`.`check_out` AS `check_out`,`gb`.`status` AS `book_status`,coalesce(`p`.`amount`,0) AS `amount_paid`,coalesce(`p`.`payment_status`,'Pending') AS `payment_status`,`p`.`created_at` AS `payment_created_at` from ((`guest_booking` `gb` left join `payment` `p` on(`gb`.`id` = `p`.`book_id`)) join `room` `r` on(`gb`.`room_code` = `r`.`room_code`))  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `summary_payment`  AS SELECT `cb`.`id` AS `booking_id`, 'User' AS `booking_type`, concat(`cb`.`fname`,' ',`cb`.`lname`) AS `NAME`, `cb`.`room_code` AS `room_code`, `r`.`room_type` AS `room_type`, `r`.`price` AS `price`, `cb`.`check_in` AS `check_in`, `cb`.`check_out` AS `check_out`, `cb`.`status` AS `book_status`, coalesce(`p`.`amount`,0) AS `amount_paid`, coalesce(`p`.`payment_status`,'Pending') AS `payment_status`, coalesce(`p`.`payment_type`,'N/A') AS `payment_type`, `p`.`created_at` AS `payment_created_at` FROM ((`customer_booking` `cb` left join `payment` `p` on(`cb`.`id` = `p`.`book_id`)) join `room` `r` on(`cb`.`room_code` = `r`.`room_code`))union all select `gb`.`id` AS `booking_id`,'Guest' AS `booking_type`,concat(`gb`.`fname`,' ',`gb`.`lname`) AS `NAME`,`gb`.`room_code` AS `room_code`,`r`.`room_type` AS `room_type`,`r`.`price` AS `price`,`gb`.`check_in` AS `check_in`,`gb`.`check_out` AS `check_out`,`gb`.`status` AS `book_status`,coalesce(`p`.`amount`,0) AS `amount_paid`,coalesce(`p`.`payment_status`,'Pending') AS `payment_status`,coalesce(`p`.`payment_type`,'N/A') AS `payment_type`,`p`.`created_at` AS `payment_created_at` from ((`guest_booking` `gb` left join `payment` `p` on(`gb`.`id` = `p`.`book_id`)) join `room` `r` on(`gb`.`room_code` = `r`.`room_code`))  ;
 
 --
 -- Constraints for dumped tables
