@@ -57,7 +57,6 @@ $row = mysqli_fetch_assoc($result);
                     </div>
                 </div>
 
-                <!-- Applicable Room Dropdown -->
                 <div class="row g-4 mt-1">
                     <div class="col-md-12">
                         <div class="form-floating">

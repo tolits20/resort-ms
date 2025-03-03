@@ -3,7 +3,6 @@ include ('../resources/database/config.php');
 include('includes/template.html');
 include("includes/system_update.php");
 
-// Count new customers in the last 7 days
 $sql="SELECT COUNT(account_id) as 'cnew' 
       FROM account 
       INNER JOIN user USING(account_id)
@@ -11,7 +10,6 @@ $sql="SELECT COUNT(account_id) as 'cnew'
 $result=mysqli_query($conn,$sql);
 $new_customer=mysqli_fetch_assoc($result);
 
-// Count total notifications in the last 7 days
 $ctmr_count_notif="SELECT 
     (SELECT COUNT(*) 
      FROM account
