@@ -7,6 +7,7 @@ include('../../resources/database/config.php');
 <style>
 /* Content Box */
 .content {
+    width: 100%;
     padding: 20px;
     background: white;
     border-radius: 12px;
