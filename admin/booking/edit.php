@@ -1,6 +1,6 @@
 <?php 
-include ('../includes/template.html');
 include('../../resources/database/config.php');
+include ('../includes/template.html');
 include("../includes/system_update.php");
 // var_dump($_SESSION);
 $id=$_GET['id'];

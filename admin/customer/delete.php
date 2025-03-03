@@ -1,6 +1,6 @@
 <?php 
-include ('../includes/template.html');
 include('../../resources/database/config.php');
+include ('../includes/template.html');
 include("../includes/system_update.php");
 
 if(isset($_POST['no'])){

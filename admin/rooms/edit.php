@@ -1,6 +1,7 @@
 <?php 
-include ('../includes/template.html');
 include('../../resources/database/config.php');
+include ('../includes/template.html');
+include("../includes/system_update.php");
 
 $id = $_GET['id'];
 $sql = "SELECT * FROM room WHERE room_id = $id";

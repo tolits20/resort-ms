@@ -1,5 +1,5 @@
 <?php 
-include("../../resources/database/config.php");
+include('../../resources/database/config.php');
 include("../includes/system_update.php");
 
 
