@@ -36,7 +36,7 @@ if (!$room) {
 
 // Fetch booked dates for this room
 $bookedDates = [];
-$bookingQuery = "SELECT check_in FROM booking WHERE room_id = ?";
+$bookingQuery = "SELECT check_in FROM booking WHERE book_status = 'confirmed' && room_id = ?";
 $stmt = $conn->prepare($bookingQuery);
 $stmt->bind_param("i", $room_id);
 $stmt->execute();
@@ -45,6 +45,28 @@ $bookingResult = $stmt->get_result();
 while ($row = $bookingResult->fetch_assoc()) {
     $bookedDates[] = date("Y-m-d", strtotime($row['check_in']));
 }
+
+// Fetch room images
+$imageQuery = "SELECT room_img FROM room_gallery WHERE room_id = ?";
+$stmt = $conn->prepare($imageQuery);
+$stmt->bind_param("i", $room_id);
+$stmt->execute();
+$imageResult = $stmt->get_result();
+$room_images = $imageResult->fetch_all(MYSQLI_ASSOC);
+
+// Fetch feedback for the room
+$feedbackQuery = "SELECT a.username, f.rating, f.comment, f.created_at, b.book_id
+FROM feedback f 
+INNER JOIN account a ON f.account_id = a.account_id
+INNER JOIN booking b ON f.book_id = b.book_id
+WHERE b.room_id = ? 
+ORDER BY f.created_at DESC;
+";
+$stmt = $conn->prepare($feedbackQuery);
+$stmt->bind_param("i", $room_id);
+$stmt->execute();
+$feedbackResult = $stmt->get_result();
+$feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +81,9 @@ while ($row = $bookingResult->fetch_assoc()) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+    <!-- Include Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <!-- Custom Styling -->
     <style>
         body {
@@ -67,17 +92,43 @@ while ($row = $bookingResult->fetch_assoc()) {
             margin: 0;
             padding: 0;
         }
+        .back-button {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #218838;
+        }
+        .back-button i {
+            margin-right: 5px;
+        }
         .container {
-            max-width: 600px;
-            background: white;
-            margin: 50px auto;
+            display: flex;
+            max-width: 1200px;
+            margin: 20px auto;
             padding: 20px;
+            background: white;
             box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
             border-radius: 8px;
         }
-        h2 {
-            text-align: center;
-            color: #333;
+        .room-gallery {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .room-gallery img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .booking-form {
+            flex: 1;
+            padding: 20px;
         }
         .price-box {
             text-align: center;
@@ -111,7 +162,7 @@ while ($row = $bookingResult->fetch_assoc()) {
         }
         input[readonly] {
             background: #e9ecef;
-            cursor: not-allowed;
+            cursor: text;
         }
         button {
             margin-top: 20px;
@@ -123,47 +174,100 @@ while ($row = $bookingResult->fetch_assoc()) {
         button:hover {
             background: #218838;
         }
+        .feedback-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+        }
+        .feedback-item strong {
+            color: #333;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Book <?= htmlspecialchars($room['room_code']); ?></h2>
+<!-- Back Button -->
+<a href="javascript:history.back()" class="back-button">
+    <i class="fas fa-arrow-left"></i> Back
+</a>
 
-    <div class="price-box">
-        <p>Price: 
-            <?php if ($room['discount_percentage'] > 0): ?>
-                <span class="discounted">$<?= number_format($room['price'], 2); ?></span>
-                <strong>$<?= number_format($room['discounted_price'], 2); ?></strong>
-                (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
-            <?php else: ?>
-                <strong>$<?= number_format($room['price'], 2); ?></strong>
-            <?php endif; ?>
-        </p>
+<div class="container">
+    <!-- Room Images -->
+    <div class="room-gallery">
+        <?php if (!empty($room_images)): ?>
+            <?php foreach ($room_images as $image): ?>
+                <img src="../../resources/assets/room_images/<?php echo $image['room_img']; ?>" alt="Room Image">
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No images available for this room.</p>
+        <?php endif; ?>
     </div>
 
-    <form method="POST" action="store.php">
-        <input type="hidden" name="room_id" value="<?= $room_id; ?>">
+    <!-- Booking Form -->
+    <div class="booking-form">
+        <h2>Book <?= htmlspecialchars($room['room_code']); ?></h2>
 
-        <label for="check_in">Check-in Date:</label>
-        <input type="text" id="check_in" name="check_in" readonly required>
+        <div class="price-box">
+            <p>Price: 
+                <?php if ($room['discount_percentage'] > 0): ?>
+                    <span class="discounted">$<?= number_format($room['price'], 2); ?></span>
+                    <strong>$<?= number_format($room['discounted_price'], 2); ?></strong>
+                    (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
+                <?php else: ?>
+                    <strong>$<?= number_format($room['price'], 2); ?></strong>
+                <?php endif; ?>
+            </p>
+        </div>
+        <input type="hidden" id="original-price" value="<?= $room['discount_percentage'] > 0 ? $room['discounted_price'] : $room['price']; ?>">
+        <form method="POST" action="store.php">
+            <input type="hidden" name="room_id" value="<?= $room_id; ?>">
 
-        <label for="time_slot">Check-in Time Slot:</label>
-        <select name="time_slot" id="time_slot" required>
-            <option value="7:00 AM - 5:00 PM">7:00 AM - 5:00 PM</option>
-            <option value="7:00 PM - 5:00 AM">7:00 PM - 5:00 AM</option>
-            <option value="7:00 PM - 5:00 PM">7:00 PM - 5:00 PM</option>
-            <option value="7:00 AM - 5:00 AM">7:00 AM - 5:00 AM</option>
-        </select>
+            <label for="check_in">Check-in Date:</label>
+            <input type="text" id="check_in" name="check_in" readonly required>
 
-        <label for="check_out">Check-out Date:</label>
-        <input type="text" id="check_out" name="check_out" readonly disabled>
-        <input type="hidden" id="hidden_check_out" name="check_out">
-        <input type="hidden" id="check_in_time" name="checkInTime">
-        <input type="hidden" id="check_out_time" name="checkOutTime">
+            <label for="time_slot">Check-in Time Slot:</label>
+            <select name="time_slot" id="time_slot" required>
+                <option value="7:00 AM - 5:00 PM">7:00 AM - 5:00 PM</option>
+                <option value="7:00 PM - 5:00 AM">7:00 PM - 5:00 AM</option>
+                <option value="7:00 PM - 5:00 PM">7:00 PM - 5:00 PM</option>
+                <option value="7:00 AM - 5:00 AM">7:00 AM - 5:00 AM</option>
+            </select>
 
-        <button type="submit">Confirm Booking</button>
-    </form>
+            <label for="check_out">Check-out Date:</label>
+            <input type="text" id="check_out" name="check_out" readonly disabled>
+            <input type="hidden" id="hidden_check_out" name="check_out">
+            <input type="hidden" id="check_in_time" name="checkInTime">
+            <input type="hidden" id="check_out_time" name="checkOutTime">
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+
+<!-- Feedback Section -->
+<div class="feedback-section">
+    <h3>Customer Feedback</h3>
+    <?php if (!empty($feedbacks)): ?>
+        <?php foreach ($feedbacks as $feedback): ?>
+            <div class="feedback-item">
+                <strong><?= htmlspecialchars($feedback['username']); ?></strong>
+                <hr>
+                <small>Rating: <?= htmlspecialchars($feedback['rating']); ?>/5</small>
+                <p><?= htmlspecialchars($feedback['comment']); ?></p>
+
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No feedback available for this room.</p>
+    <?php endif; ?>
 </div>
 
 <script>
@@ -190,45 +294,69 @@ while ($row = $bookingResult->fetch_assoc()) {
         });
 
         function updateCheckoutDate(checkInDate) {
-    let timeSlot = $("#time_slot").val();
-    if (!timeSlot) return;
+            console.log("updateCheckoutDate called"); // Debugging line
 
-    let checkInDateTime = new Date(checkInDate);
-    let checkOutDateTime = new Date(checkInDate);
-    let checkInTime, checkOutTime;
+            let timeSlot = $("#time_slot").val();
+            console.log("Selected Time Slot:", timeSlot); // Debugging line
 
-    switch (timeSlot) {
-        case "7:00 AM - 5:00 PM":
-            checkInTime = "07:00:00";
-            checkOutTime = "17:00:00";
-            break;
+            if (!timeSlot) return;
 
-        case "7:00 PM - 5:00 AM":
-            checkInTime = "19:00:00";
-            checkOutTime = "05:00:00";
-            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-            break;
+            let checkInDateTime = new Date(checkInDate);
+            let checkOutDateTime = new Date(checkInDate);
+            let checkInTime, checkOutTime;
 
-        case "7:00 PM - 5:00 PM":
-            checkInTime = "19:00:00";
-            checkOutTime = "17:00:00";
-            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-            break;
+            // Get the original price from the hidden input
+            const originalPrice = parseFloat($("#original-price").val());
+            console.log("Original Price:", originalPrice); // Debugging line
 
-        case "7:00 AM - 5:00 AM":
-            checkInTime = "07:00:00";
-            checkOutTime = "05:00:00";
-            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-            break;
-    }
+            let newPrice = originalPrice;
 
-    let checkOutFormatted = $.datepicker.formatDate("yy-mm-dd", checkOutDateTime);
-    $("#check_out").val(checkOutFormatted);
-    $("#hidden_check_out").val(checkOutFormatted);
-    $("#check_in_time").val(checkInTime);
-    $("#check_out_time").val(checkOutTime);
-}
+            switch (timeSlot) {
+                case "7:00 AM - 5:00 PM":
+                    checkInTime = "07:00:00";
+                    checkOutTime = "17:00:00";
+                    break;
 
+                case "7:00 PM - 5:00 AM":
+                    checkInTime = "19:00:00";
+                    checkOutTime = "05:00:00";
+                    checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+                    newPrice = originalPrice * 2; // Double the price for this time slot
+                    break;
+
+                case "7:00 PM - 5:00 PM":
+                    checkInTime = "19:00:00";
+                    checkOutTime = "17:00:00";
+                    checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+                    newPrice = originalPrice * 2; // Double the price for this time slot
+                    break;
+
+                case "7:00 AM - 5:00 AM":
+                    checkInTime = "07:00:00";
+                    checkOutTime = "05:00:00";
+                    checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+                    newPrice = originalPrice * 2; // Double the price for this time slot
+                    break;
+            }
+
+            console.log("New Price:", newPrice); // Debugging line
+
+            // Update the check-out date and time
+            let checkOutFormatted = $.datepicker.formatDate("yy-mm-dd", checkOutDateTime);
+            $("#check_out").val(checkOutFormatted);
+            $("#hidden_check_out").val(checkOutFormatted);
+            $("#check_in_time").val(checkInTime);
+            $("#check_out_time").val(checkOutTime);
+
+            // Update the displayed price
+            $("#dynamic-price").text(`$${newPrice.toFixed(2)}`);
+            console.log("Updated #dynamic-price element:", $("#dynamic-price").text()); // Debugging line
+        }
+
+        // Initialize the price and check-out date on page load
+        if ($("#check_in").val()) {
+            updateCheckoutDate($("#check_in").val());
+        }
     });
 </script>
 
