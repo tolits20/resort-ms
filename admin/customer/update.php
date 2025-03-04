@@ -95,7 +95,7 @@ if(isset($_POST['update'])){
         mysqli_rollback($conn);
         echo $e->getMessage();
         $_SESSION['customer_error']="yes";
-        header("location:edit.php?id=$id");
+        // header("location:edit.php?id=$id");
         exit;
     }
 

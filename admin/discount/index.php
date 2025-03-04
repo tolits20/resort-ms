@@ -70,12 +70,14 @@ $track=mysqli_fetch_assoc($track_result);
                         <tbody>
                            
                             <?php while($row=mysqli_fetch_assoc($result)){
+                                $start = date("F d, Y h:i A", strtotime($row['discount_start']));
+                                $end= date("F d, Y h:i A", strtotime($row['discount_end']));
                                 $status=($row['discount_status'] == 'activate') ? 'selected' : '';
                                 echo " <tr>
                                             <td>{$row['discount_name']}</td>
                                             <td>{$row['discount_percentage']}%</td>
-                                            <td>{$row['discount_start']}</td>
-                                            <td>{$row['discount_end']}</td>
+                                            <td>$start</td>
+                                            <td>$end</td>
                                             <td>{$row['applicable_room']}</td>
                                             <td><form action='update.php?id={$row['discount_id']}' method='POST'>
                                                 <select class='form-select' name='status' onchange='this.form.submit()'>

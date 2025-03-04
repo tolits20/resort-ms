@@ -76,5 +76,5 @@ $result = mysqli_stmt_get_result($stmt);
     <option value="DESC" <?php echo (isset($_GET['sort']) && $_GET['sort']==='DESC' ? 'selected' : '' ) ?>>Descending</option>
    </select>
    </form>
-    <a href="create.php" class="btn btn-primary" style="text-decoration: none; color:white;"><i class="fas fa-add "></i></a>
+    <a href="create.php?create=true" class="btn btn-primary" style="text-decoration: none; color:white;"><i class="fas fa-add "></i></a>
 </div>
