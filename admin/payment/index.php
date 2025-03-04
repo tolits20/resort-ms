@@ -199,7 +199,7 @@ label {
         
         <?php if ($res2): ?>
             <form action="update.php?id=<?php echo $_GET['id'] ?>" method="POST">
-                <input type="hidden" name="payment_id" value="<?= htmlspecialchars($res2['ID']); ?>">
+                <input type="hidden" name="payment_id" value="<?= htmlspecialchars($res2['booking_id']); ?>">
 
                 <div class="form-group">
                     <label>Customer Name</label>
@@ -241,14 +241,16 @@ label {
     </div>
 
     <!-- Right: Summary Section -->
-    <?php if ($res2): ?>
+    <?php if ($res2): 
+        $check_in = date("F d, Y h:i A", strtotime($res2['check_in']));
+        $check_out= date("F d, Y h:i A", strtotime($res2['check_out']));?>
         <div class="summary-section">
             <h3>Payment Details</h3>
             <div class="summary-box">
                 <p><strong>Customer:</strong> <?= htmlspecialchars($res2['NAME']); ?></p>
                 <p><strong>Room:</strong> <?= htmlspecialchars($res2['room_code']); ?></p>
-                <p><strong>Check In:</strong> <?= htmlspecialchars($res2['check_in']); ?></p>
-                <p><strong>Check Out:</strong> <?= htmlspecialchars($res2['check_out']); ?></p>
+                <p><strong>Check In:</strong> <?= htmlspecialchars($check_in); ?></p>
+                <p><strong>Check Out:</strong> <?= htmlspecialchars($check_out); ?></p>
                 <p><strong>Book Status:</strong> <?= htmlspecialchars($res2['book_status']); ?></p>
                 <p><strong>Amount:</strong> <?= htmlspecialchars($res2['amount_paid']); ?> PHP</p>
                 <p><strong>Method:</strong> <?= htmlspecialchars(empty($res2['payment_type']) ? 'N/A' : $res2['payment_type']); ?></p>

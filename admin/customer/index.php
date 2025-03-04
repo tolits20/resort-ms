@@ -2,6 +2,33 @@
 include('../../resources/database/config.php');
 include ('../includes/template.html');
 include("../includes/system_update.php");
+
+var_dump($_SESSION);
+function timeAgo($datetime) {
+    $timestamp = strtotime($datetime);
+        if (!$timestamp || $timestamp == 0) {
+        return "Last active: Unknown";
+    }
+
+    $current_time = time();
+    $diff = $current_time - $timestamp;
+
+    if ($diff < 60) {
+        return "Last active just now";
+    } elseif ($diff < 3600) { 
+        return "Last active " . floor($diff / 60) . " mins ago";
+    } elseif ($diff < 86400) {
+        return "Last active " . floor($diff / 3600) . " hrs ago";
+    } elseif ($diff < 7 * 86400) { 
+        return "Last active " . floor($diff / 86400) . " days ago";
+    } elseif ($diff < 30 * 86400) { 
+        return "Last active " . floor($diff / (7 * 86400)) . " weeks ago";
+    } elseif ($diff < 365 * 86400) { 
+        return "Last active " . floor($diff / (30 * 86400)) . " months ago";
+    } else { 
+        return "Last active " . floor($diff / (365 * 86400)) . " years ago";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -190,29 +217,20 @@ include("../includes/system_update.php");
             <tr>    
                 <th>Username</th>
                 <th>Role</th>
-                <th>Status</th>
+                <th>Active Status</th>
                 <th>Action</th>
             </tr>
             
             <?php 
             while ($row = mysqli_fetch_assoc($result)) {
-                $is_active = ($row['status'] === 'activate');
                 echo "<tr>
                     <td>{$row['username']}</td>
                     <td>{$row['role']}</td>";
-                    $opstat = ($row['status'] === 'activate' ? 'deactivate' : 'activate');
-                    print "<td>";
-                    print ($row['status'] === 'activate' ? '<p style=\"color: green;\">Active</p>' : '<p style=\"color: red;\">Deactivate</p>');
-                    print "<form method='post' action='update.php'>
-                <input type='hidden' name='account_id' value='{$row['account_id']}'>
-                <input type='hidden' name='stat1' value='$opstat'>
-                <label class='switch'>
-                    <input type='checkbox' name='status' value='$opstat' onchange='this.form.submit()' " . ($is_active ? "checked" : "") . ">
-                    <span class='slider'></span>
-                </label>
-            </form>
-        </td>
-        <td>
+                    echo "
+                    <td>
+                    ".timeAgo($row['last_active'])."<br>
+                    </td>
+                    <td>
             <a href='view.php?id={$row['account_id']}' class='btn btn-primary btn-sm'><i class='fas fa-eye'></i></a>
             <a href='edit.php?id={$row['account_id']}' class='btn btn-primary btn-sm'><i class='fas fa-edit'></i></a>
            <button class='btn btn-danger' type='button' onclick='openPopup({$row['account_id']})'><i class ='fas fa-trash'></i></button>

@@ -2,7 +2,22 @@
 include('../../resources/database/config.php');
 include("../includes/system_update.php");
 
-
+if(isset($_POST['status'])){
+    echo $stat=$_POST['status'];
+   echo  $id=$_GET['id'];
+   mysqli_begin_transaction($conn);
+    echo $sql="UPDATE discount SET discount_status='$stat' WHERE discount_id=$id";
+     $result=$conn->query($sql);
+     if($result){
+         echo 'yes';
+         mysqli_commit($conn);
+         header("location:index.php");
+         exit;
+     }else{
+        mysqli_rollback($conn);
+        exit;
+     }
+ }
 
 if (isset($_POST['update'])) {
     $name = $_POST['discount_name'];
@@ -33,12 +48,10 @@ if (isset($_POST['update'])) {
         mysqli_rollback($conn);
         echo "Error: " . $e->getMessage();
     }
-}elseif(isset($_POST['status'])){
-    $sql="UPDATE discount SET discount_status='{$_POST['status']}' WHERE discount_id={$_GET['id']}";
-    mysqli_query($conn,$sql);
-    if(mysqli_affected_rows($conn)>0){
-        header("location:index.php");
-    }
 }
+
+
+
+
 ?>
 

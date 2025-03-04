@@ -6,7 +6,7 @@ if(isset($_POST['login'])){
     $password=trim(sha1($_POST['password']));
 
     try{
-
+        mysqli_begin_transaction($conn);    
         $sql="SELECT account_id, role FROM account WHERE username=? && password=? LIMIT 1";
         $stmt=mysqli_prepare($conn,$sql);
         mysqli_stmt_bind_param($stmt,'ss',$username,$password);
@@ -16,36 +16,33 @@ if(isset($_POST['login'])){
         
         if(mysqli_stmt_num_rows($stmt)>0){
             mysqli_stmt_fetch($stmt);
-
+            $active="UPDATE account SET last_active=now() WHERE account_id=?";
+            $stmt=mysqli_prepare($conn,$active);
+            mysqli_stmt_bind_param($stmt,'i',$ID);
+            mysqli_stmt_execute($stmt);
            if($role==='admin' ){
            echo $_SESSION['ID']=$ID;
            echo $_SESSION['role']=$role;
-        //    echo $_SESSION['status']=$status;
            $_SESSION["login_success"]='yes';
             header('location:admin/index.php');
            }elseif($role=='user' ){
             $_SESSION['ID']=$ID;
             $_SESSION['role']=$role;
-            // $_SESSION['status']=$status;
             header('location:user/view/home.php');
             }
-        //    }else{
-        //     $_SESSION["status_check"]="yes";
-        //      include("alert.php");
+           }else{
+            $_SESSION["status_check"]="yes";
+             include("alert.php");
 
-        //    }
-        }else{
-            $_SESSION["account_check"]="yes";
-            include("alert.php");
-        }
-
+           }
+           mysqli_commit($conn);
     }catch(Exception $e){   
         mysqli_rollback($conn);
         echo $e->getMessage();
-        // header('location:'.$_SERVER['PHP_SELF']);
+        header('location:'.$_SERVER['PHP_SELF']);
     }
-}
 
+}
 ?>
 
 <!DOCTYPE html>

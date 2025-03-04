@@ -1,6 +1,5 @@
 <?php 
 include('../../resources/database/config.php');
-include ('../includes/template.html');
 include("../includes/system_update.php");
 
 if(isset($_GET['id']) && isset($_POST['yes'])){
@@ -22,6 +21,7 @@ if(isset($_GET['id']) && isset($_POST['yes'])){
         mysqli_rollback($conn);
         print $e->getMessage();
     }
-}
+}else{
+    header("location: index.php");}
 
 ?>

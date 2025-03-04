@@ -10,205 +10,345 @@ $room = mysqli_fetch_assoc($result);
 $sql1 = "SELECT * FROM room_gallery WHERE room_id = $id";
 $result1 = mysqli_query($conn, $sql1);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Room</title>
+
+
+
+    <title>Edit Room Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
         }
 
-        .content {
-            width: 90%;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+     .content{
+        width: 100%;
+     }
+
+        .room-edit-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            padding: 40px;
+            transition: all 0.3s ease;
         }
 
-        .content h2 {
-            text-align: center;
-            color: #333;
-            font-size: 26px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .room-details {
+        .room-edit-header {
             display: flex;
-            gap: 20px;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 15px;
+        }
+
+        .room-edit-header h2 {
+            margin: 0;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .room-code-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .form-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
         }
 
         .form-label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 6px;
-            color: #444;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
         }
 
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+        .form-label i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .form-control, .form-select {
+            padding: 12px 15px;
+            border: 1px solid #e0e7f3;
+            border-radius: 8px;
+            transition: all 0.3s ease;
             font-size: 16px;
-            transition: 0.3s ease-in-out;
         }
 
-        .form-control:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.2);
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
         }
 
         .gallery-section {
             margin-top: 30px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
         }
 
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
-            margin-top: 10px;
+            margin-bottom: 20px;
         }
 
         .gallery-item {
             position: relative;
-            width: 180px;
-            height: 120px;
             border-radius: 8px;
             overflow: hidden;
-            border: 2px solid #ddd;
-            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
         .gallery-item:hover {
             transform: scale(1.05);
-            border-color: #007bff;
         }
 
         .gallery-item img {
             width: 100%;
-            height: 100%;
+            height: 200px;
             object-fit: cover;
         }
 
-        .delete-icon {
+        .delete-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: red;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(231, 76, 60, 0.8);
             color: white;
             border: none;
-            cursor: pointer;
-            font-size: 16px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.3s;
-        }
-
-        .delete-icon:hover {
-            background: darkred;
-        }
-
-        input[type="file"] {
-            margin-top: 10px;
-        }
-
-        .btn-success {
-            width: 100%;
-            padding: 12px;
-            background: #28a745;
-            color: white;
-            font-size: 18px;
-            border: none;
-            border-radius: 6px;
             cursor: pointer;
-            transition: 0.3s;
-            display: block;
-            text-align: center;
+            transition: background-color 0.3s ease;
         }
 
-        .btn-success:hover {
-            background: #218838;
+        .delete-btn:hover {
+            background-color: rgba(231, 76, 60, 1);
+        }
+
+        .file-upload-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-upload-btn:hover {
+            background-color: #3a7bd5;
+        }
+
+        .btn-save {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                grid-template-columns: 1fr;
+            }
+
+            .room-edit-container {
+                padding: 20px;
+            }
         }
     </style>
-</head>
-<body>
+
 <div class="content">
-    <?php include("alert.php") ?>
-    <h2>Edit Room</h2>
-    <form action="update.php" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="room_id" value="<?php echo $room['room_id']; ?>">
-
-        <div class="room-details">
-            <div class="form-group">
-                <label for="room_code" class="form-label">Room Code</label>
-                <input type="text" class="form-control" name="room_code" value="<?php echo $room['room_code']; ?>" required>
-            </div>
-
-            <div class="form-group">
-                <label for="type" class="form-label">Room Type</label>
-                <select class="form-select" name="type" required>
-                    <option value="standard" <?php if($room['room_type'] == 'standard') echo 'selected'; ?>>Standard</option>
-                    <option value="premium" <?php if($room['room_type'] == 'premium') echo 'selected'; ?>>Premium</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-select" name="status" required>
-                    <option value="available" <?php if($room['room_status'] == 'available') echo 'selected'; ?>>Available</option>
-                    <option value="booked" <?php if($room['room_status'] == 'booked') echo 'selected'; ?>>Booked</option>
-                    <option value="under maintenance" <?php if($room['room_status'] == 'under maintenance') echo 'selected'; ?>>Under Maintenance</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="price" class="form-label">Price</label>
-                <input type="text" class="form-control" name="price" value="<?php echo $room['price']; ?>" required>
+    <div class="room-edit-container">
+        <div class="room-edit-header">
+            <h2>Edit Room Details</h2>
+            <div class="room-code-badge">
+                Room Code: <?php echo $room['room_code']; ?>
             </div>
         </div>
 
-        <div class="gallery-section">
-            <h3>Gallery</h3>
-            <div class="gallery">
-                <?php while ($img = mysqli_fetch_assoc($result1)) { ?>
-                    <div class="gallery-item">
-                        <img src="../../resources/assets/room_images/<?php echo $img['room_img']; ?>" alt="Room Image">
-                        <button type="button" class="delete-icon" onclick="deleteImage('<?php echo $img['room_img']; ?>')">&times;</button>
+        <form action="update.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="room_id" value="<?php echo $room['room_id']; ?>">
+
+            <div class="form-section">
+                <div>
+                    <div class="form-group">
+                        <label for="room_code" class="form-label">
+                            <i class="fas fa-barcode"></i> Room Code
+                        </label>
+                        <input type="text" id="room_code" class="form-control" name="room_code" 
+                               value="<?php echo $room['room_code']; ?>" required>
                     </div>
-                <?php } ?>
+
+                    <div class="form-group">
+                        <label for="type" class="form-label">
+                            <i class="fas fa-bed"></i> Room Type
+                        </label>
+                        <select id="type" class="form-select" name="type" required>
+                            <option value="standard" <?php echo ($room['room_type'] == 'standard') ? 'selected' : ''; ?>>
+                                Standard Room
+                            </option>
+                            <option value="premium" <?php echo ($room['room_type'] == 'premium') ? 'selected' : ''; ?>>
+                                Premium Room
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status" class="form-label">
+                            <i class="fas fa-info-circle"></i> Room Status
+                        </label>
+                        <select id="status" class="form-select" name="status" required>
+                            <option value="available" <?php echo ($room['room_status'] == 'available') ? 'selected' : ''; ?>>
+                                Available
+                            </option>
+                            <option value="booked" <?php echo ($room['room_status'] == 'booked') ? 'selected' : ''; ?>>
+                                Booked
+                            </option>
+                            <option value="under maintenance" <?php echo ($room['room_status'] == 'under maintenance') ? 'selected' : ''; ?>>
+                                Under Maintenance
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label for="price" class="form-label">
+                            <i class="fas fa-dollar-sign"></i> Price per Night
+                        </label>
+                        <input type="number" id="price" class="form-control" name="price" 
+                               value="<?php echo $room['price']; ?>" min="0" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="form-label">
+                            <i class="fas fa-pencil-alt"></i> Room Description
+                        </label>
+                        <textarea id="description" class="form-control" name="description" rows="4" 
+                                  placeholder="Enter room description (optional)"><?php echo $room['description'] ?? ''; ?></textarea>
+                    </div>
+                </div>
             </div>
-            <input type="file" name="images[]" multiple class="form-control mt-2">
-        </div>
-        <br>
-        <button type="submit" name="update" class="btn btn-success">Save Changes</button>
-    </form>
+
+            <div class="gallery-section">
+                <h3>Room Gallery</h3>
+                <div class="gallery-grid">
+                    <?php while ($img = mysqli_fetch_assoc($result1)) { ?>
+                        <div class="gallery-item">
+                            <img src="../../resources/assets/room_images/<?php echo $img['room_img']; ?>" alt="Room Image">
+                            <button type="button" class="delete-btn" onclick="deleteImage('<?php echo $img['room_img']; ?>')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    <?php } ?>
+                </div>
+
+                <div class="file-upload-container">
+                    <input type="file" name="images[]" multiple class="file-upload-input" id="image-upload" accept="image/*">
+                    <label for="image-upload" class="file-upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Images
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" name="update" class="btn-save mt-4">
+                Save Changes <i class="fas fa-save"></i>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function deleteImage(imageName) {
+            if (confirm(`Are you sure you want to delete the image ${imageName}?`)) {
+                // Add AJAX call or form submission to handle image deletion
+                alert('Image deletion functionality to be implemented');
+            }
+        }
+
+        // File upload preview
+        document.getElementById('image-upload').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const galleryGrid = document.querySelector('.gallery-grid');
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewItem = document.createElement('div');
+                    previewItem.classList.add('gallery-item', 'preview-item');
+                    previewItem.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <button type="button" class="delete-btn remove-preview">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    const removeBtn = previewItem.querySelector('.remove-preview');
+                    removeBtn.addEventListener('click', () => {
+                        previewItem.remove();
+                    });
+
+                    galleryGrid.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 </div>
 
-<script>
-    function deleteImage(imageName) {
-        window.location.href = "delete.php?image=" + imageName + "&room_id=<?php echo $room['room_id']; ?>&click=true";
-    }
-</script>
-</body>
-</html>

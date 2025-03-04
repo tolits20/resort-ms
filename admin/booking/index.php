@@ -123,11 +123,13 @@ if(isset($_GET['switch'])){
                 <?php 
                 if(mysqli_num_rows($result)>0){
                     while($row=mysqli_fetch_assoc($result)){
+                        $check_in = date("F d, Y h:i A", strtotime($row['check_in']));
+                        $check_out= date("F d, Y h:i A", strtotime($row['check_out']));
                         print "<tr>
                     <td>{$row['fname']} {$row['lname']}</td>
                     <td>{$row['room_code']}</td>
-                    <td>{$row['check_in']}</td>
-                    <td>{$row['check_out']}</td>
+                    <td>$check_in</td>
+                    <td>$check_out</td>
                     <td><span class='badge bg-success'>{$row['status']}</span></td>
                     <td>
                         <a href='../payment/index.php?id={$row['id']}' class='btn btn-success'><i class='fas fa-credit-card'></i></a>
