@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2025 at 04:06 PM
+-- Generation Time: Mar 04, 2025 at 04:22 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,23 +34,23 @@ CREATE TABLE IF NOT EXISTS `account` (
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `role` enum('user','admin') NOT NULL,
-  `status` enum('activate','deactivate') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `status`, `created_at`, `updated_at`) VALUES
-(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', 'activate', '2025-02-14 15:10:14', '2025-02-14 15:10:14'),
-(9, 'tolits@example.com', '21a2f903885172b4503e6f5eaf6b78880f4712cc', 'admin', 'activate', '2025-02-15 05:24:00', '2025-02-28 03:53:06'),
-(10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'deactivate', '2025-02-16 10:43:34', '2025-02-27 13:42:18'),
-(12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'deactivate', '2025-02-23 15:06:58', '2025-03-02 03:45:02'),
-(13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', 'activate', '2025-02-24 15:25:09', '2025-02-25 01:32:39'),
-(27, 'lems.leviasherpenaverde@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', 'activate', '2025-02-26 16:17:06', '2025-03-03 13:58:06');
+INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `created_at`, `updated_at`) VALUES
+(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-02-14 15:10:14', '2025-02-14 15:10:14'),
+(9, 'tolits@example.com', '21a2f903885172b4503e6f5eaf6b78880f4712cc', 'admin', '2025-02-15 05:24:00', '2025-02-28 03:53:06'),
+(10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', '2025-02-16 10:43:34', '2025-02-27 13:42:18'),
+(12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', '2025-02-23 15:06:58', '2025-03-02 03:45:02'),
+(13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', '2025-02-24 15:25:09', '2025-02-25 01:32:39'),
+(27, 'lems.leviasherpenaverde@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', '2025-02-26 16:17:06', '2025-03-03 13:58:06'),
+(37, 'asd@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-04 00:30:14', NULL);
 
 -- --------------------------------------------------------
 
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `account_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`cnotif_id`),
   KEY `account_notification_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account_notification`
@@ -73,7 +73,8 @@ CREATE TABLE IF NOT EXISTS `account_notification` (
 
 INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `account_notification`, `Date`) VALUES
 (1, 12, 'update', '2025-03-02 11:45:02'),
-(2, 27, 'update', '2025-03-03 21:58:06');
+(2, 27, 'update', '2025-03-03 21:58:06'),
+(3, 37, 'create', '2025-03-04 08:30:14');
 
 -- --------------------------------------------------------
 
@@ -97,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `book_room_fk` (`room_id`),
   KEY `book_account_fk` (`account_id`),
   KEY `book_guest_fk` (`guest_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
@@ -106,7 +107,12 @@ CREATE TABLE IF NOT EXISTS `booking` (
 INSERT INTO `booking` (`book_id`, `account_id`, `guest_id`, `room_id`, `check_in`, `check_out`, `book_status`, `reminder_sent`, `completion_sent`, `created_at`, `updated_at`) VALUES
 (4, NULL, 1, 9, '2025-03-14 18:00:00', '2025-03-18 10:00:00', 'pending', 0, 0, '2025-03-03 08:45:00', '2025-03-01 09:29:34'),
 (5, 12, NULL, 15, '2025-03-03 04:00:00', '2025-03-03 11:20:00', 'cancelled', 0, 0, '2025-02-25 12:32:02', '2025-03-03 03:11:08'),
-(6, 27, NULL, 9, '2025-03-04 07:00:00', '2025-03-04 17:00:00', 'completed', 1, 1, '2025-03-03 22:18:00', '2025-03-03 14:51:05');
+(6, 27, NULL, 9, '2025-03-04 07:00:00', '2025-03-04 17:00:00', 'completed', 1, 1, '2025-03-03 22:18:00', '2025-03-03 14:51:05'),
+(7, 27, NULL, 12, '2025-03-04 07:00:00', '2025-03-05 05:00:00', 'confirmed', 0, 0, '2025-03-04 08:28:06', '2025-03-04 00:28:06'),
+(8, 37, NULL, 12, '2025-03-04 07:00:00', '2025-03-05 05:00:00', 'pending', 0, 0, '2025-03-04 08:31:17', '2025-03-04 00:31:17'),
+(9, 27, NULL, 12, '2025-03-05 07:00:00', '2025-03-05 17:00:00', 'pending', 0, 0, '2025-03-04 09:37:49', '2025-03-04 01:37:49'),
+(10, 27, NULL, 12, '2025-03-06 19:00:00', '2025-03-07 17:00:00', 'pending', 0, 0, '2025-03-04 09:44:44', '2025-03-04 01:44:44'),
+(11, 27, NULL, 9, '2025-03-01 07:00:00', '2025-03-01 17:00:00', 'pending', 0, 0, '2025-03-04 11:08:12', '2025-03-04 03:08:12');
 
 -- --------------------------------------------------------
 
@@ -121,14 +127,16 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`booking_notif_id`),
   KEY `booking_notif_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_notification`
 --
 
 INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_status`, `Date`) VALUES
-(1, 6, 'pending', '2025-03-03 22:18:00');
+(1, 6, 'pending', '2025-03-03 22:18:00'),
+(2, 7, 'pending', '2025-03-04 08:28:06'),
+(3, 8, 'pending', '2025-03-04 08:31:17');
 
 -- --------------------------------------------------------
 
@@ -180,15 +188,15 @@ INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percentage`, `
 
 CREATE TABLE IF NOT EXISTS `feedback` (
   `feedback_id` int(11) NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
   `book_id` int(11) DEFAULT NULL,
   `rating` int(1) NOT NULL,
   `comment` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`feedback_id`),
-  KEY `feedback_account_fk` (`account_id`),
-  KEY `feedback_book_fk` (`book_id`)
+  KEY `feedback_book_fk` (`book_id`),
+  KEY `feedback_account_fk` (`account_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -271,6 +279,7 @@ CREATE TABLE IF NOT EXISTS `room` (
   `room_code` varchar(50) NOT NULL,
   `room_type` enum('standard','premium','deluxe') NOT NULL,
   `room_status` enum('available','booked','under maintenance') NOT NULL,
+  `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -282,11 +291,11 @@ CREATE TABLE IF NOT EXISTS `room` (
 -- Dumping data for table `room`
 --
 
-INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `price`, `created_at`, `updated_at`) VALUES
-(9, 'room101', 'standard', 'available', 500.00, '2025-02-15 15:37:50', '2025-03-03 03:27:40'),
-(12, 'room102', 'standard', 'booked', 1000.00, '2025-02-19 12:40:06', '2025-03-01 13:33:44'),
-(14, 'room103', 'premium', 'under maintenance', 5000.00, '2025-02-22 03:31:37', '2025-02-27 15:03:28'),
-(15, 'room104', 'premium', 'available', 6000.00, '2025-02-25 01:27:38', '2025-02-27 15:30:17');
+INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `description`, `price`, `created_at`, `updated_at`) VALUES
+(9, 'room101', 'standard', 'available', '', 500.00, '2025-02-15 15:37:50', '2025-03-03 03:27:40'),
+(12, 'room102', 'standard', 'booked', '', 1000.00, '2025-02-19 12:40:06', '2025-03-01 13:33:44'),
+(14, 'room103', 'premium', 'under maintenance', '', 5000.00, '2025-02-22 03:31:37', '2025-02-27 15:03:28'),
+(15, 'room104', 'premium', 'available', '', 6000.00, '2025-02-25 01:27:38', '2025-02-27 15:30:17');
 
 -- --------------------------------------------------------
 
@@ -382,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `contact` (`contact`),
   KEY `user_account_fk` (`account_id`),
   KEY `unique_fullname` (`fname`,`lname`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -394,7 +403,8 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 (10, 10, 'Allan', 'Monforte', 98, 'male', '9112245667', '67b1c15630d272.47796055.png'),
 (12, 12, 'Melvin', 'Catuera', 20, 'female', '9123456789', '67c3d43e7168e3.93428308.png'),
 (13, 13, 'Ianzae', 'Ego', 21, 'female', '9876543211', '67bc8f552ae286.40054461.png'),
-(14, 27, 'Asher', 'Hilado', 21, 'male', '9231231236', '67bf3e820512d9.05980251.png');
+(14, 27, 'Asher', 'Hilado', 21, 'male', '9231231236', '67bf3e820512d9.05980251.png'),
+(24, 37, 'Asd', 'Lname', 20, 'male', '9232542569', '67c64996999a09.73963392.jpg');
 
 -- --------------------------------------------------------
 
@@ -451,7 +461,7 @@ ALTER TABLE `booking_notification`
 -- Constraints for table `feedback`
 --
 ALTER TABLE `feedback`
-  ADD CONSTRAINT `feedback_account_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `feedback_account_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `feedback_book_fk` FOREIGN KEY (`book_id`) REFERENCES `booking` (`book_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --

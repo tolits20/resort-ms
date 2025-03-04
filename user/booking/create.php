@@ -1,13 +1,15 @@
 <?php
-include ('../../resources/database/config.php');
+require '../../resources/database/config.php';
 
-if (!isset($_SESSION['ID'])) {
-    header("location: ../../login.php");
-    exit;
+// Ensure a room is selected
+if (!isset($_GET['room_id']) || empty($_GET['room_id'])) {
+    die("Room not selected.");
 }
 
-$rooms = [];
-$result = mysqli_query($conn, "SELECT 
+$room_id = intval($_GET['room_id']);
+
+// Fetch room details including discount
+$roomQuery = "SELECT 
     room.room_id,
     room.room_code,
     room.room_type,
@@ -20,139 +22,215 @@ LEFT JOIN discount
     ON room.room_type = discount.applicable_room 
     AND discount.discount_status = 'activate'
     AND NOW() BETWEEN discount.discount_start AND discount.discount_end
-WHERE room.room_status = 'available' || room.room_status = 'pending'");
+WHERE room.room_id = ?";
 
-if ($result) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rooms[] = $row;
-    }
-} else {
-    die("Error fetching rooms: " . mysqli_error($conn));
+$stmt = $conn->prepare($roomQuery);
+$stmt->bind_param("i", $room_id);
+$stmt->execute();
+$roomResult = $stmt->get_result();
+$room = $roomResult->fetch_assoc();
+
+if (!$room) {
+    die("Room not found.");
+}
+
+// Fetch booked dates for this room
+$bookedDates = [];
+$bookingQuery = "SELECT check_in FROM booking WHERE room_id = ?";
+$stmt = $conn->prepare($bookingQuery);
+$stmt->bind_param("i", $room_id);
+$stmt->execute();
+$bookingResult = $stmt->get_result();
+
+while ($row = $bookingResult->fetch_assoc()) {
+    $bookedDates[] = date("Y-m-d", strtotime($row['check_in']));
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Book a Room</title>
-  <?php include '../bootstrap.php'; ?>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book <?= htmlspecialchars($room['room_code']); ?></title>
+    
+    <!-- Include jQuery & jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Custom Styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            margin: 50px auto;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .price-box {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .discounted {
+            text-decoration: line-through;
+            color: red;
+            font-size: 14px;
+        }
+        .discounted strong {
+            color: green;
+            font-size: 18px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        input[readonly] {
+            background: #e9ecef;
+            cursor: not-allowed;
+        }
+        button {
+            margin-top: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="booking-form">
-      <h2>Book a Room</h2>
-      <form action="store.php" method="POST">
-        <div class="mb-3">
-          <label for="room_id" class="form-label">Select Available Room</label>
-          <select name="room_id" id="room_id" class="form-select" required>
-            <option value="">Choose a room</option>
-            <?php foreach ($rooms as $room): ?>
-              <option value="<?php echo $room['room_id']; ?>" 
-        data-price="<?php echo $room['price']; ?>"
-        data-discount="<?php echo $room['discount_percentage'] ?? 0; ?>"
-        data-discounted-price="<?php echo $room['discounted_price'] ?? $room['price']; ?>">
-    Room <?php echo $room['room_code']; ?> - <?php echo ucfirst($room['room_type']); ?>
-    <?php if (!empty($room['discount_percentage']) && $room['discount_percentage'] > 0): ?>
-        (<?php echo $room['discount_percentage']; ?>% Off - 
-        <?php echo number_format($room['price'], 2); ?> → 
-        <?php echo number_format($room['discounted_price'], 2); ?>)
-    <?php else: ?>
-        (<?php echo number_format($room['price'], 2); ?>)
-    <?php endif; ?>
-</option>
 
-            <?php endforeach; ?>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="price_display" class="form-label">Price</label>
-          <input type="text" id="price_display" class="form-control" readonly>
-          <input type="hidden" name="price" id="price">
-        </div>
-        <div class="mb-3">
-          <label for="check_in" class="form-label">Check-in Date</label>
-          <input type="date" name="check_in" id="check_in" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="time_slot" class="form-label">Select Time Slot</label>
-          <select name="time_slot" id="time_slot" class="form-select" required>
-            <option value="">Choose a time slot</option>
-            <option value="7:00 AM - 5:00 PM">7:00 AM - 5:00 PM (10 hrs)</option>
-            <option value="7:00 PM - 5:00 AM">7:00 PM - 5:00 AM (10 hrs)</option>
-            <option value="7:00 PM - 5:00 PM">7:00 PM - 5:00 PM (22 hrs)</option>
-            <option value="7:00 AM - 5:00 AM">7:00 AM - 5:00 AM (22 hrs)</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="check_out" class="form-label">Check-out Date</label>
-          <input type="text" id="check_out" class="form-control" readonly>
-        </div>
-        
-        <input type="hidden" name="check_out" id="check_out_hidden">
-        <input type="hidden" name="check_in_time" id="check_in_time">
-        <input type="hidden" name="check_out_time" id="check_out_time">
-        
-        <div class="d-grid">
-          <button type="submit" name="submit" class="btn btn-primary">Book Now</button>
-        </div>
-      </form>
+<div class="container">
+    <h2>Book <?= htmlspecialchars($room['room_code']); ?></h2>
+
+    <div class="price-box">
+        <p>Price: 
+            <?php if ($room['discount_percentage'] > 0): ?>
+                <span class="discounted">$<?= number_format($room['price'], 2); ?></span>
+                <strong>$<?= number_format($room['discounted_price'], 2); ?></strong>
+                (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
+            <?php else: ?>
+                <strong>$<?= number_format($room['price'], 2); ?></strong>
+            <?php endif; ?>
+        </p>
     </div>
-  </div>
 
-  <script>
-  document.getElementById("room_id").addEventListener("change", function () {
-      var selectedOption = this.options[this.selectedIndex];
-      var discountedPrice = selectedOption.getAttribute("data-discounted-price") || 0;
-      document.getElementById("price_display").value = discountedPrice;
-      document.getElementById("price").value = discountedPrice;
-  });
+    <form method="POST" action="store.php">
+        <input type="hidden" name="room_id" value="<?= $room_id; ?>">
 
-  document.getElementById("time_slot").addEventListener("change", updateCheckOut);
-  document.getElementById("check_in").addEventListener("change", updateCheckOut);
+        <label for="check_in">Check-in Date:</label>
+        <input type="text" id="check_in" name="check_in" readonly required>
 
-  function updateCheckOut() {
-      var checkInDate = document.getElementById("check_in").value;
-      var timeSlot = document.getElementById("time_slot").value;
-      var checkOutField = document.getElementById("check_out");
-      var checkOutHidden = document.getElementById("check_out_hidden");
-      var checkInTimeField = document.getElementById("check_in_time");
-      var checkOutTimeField = document.getElementById("check_out_time");
+        <label for="time_slot">Check-in Time Slot:</label>
+        <select name="time_slot" id="time_slot" required>
+            <option value="7:00 AM - 5:00 PM">7:00 AM - 5:00 PM</option>
+            <option value="7:00 PM - 5:00 AM">7:00 PM - 5:00 AM</option>
+            <option value="7:00 PM - 5:00 PM">7:00 PM - 5:00 PM</option>
+            <option value="7:00 AM - 5:00 AM">7:00 AM - 5:00 AM</option>
+        </select>
 
-      if (checkInDate && timeSlot) {
-          var checkInDateTime = new Date(checkInDate);
-          var checkInTime, checkOutTime;
+        <label for="check_out">Check-out Date:</label>
+        <input type="text" id="check_out" name="check_out" readonly disabled>
+        <input type="hidden" id="hidden_check_out" name="check_out">
+        <input type="hidden" id="check_in_time" name="checkInTime">
+        <input type="hidden" id="check_out_time" name="checkOutTime">
 
-          switch (timeSlot) {
-              case "7:00 AM - 5:00 PM":
-                  checkInTime = "07:00:00";
-                  checkOutTime = "17:00:00";
-                  break;
-              case "7:00 PM - 5:00 AM":
-                  checkInTime = "19:00:00";
-                  checkInDateTime.setDate(checkInDateTime.getDate() + 1);
-                  checkOutTime = "05:00:00";
-                  break;
-              case "7:00 PM - 5:00 PM":
-                  checkInTime = "19:00:00";
-                  checkInDateTime.setDate(checkInDateTime.getDate() + 1);
-                  checkOutTime = "17:00:00";
-                  break;
-              case "7:00 AM - 5:00 AM":
-                  checkInTime = "07:00:00";
-                  checkInDateTime.setDate(checkInDateTime.getDate() + 1);
-                  checkOutTime = "05:00:00";
-                  break;
-              default:
-                  return;
-          }
+        <button type="submit">Confirm Booking</button>
+    </form>
+</div>
 
-          checkOutField.value = checkInDateTime.toISOString().split("T")[0];
-          checkOutHidden.value = checkOutField.value;
-          checkInTimeField.value = checkInTime;
-          checkOutTimeField.value = checkOutTime;
-      }
-  }
-  </script>
+<script>
+    $(document).ready(function () {
+        let bookedDates = <?= json_encode($bookedDates); ?>;
+
+        $("#check_in").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: 0,
+            beforeShowDay: function (date) {
+                let formattedDate = $.datepicker.formatDate("yy-mm-dd", date);
+                return [bookedDates.indexOf(formattedDate) === -1];
+            },
+            onSelect: function (selectedDate) {
+                updateCheckoutDate(selectedDate);
+            }
+        });
+
+        $("#time_slot").change(function () {
+            let checkInDate = $("#check_in").val();
+            if (checkInDate) {
+                updateCheckoutDate(checkInDate);
+            }
+        });
+
+        function updateCheckoutDate(checkInDate) {
+    let timeSlot = $("#time_slot").val();
+    if (!timeSlot) return;
+
+    let checkInDateTime = new Date(checkInDate);
+    let checkOutDateTime = new Date(checkInDate);
+    let checkInTime, checkOutTime;
+
+    switch (timeSlot) {
+        case "7:00 AM - 5:00 PM":
+            checkInTime = "07:00:00";
+            checkOutTime = "17:00:00";
+            break;
+
+        case "7:00 PM - 5:00 AM":
+            checkInTime = "19:00:00";
+            checkOutTime = "05:00:00";
+            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+            break;
+
+        case "7:00 PM - 5:00 PM":
+            checkInTime = "19:00:00";
+            checkOutTime = "17:00:00";
+            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+            break;
+
+        case "7:00 AM - 5:00 AM":
+            checkInTime = "07:00:00";
+            checkOutTime = "05:00:00";
+            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+            break;
+    }
+
+    let checkOutFormatted = $.datepicker.formatDate("yy-mm-dd", checkOutDateTime);
+    $("#check_out").val(checkOutFormatted);
+    $("#hidden_check_out").val(checkOutFormatted);
+    $("#check_in_time").val(checkInTime);
+    $("#check_out_time").val(checkOutTime);
+}
+
+    });
+</script>
+
 </body>
 </html>

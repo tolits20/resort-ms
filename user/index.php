@@ -1,7 +1,7 @@
 <?php
 include ("../resources/database/config.php");
 
-$sql = "SELECT * FROM room WHERE room_status = 'available'";
+$sql = "SELECT r.room_id, r.room_code, r.room_type, r.price, g.room_img FROM room r INNER JOIN room_gallery g on r.room_id = g.room_id";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -126,10 +126,9 @@ $result = $conn->query($sql);
     <main class="room-container">
         <?php while ($row = $result->fetch_assoc()) { ?>
             <div class="room-card">
-                <img src="../resources/assets/images/<?php echo $row['image']; ?>" alt="Room Image">
+                <img src="../resources/assets/room_images/<?php echo $row['room_img']; ?>" alt="Room Image">
                 <div class="content">
-                    <h2><?php echo $row['room_name']; ?></h2>
-                    <p><?php echo $row['description']; ?></p>
+                    <h2><?php echo $row['room_code']; ?></h2>
                     <p class="price">$<?php echo $row['price']; ?> per night</p>
                     <a href="book.php?room_id=<?php echo $row['room_id']; ?>" class="book-btn">Book Now</a>
                 </div>
