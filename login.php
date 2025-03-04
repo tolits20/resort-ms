@@ -7,32 +7,33 @@ if(isset($_POST['login'])){
 
     try{
 
-        $sql="SELECT account_id, role, status FROM account WHERE username=? && password=? LIMIT 1";
+        $sql="SELECT account_id, role FROM account WHERE username=? && password=? LIMIT 1";
         $stmt=mysqli_prepare($conn,$sql);
         mysqli_stmt_bind_param($stmt,'ss',$username,$password);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
-        mysqli_stmt_bind_result($stmt,$ID,$role,$status);
+        mysqli_stmt_bind_result($stmt,$ID,$role);
         
         if(mysqli_stmt_num_rows($stmt)>0){
             mysqli_stmt_fetch($stmt);
 
-           if($role==='admin' && $status==='activate'){
+           if($role==='admin' ){
            echo $_SESSION['ID']=$ID;
            echo $_SESSION['role']=$role;
-           echo $_SESSION['status']=$status;
+        //    echo $_SESSION['status']=$status;
            $_SESSION["login_success"]='yes';
             header('location:admin/index.php');
-           }elseif($role=='user' && $status=='activate'){
+           }elseif($role=='user' ){
             $_SESSION['ID']=$ID;
             $_SESSION['role']=$role;
-            $_SESSION['status']=$status;
+            // $_SESSION['status']=$status;
             header('location:user/view/home.php');
-           }else{
-            $_SESSION["status_check"]="yes";
-             include("alert.php");
+            }
+        //    }else{
+        //     $_SESSION["status_check"]="yes";
+        //      include("alert.php");
 
-           }
+        //    }
         }else{
             $_SESSION["account_check"]="yes";
             include("alert.php");
