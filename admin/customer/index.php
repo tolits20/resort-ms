@@ -4,7 +4,6 @@ include('../includes/page_authentication.php');
 include ('../includes/template.php');
 include("../includes/system_update.php");
 
-var_dump($_SESSION);
 function timeAgo($datetime) {
     $timestamp = strtotime($datetime);
         if (!$timestamp || $timestamp == 0) {
@@ -267,9 +266,6 @@ function timeAgo($datetime) {
         document.getElementById('popup-' + accountId).style.display = 'none';
     }
 </script>
-Last edited just now
-
-
 
     </style>
     <script>

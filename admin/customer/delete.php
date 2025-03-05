@@ -9,7 +9,35 @@ if(isset($_POST['no'])){
 }
 
 if(isset($_POST['yes'])){
-   echo $id=$_GET['id'];
+    echo $id=$_GET['id'];
+    $sql="UPDATE account SET  deleted_at=now() WHERE account_id=?";
+    $stmt=mysqli_prepare($conn,$sql);
+    mysqli_stmt_bind_param($stmt,'i',$id);
+    mysqli_stmt_execute($stmt);
+
+    if(mysqli_stmt_affected_rows($stmt)>0){
+        mysqli_commit($conn);
+        header('location:index.php');
+        exit;
+    }
+}
+
+if($_GET['restore']){
+    $id=$_GET['restore'];
+    $sql="UPDATE account SET deleted_at=NULL WHERE account_id=?";
+    $stmt=mysqli_prepare($conn,$sql);
+    mysqli_stmt_bind_param($stmt,'i',$id);
+    mysqli_stmt_execute($stmt);
+
+    if(mysqli_stmt_affected_rows($stmt)>0){
+        mysqli_commit($conn);
+        header('location:../activity_logs/index.php');
+        exit;
+    }
+}
+
+if($_GET['delete_permanent']){
+    echo $id=$_GET['delete_permanent'];
     $sql1="SELECT * FROM user WHERE account_id=$id";
     $result=mysqli_query($conn,$sql1);
     $row=mysqli_fetch_assoc($result);
@@ -54,6 +82,6 @@ if(isset($_POST['yes'])){
             exit;
         }
 
-    
 }
+
 ?>

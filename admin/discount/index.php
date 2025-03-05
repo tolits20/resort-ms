@@ -13,7 +13,7 @@ $track=mysqli_fetch_assoc($track_result);
 <style>
     
 </style>
-<div class="content">
+<div class="content" style="color:#fff;">
     <div class="container-fluid">
         <!-- Header Section -->
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -101,38 +101,3 @@ $track=mysqli_fetch_assoc($track_result);
     </div>
 </div>
 
-<!-- Add Discount Modal -->
-<div class="modal fade" id="addDiscountModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title"><i class="fas fa-plus"></i> Add Discount</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label">Discount Name</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Percentage (%)</label>
-                        <input type="number" class="form-control" min="1" max="100" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Start Date</label>
-                        <input type="date" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">End Date</label>
-                            <input type="date" class="form-control" required>
-                        </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Discount</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>

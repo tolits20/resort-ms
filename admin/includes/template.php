@@ -1,9 +1,8 @@
 <?php 
-include('../../resources/database/config.php');
-include('../includes/page_authentication.php');
+include('page_authentication.php');
 include('system_update.php');
 ?>
-
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,7 +113,6 @@ include('system_update.php');
             border-radius: 50px;
             font-weight: 500;
             transition: all 0.3s;
-            cursor: pointer;
         }
 
         .admin-info:hover {
@@ -136,6 +134,7 @@ include('system_update.php');
             padding: 20px;
             background: #1E1E2E;
             box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: black;
         }
 
         /* Adding some cool pulse animation to the sidebar hover */
@@ -148,6 +147,7 @@ include('system_update.php');
         .sidebar ul li a:active {
             animation: pulse 1s;
         }
+        
     </style>
 </head>
 <body>
@@ -160,7 +160,7 @@ include('system_update.php');
             <li><a href="http:/resort-ms/admin/rooms/index.php"><i class="fas fa-bed"></i> Rooms</a></li>
             <li><a href="http:/resort-ms/admin/discount/index.php"><i class="fas fa-tags"></i> Discount</a></li>
             <li><a href="http:/resort-ms/admin/reports/index.php"><i class="fas fa-chart-bar"></i> Reports</a></li>
-            <li><a href="settings.php"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="http:/resort-ms/admin/activity_logs/index.php"><i class="fas fa-scroll"></i> Activity Logs</a></li>
             <li><a href="http:/resort-ms/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>

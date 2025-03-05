@@ -3,14 +3,14 @@ $id = $_SESSION['ID'];
 $result;
 if(isset($_GET['search']) && !empty($_GET['searchbar'])){
  $find=isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
-$sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ? ";
+$sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL AND username LIKE ? ";
 $stmt = mysqli_prepare($conn, $sql1);
 $search="%$find%";
 mysqli_stmt_bind_param($stmt, 'is', $id,$search);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 }else{
-$sql1 = "SELECT * FROM account WHERE account_id <> ?";
+$sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL ";
 $stmt = mysqli_prepare($conn, $sql1);
 mysqli_stmt_bind_param($stmt, 'i', $id);
 mysqli_stmt_execute($stmt);
@@ -20,7 +20,7 @@ $result = mysqli_stmt_get_result($stmt);
 if(isset($_GET['sort'])){
  $sort=$_GET['sort'];
  $find=$_GET['searchbar'];
-  $sql1 = "SELECT * FROM account WHERE account_id <> ? AND username LIKE ? ORDER BY username $sort";
+  $sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL AND username LIKE ? ORDER BY username $sort";
 $stmt = mysqli_prepare($conn, $sql1);
 $search="%$find%";
 mysqli_stmt_bind_param($stmt, 'is', $id,$search);
