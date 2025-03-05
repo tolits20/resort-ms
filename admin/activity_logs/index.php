@@ -4,6 +4,14 @@ include('../includes/page_authentication.php');
 include ('../includes/template.php');
 include("../includes/system_update.php");
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Logs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         :root {
             --primary-color: #3498db;
@@ -165,7 +173,58 @@ include("../includes/system_update.php");
             font-size: 16px;
             color: #95a5a6;
         }
+
+        /* Booking Table Styling */
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .booking-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-soft);
+            color: var(--text-dark);
+        }
+
+        .booking-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status-confirmed {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .status-pending {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .status-cancelled {
+            background-color: #e74c3c;
+            color: white;
+        }
     </style>
+
 
     <div class="content">
         <div class="admin-filter-section">
@@ -214,14 +273,58 @@ include("../includes/system_update.php");
 
         <div id="booking-history" class="admin-tab-content">
             <h3>Booking History</h3>
-            <div class="admin-empty-state">
-                <div class="admin-empty-state-icon">
-                    <i class="fas fa-book-open"></i>
-                </div>
-                <div class="admin-empty-state-message">
-                    No booking history available at the moment.
-                </div>
-            </div>
+                    <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Room</th>
+                            <th>Check-In</th>
+                            <th>Check-Out</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $sql = "
+                           SELECT * FROM (
+                            SELECT 'user' AS identifier, fname, lname, room_code, check_in, check_out, status, id
+                            FROM customer_booking
+                            UNION
+                            SELECT 'guest' AS identifier, fname, lname, room_code, check_in, check_out, status, id
+                            FROM guest_booking
+                        ) AS combined
+                        WHERE status IN ('completed', 'cancelled') 
+                        ORDER BY check_in DESC;
+                        ";
+                        $result = mysqli_query($conn, $sql);
+                        if(mysqli_num_rows($result) > 0){
+                            while($row = mysqli_fetch_assoc($result)){
+                                $check_in = date("F d, Y h:i A", strtotime($row['check_in']));
+                                $check_out = date("F d, Y h:i A", strtotime($row['check_out']));
+                                print "<tr>
+                                        <td>
+                                            <div class='customer-info'>
+                                                <div class='customer-name'>{$row['fname']} {$row['lname']}</div>
+                                            </div>
+                                        </td>
+                                        <td>{$row['room_code']}</td>
+                                        <td>$check_in</td>
+                                        <td>$check_out</td>
+                                        <td><span class='status-badge status-{$row['status']}'>{$row['status']}</span></td>
+                                        <td>
+                                            <div class='action-buttons'>
+                                                <a href='../booking/edit.php?id={$row['id']}' class='btn btn-primary' title='Process Payment'>
+                                                    <i class='fas fa-eye'></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>";
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
         </div>
 
         <div id="emails-sent" class="admin-tab-content">
@@ -245,3 +348,5 @@ include("../includes/system_update.php");
             document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
         }
     </script>
+</body>
+</html>

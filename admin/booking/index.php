@@ -4,16 +4,22 @@ include('../includes/page_authentication.php');
 include ('../includes/template.php');
 include("../includes/system_update.php");
 
-$sql="SELECT * FROM customer_booking ORDER BY id DESC;";
+$sql="SELECT * FROM customer_booking 
+WHERE status NOT IN ('completed', 'cancelled') 
+ORDER BY id DESC;";
 $result=mysqli_query($conn,$sql);
 $_SESSION['identifier']='user';
 if(isset($_GET['switch'])){
     if($_GET['switch']=='user'){
-        $sql="SELECT * FROM customer_booking ORDER BY id DESC;";
+        $sql="SELECT * FROM customer_booking 
+                WHERE status NOT IN ('completed', 'cancelled') 
+                ORDER BY id DESC;";
         $result=mysqli_query($conn,$sql);
         $_SESSION['identifier']="user";
     }elseif($_GET['switch']=='guest'){
-        $sql="SELECT * FROM guest_booking ORDER BY id DESC;";
+        $sql="SELECT * FROM guest_booking 
+                WHERE status NOT IN ('completed', 'cancelled') 
+                ORDER BY id DESC;";
         $result=mysqli_query($conn,$sql);
         $_SESSION['identifier']="guest";
     }

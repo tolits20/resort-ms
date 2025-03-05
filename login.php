@@ -7,7 +7,7 @@ if(isset($_POST['login'])){
 
     try{
         mysqli_begin_transaction($conn);    
-        $sql="SELECT account_id, role FROM account WHERE username=? && password=? LIMIT 1";
+        $sql="SELECT account_id, role FROM account WHERE username=? && password=? && deleted_at IS NULL LIMIT 1";
         $stmt=mysqli_prepare($conn,$sql);
         mysqli_stmt_bind_param($stmt,'ss',$username,$password);
         mysqli_stmt_execute($stmt);

@@ -39,7 +39,7 @@ if(mysqli_num_rows($result)>0){
                     <div class="card-content">
                         <div class="detail-row">
                             <label>Name</label>
-                            <input type="text" value="<?php echo $row['fname']." ".$row['lname']?>" disabled>
+                            <input type="text" value="<?php $name= $row['fname']." ".$row['lname']; echo $name?>" disabled>
                         </div>
                     </div>
                 </div>
