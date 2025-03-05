@@ -17,9 +17,9 @@ if(isset($_POST['login'])){
         if(mysqli_stmt_num_rows($stmt)>0){
             mysqli_stmt_fetch($stmt);
             $active="UPDATE account SET last_active=now() WHERE account_id=?";
-            $stmt=mysqli_prepare($conn,$active);
-            mysqli_stmt_bind_param($stmt,'i',$ID);
-            mysqli_stmt_execute($stmt);
+            $stmt1=mysqli_prepare($conn,$active);
+            mysqli_stmt_bind_param($stmt1,'i',$ID);
+            mysqli_stmt_execute($stmt1);
            if($role==='admin' ){
            echo $_SESSION['ID']=$ID;
            echo $_SESSION['role']=$role;

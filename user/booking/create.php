@@ -2,6 +2,8 @@
 require '../../resources/database/config.php';
 
 // Ensure a room is selected
+
+
 if (!isset($_GET['room_id']) || empty($_GET['room_id'])) {
     die("Room not selected.");
 }
@@ -219,10 +221,10 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
             <p>Price: 
                 <?php if ($room['discount_percentage'] > 0): ?>
                     <span class="discounted">$<?= number_format($room['price'], 2); ?></span>
-                    <strong>$<?= number_format($room['discounted_price'], 2); ?></strong>
+                    <strong id="dynamic-price">$<?= number_format($room['discounted_price'], 2); ?></strong>
                     (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
                 <?php else: ?>
-                    <strong>$<?= number_format($room['price'], 2); ?></strong>
+                    <strong id="dynamic-price">$<?= number_format($room['price'], 2); ?></strong>
                 <?php endif; ?>
             </p>
         </div>
@@ -321,7 +323,6 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
                     checkInTime = "19:00:00";
                     checkOutTime = "05:00:00";
                     checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-                    newPrice = originalPrice * 2; // Double the price for this time slot
                     break;
 
                 case "7:00 PM - 5:00 PM":
