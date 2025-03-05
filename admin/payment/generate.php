@@ -1,6 +1,7 @@
 <?php
 require('../../resources/fpdf186/fpdf.php');
 include('../../resources/database/config.php');
+include('../includes/page_authentication.php');
 
 class PDF extends FPDF
 {

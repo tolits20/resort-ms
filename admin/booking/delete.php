@@ -1,5 +1,6 @@
 <?php 
 include('../../resources/database/config.php');
+include('../includes/page_authentication.php');
 include("../includes/system_update.php");
 
 if(isset($_GET['id']) && isset($_POST['yes'])){
@@ -13,7 +14,7 @@ if(isset($_GET['id']) && isset($_POST['yes'])){
 
         if(mysqli_stmt_affected_rows($stmt)>0){
             mysqli_commit($conn);
-            header("location: index.php");
+            header("location:index.php?switch=user");
             exit;
         }
 
@@ -22,6 +23,7 @@ if(isset($_GET['id']) && isset($_POST['yes'])){
         print $e->getMessage();
     }
 }else{
-    header("location: index.php");}
+    header("location:index.php?switch=user");
+}
 
 ?>

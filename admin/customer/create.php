@@ -2,7 +2,7 @@
 if(!empty($_GET['create'])) {
     include('../../resources/database/config.php');
     include('../includes/system_update.php');
-    include('../includes/template.html');
+    include('../includes/template.php');
 }
 
 ?>

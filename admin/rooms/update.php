@@ -1,5 +1,7 @@
 <?php 
 include('../../resources/database/config.php');
+include('../includes/page_authentication.php');
+
 
 if(isset($_POST['update'])){
     echo $code=trim($_POST['room_code']);

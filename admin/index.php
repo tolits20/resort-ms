@@ -1,6 +1,7 @@
 <?php 
 include ('../resources/database/config.php');
-include('includes/template.html');
+include('includes/page_authentication.php');
+include('includes/template.php');
 include("includes/system_update.php");
 
 $sql="SELECT COUNT(account_id) as 'cnew' 

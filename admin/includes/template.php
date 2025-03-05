@@ -1,3 +1,9 @@
+<?php 
+include('../../resources/database/config.php');
+include('../includes/page_authentication.php');
+include('system_update.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

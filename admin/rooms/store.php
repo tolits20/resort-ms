@@ -1,5 +1,7 @@
 <?php 
 include('../../resources/database/config.php');
+include('../includes/page_authentication.php');
+
 print "<pre>";
 var_dump($_FILES);
 var_dump($_POST);

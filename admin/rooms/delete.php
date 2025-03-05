@@ -1,5 +1,6 @@
 <?php 
 include('../../resources/database/config.php');
+include('../includes/page_authentication.php');
 
 if(isset($_GET['click'])){
     try{
