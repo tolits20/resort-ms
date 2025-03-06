@@ -24,7 +24,7 @@ LEFT JOIN discount
     ON room.room_type = discount.applicable_room 
     AND discount.discount_status = 'activate'
     AND NOW() BETWEEN discount.discount_start AND discount.discount_end
-WHERE room.room_id = ?";
+WHERE room.room_id = ?";    
 
 $stmt = $conn->prepare($roomQuery);
 $stmt->bind_param("i", $room_id);

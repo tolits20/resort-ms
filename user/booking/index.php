@@ -89,10 +89,10 @@ while ($row = mysqli_fetch_array($result)) {
                                 </td>
                                 <td>
                                     <?php if ($booking['book_status'] == 'pending'): ?>
-                                        <a href="edit.php?id=<?php echo $booking['book_id']; ?>" class="btn btn-primary btn-sm">
+                                        <a href="edit.php?booking_id=<?php echo $booking['book_id']; ?>" class="btn btn-primary btn-sm">
                                             <i class="fa-solid fa-pen"></i> Edit
                                         </a>
-                                        <a href="cancel.php?id=<?php echo $booking['book_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                                        <a href="cancel.php?booking_id=<?php echo $booking['book_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?');">
                                             <i class="fa-solid fa-ban"></i> Cancel
                                         </a>
                                     <?php else: ?>
