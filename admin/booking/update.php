@@ -18,7 +18,7 @@ if(isset($_POST['save'])){
         mysqli_stmt_execute($stmt);
         if(mysqli_stmt_affected_rows($stmt)>0){
             mysqli_commit($conn);
-            header("location:edit.php?id=$id");
+            header("location:edit.php?switch=user&&id=$id");
         }else{
             throw new Exception("failed to update the booking table");
         }

@@ -3,7 +3,7 @@
 //booking real time tracking
 $check="SELECT * FROM booking";
 $check_set=mysqli_query($conn,$check);
-echo $today = date("Y-m-d");
+echo $today = date("Y-m-d H:i:s");
 while($check_record=mysqli_fetch_assoc($check_set)){
     if($check_record['check_out']==$today && $check_record['book_status']=="confirmed"){
         echo $set="UPDATE booking SET book_status='completed' WHERE book_id={$check_record['book_id']}";
@@ -23,13 +23,51 @@ try{
     $now = date("Y-m-d H:i:s");
 
 // 1. Send reminder email 24 hours before check-in
-$sql = "SELECT booking.*, user.*, room.room_code, account.username FROM booking INNER JOIN user USING(account_id) INNER JOIN room USING(room_id)
- INNER JOIN account USING(account_id) WHERE book_status='confirmed' AND reminder_sent IS NULL AND check_in BETWEEN NOW() 
- AND DATE_ADD(NOW(), INTERVAL 24 HOUR)";
+    $sql = "SELECT 
+        'user' AS identntifier,
+        b.book_id,
+        b.created_at,
+        b.check_in,
+        b.check_out,
+        b.book_status,
+        b.reminder_sent,
+        u.fname AS fname, 
+        u.lname AS lname, 
+        a.username AS email, 
+        r.room_code
+    FROM booking b
+    INNER JOIN user u ON b.account_id = u.account_id
+    INNER JOIN room r ON b.room_id = r.room_id
+    INNER JOIN account a ON b.account_id = a.account_id
+    WHERE b.book_status = 'confirmed' 
+    AND b.reminder_sent IS NULL 
+    AND b.check_in BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR)
+
+    UNION ALL
+
+    SELECT 
+        'guest' AS identifier,
+        b.book_id,
+        b.created_at,
+        b.check_in,
+        b.check_out,
+        b.book_status,
+        b.reminder_sent,
+        g.fname AS fname, 
+        g.lname AS lname, 
+        g.email AS email, 
+        r.room_code
+    FROM booking b
+    INNER JOIN guest g ON b.guest_id = g.guest_id
+    INNER JOIN room r ON b.room_id = r.room_id
+    WHERE b.book_status = 'confirmed' 
+    AND b.reminder_sent IS NULL 
+    AND b.check_in BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR);
+    ";
 $result = mysqli_query($conn, $sql);
 
 while ($row = mysqli_fetch_assoc($result)) {
-    $to = $row['username'];
+    $to = $row['email'];
     $subject = "Booking Confirmation - Your Stay at SAMPLE Resort";
     
     $name=$row['fname']." ".$row['lname'];
@@ -95,12 +133,49 @@ while ($row = mysqli_fetch_assoc($result)) {
 // 2. Send completion email after checkout
 try{
     mysqli_begin_transaction($conn);
-    $sql2 = "SELECT booking.*, user.*, account.username FROM booking INNER JOIN user USING(account_id)
-     INNER JOIN account USING(account_id) WHERE book_status='completed' AND completion_sent IS NULL";
+        $sql2 = "SELECT 
+        'user' AS identntifier,
+        b.book_id,
+        b.check_in,
+        b.check_out,
+        b.book_status,
+        b.reminder_sent,
+        u.fname AS fname, 
+        u.lname AS lname, 
+        a.username AS email, 
+        r.room_code
+    FROM booking b
+    INNER JOIN user u ON b.account_id = u.account_id
+    INNER JOIN room r ON b.room_id = r.room_id
+    INNER JOIN account a ON b.account_id = a.account_id
+    WHERE b.book_status = 'completed' 
+    AND b.completion_sent IS NULL 
+    AND b.check_out >= NOW()
+
+    UNION ALL
+
+    SELECT 
+        'guest' AS identifier,
+        b.book_id,
+        b.check_in,
+        b.check_out,
+        b.book_status,
+        b.reminder_sent,
+        g.fname AS fname, 
+        g.lname AS lname, 
+        g.email AS email, 
+        r.room_code
+    FROM booking b
+    INNER JOIN guest g ON b.guest_id = g.guest_id
+    INNER JOIN room r ON b.room_id = r.room_id
+    WHERE b.book_status = 'completed' 
+    AND b.completion_sent IS NULL 
+    AND b.check_out>=NOW();
+    ";
 $result2 = mysqli_query($conn, $sql2);
 
 while ($row = mysqli_fetch_assoc($result2)) {
-    $to = $row['username'];
+    $to = $row['email'];
     $name=$row['fname']." ".$row['lname'];
     $subject = "Booking Completed - Thank You for Staying with Us!";
     $headers = "MIME-Version: 1.0" . "\r\n";
@@ -181,6 +256,25 @@ $track_query="SELECT
 (SELECT COUNT(*) FROM discount WHERE discount_start<=NOW() && discount_end>=NOW()) AS active_discount,
 (SELECT COUNT(*) FROM discount WHERE discount_start<NOW() && discount_end<NOW()) AS expired_discount,
 (SELECT COUNT(*) FROM discount WHERE discount_start>NOW() && discount_end>NOW()) AS upcoming_discount;";
+
+
+
+//auto cancel booking after check-in
+$check="SELECT * FROM booking";
+$check_set=mysqli_query($conn,$check);
+echo $today = date("Y-m-d H:i:s");
+while($check_record=mysqli_fetch_assoc($check_set)){
+    if($check_record['check_in']<=$today && $check_record['book_status']=="pending"){
+        echo $set="UPDATE booking SET book_status='cancelled' WHERE book_id={$check_record['book_id']}";
+        $set1=mysqli_query($conn,$set); 
+        if(mysqli_affected_rows($conn)>0){
+           echo $set2="UPDATE room SET room_status='available' WHERE room_id={$check_record['room_id']}";
+            if (!mysqli_query($conn, $set2)) {
+                echo "Error updating room status: " . mysqli_error($conn);
+            }
+        }
+    }
+}
 
 
 

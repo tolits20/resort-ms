@@ -33,7 +33,8 @@ $c_count=mysqli_query($conn,$ctmr_count_notif);
 $c_final_count=mysqli_fetch_assoc($c_count);
 
 // Count available rooms
-$sql1="SELECT COUNT(room_id) as 'available' FROM room WHERE room_status = 'available'";
+$sql1="SELECT COUNT(room_id) as 'available' FROM room INNER JOIN booking USING(room_id)
+    WHERE room_status = 'available' && booking.check_in <> NOW()";
 $result1=mysqli_query($conn,$sql1);
 $available_room=mysqli_fetch_assoc($result1);
 

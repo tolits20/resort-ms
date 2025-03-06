@@ -411,7 +411,7 @@ include("../includes/system_update.php");
                             INNER JOIN guest g ON b.guest_id = g.guest_id
                             WHERE b.completion_sent IS NOT NULL
                         ) AS combined
-                        WHERE book_status IN ('completed', 'cancelled') 
+                        WHERE book_status IN ('completed', 'confirmed') 
                         ORDER BY notification_date ASC;";
                         $result = mysqli_query($conn, $sql1);
                         if(mysqli_num_rows($result) > 0){
@@ -425,7 +425,7 @@ include("../includes/system_update.php");
                                             </div>
                                         </td>
                                         <td>{$row['fname']} {$row['lname']}</td>
-                                        <td>Sent in \"$notification\"</td>
+                                        <td>Sent on \"$notification\"</td>
                                         <td><span class='status-badge status-{$row['book_status']}'>$state</span></td>
                                         <td>
                                             <div class='action-buttons'>
