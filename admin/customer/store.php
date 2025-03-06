@@ -1,6 +1,5 @@
 <?php 
 include('../../resources/database/config.php');
-include('../includes/page_authentication.php');
 include("../includes/system_update.php");
 
 
