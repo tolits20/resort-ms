@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 06, 2025 at 04:22 AM
+-- Generation Time: Mar 06, 2025 at 03:12 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,15 +46,14 @@ CREATE TABLE IF NOT EXISTS `account` (
 --
 
 INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `last_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-03-06 09:20:40', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
+(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-03-06 22:08:12', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
 (9, 'tolits@example.com', '21a2f903885172b4503e6f5eaf6b78880f4712cc', 'admin', NULL, '2025-02-15 05:24:00', '2025-03-04 14:20:11', NULL),
 (10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', NULL, '2025-02-16 10:43:34', '2025-02-27 13:42:18', NULL),
 (12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-02-23 15:06:58', '2025-03-02 03:45:02', NULL),
 (13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', NULL, '2025-02-24 15:25:09', '2025-02-25 01:32:39', '2025-03-05 22:59:09'),
-(27, 'lems.leviasherpenaverde@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', '2025-03-05 22:45:53', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
-(38, 'asherxd102345@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-04 13:33:51', NULL, NULL),
-(40, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-06 09:39:23', '2025-03-06 01:39:18', NULL, NULL),
-(41, 'admin@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-06 10:31:23', '2025-03-06 02:31:18', NULL, NULL);
+(27, 'lems.leviasherpenaverde@gmail.com', '9d2dd1c52280572bf5d0aedd5aeda096fc1f8f54', 'user', '2025-03-06 22:09:54', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
+(38, 'asherxd102345@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-04 13:33:51', '2025-03-06 13:43:42', NULL),
+(40, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-06 09:39:23', '2025-03-06 01:39:18', '2025-03-06 10:44:32', '2025-03-06 18:49:28');
 
 -- --------------------------------------------------------
 
@@ -69,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `account_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`cnotif_id`),
   KEY `account_notification_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account_notification`
@@ -83,7 +82,8 @@ INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `account_notifica
 (6, 9, 'update', '2025-03-04 22:18:32'),
 (7, 9, 'update', '2025-03-04 22:20:11'),
 (9, 40, 'create', '2025-03-06 09:39:18'),
-(10, 41, 'create', '2025-03-06 10:31:18');
+(11, 40, 'update', '2025-03-06 18:44:32'),
+(13, 38, 'update', '2025-03-06 21:43:42');
 
 -- --------------------------------------------------------
 
@@ -107,23 +107,19 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `book_room_fk` (`room_id`),
   KEY `book_account_fk` (`account_id`),
   KEY `book_guest_fk` (`guest_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
 INSERT INTO `booking` (`book_id`, `account_id`, `guest_id`, `room_id`, `check_in`, `check_out`, `book_status`, `reminder_sent`, `completion_sent`, `created_at`, `updated_at`) VALUES
-(4, NULL, 1, 9, '2025-03-14 18:00:00', '2025-03-18 10:00:00', 'completed', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-03 08:45:00', '2025-03-05 14:45:18'),
-(12, 27, NULL, 15, '2025-03-05 07:00:00', '2025-03-05 17:00:00', 'completed', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-04 23:05:00', '2025-03-05 14:30:55'),
-(14, NULL, 1, 12, '2025-03-06 07:00:00', '2025-03-05 19:00:00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-05 22:49:45', '2025-03-05 14:49:45'),
-(16, 40, NULL, 9, '2025-03-31 07:00:00', '2025-04-01 05:00:00', 'cancelled', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-06 09:45:27', '2025-03-06 03:02:18'),
-(17, 41, NULL, 12, '2025-03-16 07:00:00', '2025-03-17 05:00:00', 'pending', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-06 10:31:34', '2025-03-06 02:31:34'),
-(18, 40, NULL, 14, '2025-03-14 07:00:00', '2025-03-15 05:00:00', 'confirmed', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-06 10:40:37', '2025-03-06 02:40:37'),
-(19, 40, NULL, 15, '2025-03-14 07:00:00', '2025-03-15 05:00:00', 'confirmed', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-06 10:41:39', '2025-03-06 02:41:39'),
-(20, 40, NULL, 9, '2025-03-07 07:00:00', '2025-03-08 05:00:00', 'pending', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-06 10:43:06', '2025-03-06 02:43:06'),
-(21, 40, NULL, 15, '2025-03-07 07:00:00', '2025-03-08 05:00:00', 'pending', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-06 10:44:06', '2025-03-06 02:44:06'),
-(22, 40, NULL, 12, '2025-03-29 07:00:00', '2025-03-30 05:00:00', 'pending', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-03-06 10:51:57', '2025-03-06 02:51:57');
+(4, NULL, 1, 9, '2025-03-14 18:00:00', '2025-03-18 10:00:00', 'completed', NULL, '2025-03-06 18:41:16', '2025-03-03 08:45:00', '2025-03-05 14:45:18'),
+(12, 27, NULL, 15, '2025-03-05 07:00:00', '2025-03-05 17:00:00', 'completed', NULL, '2025-03-06 11:38:39', '2025-03-04 23:05:00', '2025-03-05 14:30:55'),
+(14, NULL, 1, 12, '2025-03-07 07:00:00', '2025-03-07 19:00:00', 'confirmed', '2025-03-06 18:40:13', NULL, '2025-03-05 22:49:45', '2025-03-05 14:49:45'),
+(16, 40, NULL, 9, '2025-03-31 07:00:00', '2025-04-01 05:00:00', 'confirmed', NULL, NULL, '2025-03-06 09:45:27', '2025-03-06 10:24:09'),
+(23, 27, NULL, 15, '2025-03-05 07:00:00', '2025-03-06 17:00:00', 'cancelled', NULL, NULL, '2025-03-06 19:04:45', '2025-03-06 11:13:51'),
+(24, 12, NULL, 14, '2025-03-05 07:00:00', '2025-03-06 17:00:00', 'cancelled', NULL, NULL, '2025-03-06 19:37:46', '2025-03-06 11:37:46');
 
 -- --------------------------------------------------------
 
@@ -138,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`booking_notif_id`),
   KEY `booking_notif_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_notification`
@@ -146,8 +142,8 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
 
 INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_status`, `Date`) VALUES
 (5, 16, 'updated', '2025-03-06 10:50:35'),
-(6, 22, 'pending', '2025-03-06 10:51:57'),
-(7, 16, 'cancelled', '2025-03-06 11:02:18');
+(7, 16, 'cancelled', '2025-03-06 11:02:18'),
+(8, 23, 'pending', '2025-03-06 19:04:45');
 
 -- --------------------------------------------------------
 
@@ -253,6 +249,23 @@ CREATE TABLE IF NOT EXISTS `guest_booking` (
 ,`check_out` datetime
 ,`status` enum('pending','confirmed','cancelled','completed')
 );
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_recovery`
+--
+
+CREATE TABLE IF NOT EXISTS `password_recovery` (
+  `otp_id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) NOT NULL,
+  `otp_code` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `expire_at` datetime NOT NULL,
+  PRIMARY KEY (`otp_id`),
+  UNIQUE KEY `otp_code` (`otp_code`),
+  KEY `account_recovery_fk` (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -417,9 +430,8 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 (12, 12, 'Melvin', 'Catuera', 20, 'female', '9123456789', '67c3d43e7168e3.93428308.png'),
 (13, 13, 'Ianzae', 'Ego', 21, 'female', '9876543211', '67bc8f552ae286.40054461.png'),
 (14, 27, 'Asher', 'Hilado', 21, 'male', '9231231236', '67bf3e820512d9.05980251.png'),
-(25, 38, 'Cindy', 'Penaverde', 18, 'female', '912345678', '67c7013f97ae19.64225426.png'),
-(27, 40, 'Asd', 'Usera', 98, 'male', '914154147', '67c8fcc661d110.05298683.jpg'),
-(28, 41, 'Fname', 'Adora', 20, 'male', '912125125', '67c908f6374da5.20216189.jpg');
+(25, 38, 'Scarlet', 'Penaverde', 18, 'female', '912345678', '67c7013f97ae19.64225426.png'),
+(27, 40, 'user', 'User', 98, 'male', '914154147', '67c8fcc661d110.05298683.jpg');
 
 -- --------------------------------------------------------
 
@@ -478,6 +490,12 @@ ALTER TABLE `booking_notification`
 ALTER TABLE `feedback`
   ADD CONSTRAINT `feedback_account_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `feedback_book_fk` FOREIGN KEY (`book_id`) REFERENCES `booking` (`book_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `password_recovery`
+--
+ALTER TABLE `password_recovery`
+  ADD CONSTRAINT `account_recovery_fk` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `payment`

@@ -1,6 +1,6 @@
 <?php 
 
-//booking real time tracking
+//booking real time tracking and update
 $check="SELECT * FROM booking";
 $check_set=mysqli_query($conn,$check);
 echo $today = date("Y-m-d H:i:s");

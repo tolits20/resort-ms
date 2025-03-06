@@ -223,6 +223,7 @@ if(isset($_POST['login'])){
             
             <div class="login-footer">
                 <p>Don't have an account? <a href="admin/customer/create.php">Create one now</a></p>
+                <p><a href="password_recovery.php">Forgot password?</a></p>
             </div>
         </div>
     </div>
