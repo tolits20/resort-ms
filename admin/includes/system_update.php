@@ -24,7 +24,7 @@ try{
 
 // 1. Send reminder email 24 hours before check-in
 $sql = "SELECT booking.*, user.*, room.room_code, account.username FROM booking INNER JOIN user USING(account_id) INNER JOIN room USING(room_id)
- INNER JOIN account USING(account_id) WHERE book_status='confirmed' AND reminder_sent=0 AND check_in BETWEEN NOW() 
+ INNER JOIN account USING(account_id) WHERE book_status='confirmed' AND reminder_sent IS NULL AND check_in BETWEEN NOW() 
  AND DATE_ADD(NOW(), INTERVAL 24 HOUR)";
 $result = mysqli_query($conn, $sql);
 
@@ -76,7 +76,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     
     // Send Email
     if (mail($to, $subject, $message, $headers)) {
-        $update = "UPDATE booking SET reminder_sent=1 WHERE book_id=" . $row['book_id'];
+        $update = "UPDATE booking SET reminder_sent=NOW() WHERE book_id=" . $row['book_id'];
         mysqli_query($conn, $update);
       
     } else {
@@ -95,7 +95,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 // 2. Send completion email after checkout
 try{
     mysqli_begin_transaction($conn);
-    $sql2 = "SELECT booking.*, user.*, account.username FROM booking INNER JOIN user USING(account_id) INNER JOIN account USING(account_id) WHERE book_status='completed' AND completion_sent=0 ";
+    $sql2 = "SELECT booking.*, user.*, account.username FROM booking INNER JOIN user USING(account_id)
+     INNER JOIN account USING(account_id) WHERE book_status='completed' AND completion_sent IS NULL";
 $result2 = mysqli_query($conn, $sql2);
 
 while ($row = mysqli_fetch_assoc($result2)) {
@@ -156,7 +157,7 @@ while ($row = mysqli_fetch_assoc($result2)) {
         echo 'email is empty';
     }else{
         if (mail($to,$subject, $message, $headers)) {
-            $update = "UPDATE booking SET completion_sent=1 WHERE book_id=" . $row['book_id'];
+            $update = "UPDATE booking SET completion_sent=NOW() WHERE book_id=" . $row['book_id'];
             if(mysqli_query($conn, $update)){
                 mysqli_commit($conn);
             }

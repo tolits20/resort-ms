@@ -6,10 +6,10 @@ include("../includes/system_update.php");
 // var_dump($_SESSION);
 $id=$_GET['id'];
 $sql="";
-if($_SESSION['identifier']=="user" || empty($_SESSION['identifier'])){
+if($_GET['switch']=="user" || empty($_GET['switch'])){
     $sql="SELECT * FROM booking left join account using(account_id) left join user using(account_id) left join room using (room_id)  
     WHERE booking.book_id= {$id}";
-}elseif($_SESSION['identifier']=="guest"){
+}elseif($_GET['switch']=="guest"){
     $sql="SELECT * FROM booking left join account using(account_id) left join guest using(guest_id) left join room using (room_id) 
     WHERE booking.book_id= {$id}";
 }

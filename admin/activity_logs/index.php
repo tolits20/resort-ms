@@ -111,7 +111,6 @@ include("../includes/system_update.php");
 
         .admin-data-table th {
             background-color: #f1f3f4;
-            color: #B0B0B0;
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid var(--border-soft);
@@ -273,7 +272,7 @@ include("../includes/system_update.php");
 
         <div id="booking-history" class="admin-tab-content">
             <h3>Booking History</h3>
-                    <table class="booking-table">
+                    <table class="admin-data-table">
                     <thead>
                         <tr>
                             <th>Customer</th>
@@ -314,7 +313,7 @@ include("../includes/system_update.php");
                                         <td><span class='status-badge status-{$row['status']}'>{$row['status']}</span></td>
                                         <td>
                                             <div class='action-buttons'>
-                                                <a href='../booking/edit.php?id={$row['id']}' class='btn btn-primary' title='Process Payment'>
+                                                <a href='../booking/edit.php?switch={$row['identifier']}&&id={$row['id']}' class='btn btn-primary' title='Process Payment'>
                                                     <i class='fas fa-eye'></i>
                                                 </a>
                                             </div>
@@ -327,17 +326,122 @@ include("../includes/system_update.php");
                 </table>
         </div>
 
-        <div id="emails-sent" class="admin-tab-content">
-            <h3>Emails Sent</h3>
-            <div class="admin-empty-state">
-                <div class="admin-empty-state-icon">
-                    <i class="fas fa-envelope-open"></i>
-                </div>
-                <div class="admin-empty-state-message">
-                    No email logs have been recorded yet.
-                </div>
+                    <div id="emails-sent" class="admin-tab-content">
+                <h3>Emails Sent</h3>
+                <table class="admin-data-table">
+                    <thead>
+                        <tr>
+                            <th>Recipient</th>
+                            <th>Customer Name</th>
+                            <th>Check-Out</th>
+                            <th>Mail Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $sql1 = "SELECT * FROM (
+                            -- Reminder Rows
+                            SELECT 
+                                'user' AS identifier, 
+                            a.username,
+                                u.fname, 
+                                u.lname, 
+                                b.check_in, 
+                                b.check_out, 
+                                b.book_status, 
+                                b.book_id AS booking_id, 
+                                'reminder' AS notification_type,
+                                COALESCE(b.reminder_sent, 0) AS notification_date
+                            FROM booking b
+                            INNER JOIN account a ON b.account_id = a.account_id
+                            INNER JOIN user u ON a.account_id = u.account_id
+                            WHERE b.reminder_sent IS NOT NULL
+
+                            UNION ALL
+
+                            SELECT 
+                                'guest' AS identifier, 
+                            g.email,
+                                g.fname, 
+                                g.lname, 
+                                b.check_in, 
+                                b.check_out, 
+                                b.book_status, 
+                                b.book_id AS booking_id, 
+                                'reminder' AS notification_type,
+                                COALESCE(b.reminder_sent, 0) AS notification_date
+                            FROM booking b
+                            INNER JOIN guest g ON b.guest_id = g.guest_id
+                            WHERE b.reminder_sent IS NOT NULL
+
+                            UNION ALL
+
+                            -- Completion Rows
+                            SELECT 
+                                'user' AS identifier, 
+                            a.username,
+                                u.fname, 
+                                u.lname, 
+                                b.check_in, 
+                                b.check_out, 
+                                b.book_status, 
+                                b.book_id AS booking_id, 
+                                'completion' AS notification_type,
+                                COALESCE(b.completion_sent, 0) AS notification_date
+                            FROM booking b
+                            INNER JOIN account a ON b.account_id = a.account_id
+                            INNER JOIN user u ON a.account_id = u.account_id
+                            WHERE b.completion_sent IS NOT NULL
+
+                            UNION ALL
+
+                            SELECT 
+                                'guest' AS identifier,
+                            g.email,
+                                g.fname, 
+                                g.lname, 
+                                b.check_in, 
+                                b.check_out, 
+                                b.book_status, 
+                                b.book_id AS booking_id, 
+                                'completion' AS notification_type,
+                                COALESCE(b.completion_sent, 0) AS notification_date
+                            FROM booking b
+                            INNER JOIN guest g ON b.guest_id = g.guest_id
+                            WHERE b.completion_sent IS NOT NULL
+                        ) AS combined
+                        WHERE book_status IN ('completed', 'cancelled') 
+                        ORDER BY notification_date ASC;";
+                        $result = mysqli_query($conn, $sql1);
+                        if(mysqli_num_rows($result) > 0){
+                            while($row = mysqli_fetch_assoc($result)){
+                                $notification = date("F d, Y h:i A", strtotime($row['notification_date']));
+                                $state=($row['notification_type']=='reminder')?"reminder":'completion';
+                                print "<tr>
+                                        <td>
+                                            <div class='customer-info'>
+                                                <div class='customer-name'>{$row['username']}</div>
+                                            </div>
+                                        </td>
+                                        <td>{$row['fname']} {$row['lname']}</td>
+                                        <td>Sent in \"$notification\"</td>
+                                        <td><span class='status-badge status-{$row['book_status']}'>$state</span></td>
+                                        <td>
+                                            <div class='action-buttons'>
+                                                <a href='../booking/edit.php?switch={$row['identifier']}&&id={$row['booking_id']}' class='btn btn-primary' title='Process Payment'>
+                                                    <i class='fas fa-eye'></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>";
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
-        </div>
+
     </div>
 
     <script>

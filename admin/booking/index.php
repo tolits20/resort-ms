@@ -9,6 +9,7 @@ WHERE status NOT IN ('completed', 'cancelled')
 ORDER BY id DESC;";
 $result=mysqli_query($conn,$sql);
 $_SESSION['identifier']='user';
+$switch=$_SESSION['identifier'];
 if(isset($_GET['switch'])){
     if($_GET['switch']=='user'){
         $sql="SELECT * FROM customer_booking 
@@ -24,6 +25,7 @@ if(isset($_GET['switch'])){
         $_SESSION['identifier']="guest";
     }
 }
+$switch=$_SESSION['identifier'];
 ?>
 <div class="content">
     <div class="booking-management-container">
@@ -72,7 +74,7 @@ if(isset($_GET['switch'])){
                                         <a href='../payment/index.php?id={$row['id']}' class='action-btn payment-btn' title='Process Payment'>
                                             <i class='fas fa-credit-card'></i>
                                         </a>
-                                        <a href='edit.php?id={$row['id']}' class='action-btn edit-btn' title='Edit Booking'>
+                                        <a href='edit.php?switch=$switch&&id={$row['id']}' class='action-btn edit-btn' title='Edit Booking'>
                                             <i class='fas fa-edit'></i>
                                         </a>
                                         <button class='action-btn delete-btn' type='button' onclick='openPopup({$row['id']})' title='Delete Booking'>
