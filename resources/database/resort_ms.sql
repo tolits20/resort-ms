@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2025 at 08:21 AM
+-- Generation Time: Mar 07, 2025 at 02:21 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,12 +46,12 @@ CREATE TABLE IF NOT EXISTS `account` (
 --
 
 INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `last_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-03-07 14:51:46', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
+(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-03-07 21:19:50', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
 (9, 'tolits@example.com', '21a2f903885172b4503e6f5eaf6b78880f4712cc', 'admin', NULL, '2025-02-15 05:24:00', '2025-03-04 14:20:11', NULL),
 (10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', NULL, '2025-02-16 10:43:34', '2025-02-27 13:42:18', NULL),
 (12, 'catuera@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-02-23 15:06:58', '2025-03-02 03:45:02', NULL),
 (13, 'ego@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', NULL, '2025-02-24 15:25:09', '2025-02-25 01:32:39', '2025-03-05 22:59:09'),
-(27, 'lems.leviasherpenaverde@gmail.com', '9d2dd1c52280572bf5d0aedd5aeda096fc1f8f54', 'user', '2025-03-06 22:09:54', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
+(27, 'lems.leviasherpenaverde@gmail.com', '9d2dd1c52280572bf5d0aedd5aeda096fc1f8f54', 'user', '2025-03-07 21:19:42', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
 (38, 'asherxd102345@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-04 13:33:51', '2025-03-06 13:43:42', NULL),
 (40, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-06 09:39:23', '2025-03-06 01:39:18', '2025-03-06 10:44:32', NULL),
 (43, 'jyren@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-06 14:37:19', NULL, NULL);
@@ -111,18 +111,6 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `book_guest_fk` (`guest_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `booking`
---
-
-INSERT INTO `booking` (`book_id`, `account_id`, `guest_id`, `room_id`, `check_in`, `check_out`, `book_status`, `reminder_sent`, `completion_sent`, `created_at`, `updated_at`) VALUES
-(4, NULL, 1, 9, '2025-03-14 18:00:00', '2025-03-18 10:00:00', 'completed', NULL, '2025-03-06 18:41:16', '2025-03-03 08:45:00', '2025-03-05 14:45:18'),
-(12, 27, NULL, 15, '2025-03-05 07:00:00', '2025-03-05 17:00:00', 'completed', NULL, '2025-03-06 11:38:39', '2025-03-04 23:05:00', '2025-03-05 14:30:55'),
-(14, NULL, 1, 12, '2025-03-07 07:00:00', '2025-03-07 19:00:00', 'confirmed', '2025-03-06 18:40:13', NULL, '2025-03-05 22:49:45', '2025-03-05 14:49:45'),
-(16, 40, NULL, 9, '2025-03-31 07:00:00', '2025-04-01 05:00:00', 'confirmed', NULL, NULL, '2025-03-06 09:45:27', '2025-03-06 10:24:09'),
-(23, 27, NULL, 15, '2025-03-05 07:00:00', '2025-03-06 17:00:00', 'cancelled', NULL, NULL, '2025-03-06 19:04:45', '2025-03-06 11:13:51'),
-(24, 12, NULL, 14, '2025-03-05 07:00:00', '2025-03-06 17:00:00', 'cancelled', NULL, NULL, '2025-03-06 19:37:46', '2025-03-06 11:37:46');
-
 -- --------------------------------------------------------
 
 --
@@ -137,15 +125,6 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
   PRIMARY KEY (`booking_notif_id`),
   KEY `booking_notif_id` (`book_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `booking_notification`
---
-
-INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_status`, `Date`) VALUES
-(5, 16, 'updated', '2025-03-06 10:50:35'),
-(7, 16, 'cancelled', '2025-03-06 11:02:18'),
-(8, 23, 'pending', '2025-03-06 19:04:45');
 
 -- --------------------------------------------------------
 
@@ -280,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `book_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `pay_amount` decimal(10,2) NOT NULL,
-  `payment_type` enum('cash','credit_card','e-payment') DEFAULT NULL,
+  `payment_type` enum('cash','credit_card','e-wallet') DEFAULT NULL,
   `payment_img` varchar(255) NOT NULL,
   `transaction_id` varchar(255) NOT NULL,
   `payment_status` enum('pending','paid','refunded') NOT NULL,
@@ -289,13 +268,6 @@ CREATE TABLE IF NOT EXISTS `payment` (
   PRIMARY KEY (`payment_id`),
   KEY `payment_book_fk` (`book_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `payment`
---
-
-INSERT INTO `payment` (`payment_id`, `book_id`, `amount`, `pay_amount`, `payment_type`, `payment_img`, `transaction_id`, `payment_status`, `created_at`, `updated_at`) VALUES
-(3, 4, 500.00, 0.00, 'cash', '', '', 'pending', '2025-03-02 00:19:30', '2025-03-02 00:19:30');
 
 -- --------------------------------------------------------
 
@@ -314,17 +286,15 @@ CREATE TABLE IF NOT EXISTS `room` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`room_id`),
   UNIQUE KEY `room_ code` (`room_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room`
 --
 
 INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `description`, `price`, `created_at`, `updated_at`) VALUES
-(9, 'room101', 'standard', 'available', '', 500.00, '2025-02-15 15:37:50', '2025-03-06 03:02:18'),
-(12, 'room102', 'standard', 'booked', '', 1000.00, '2025-02-19 12:40:06', '2025-03-01 13:33:44'),
-(14, 'room103', 'premium', 'available', '', 5000.00, '2025-02-22 03:31:37', '2025-03-06 02:13:51'),
-(15, 'room104', 'premium', 'available', '', 6000.00, '2025-02-25 01:27:38', '2025-02-27 15:30:17');
+(20, 'room101', 'standard', 'available', 'i want you all to like this room ', 2500.00, '2025-03-07 09:43:58', '2025-03-07 09:54:32'),
+(21, 'room103', 'standard', 'under maintenance', '', 2000.00, '2025-03-07 10:07:11', '2025-03-07 10:07:11');
 
 -- --------------------------------------------------------
 
@@ -336,6 +306,7 @@ CREATE TABLE IF NOT EXISTS `room_gallery` (
   `room_id` int(11) NOT NULL,
   `room_img` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  UNIQUE KEY `room_img` (`room_img`),
   KEY `galley_room_fk` (`room_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -344,15 +315,12 @@ CREATE TABLE IF NOT EXISTS `room_gallery` (
 --
 
 INSERT INTO `room_gallery` (`room_id`, `room_img`, `created_at`) VALUES
-(12, '167b5d126d3e1d.png', '2025-02-19 12:40:06'),
-(12, '167b5d126d7179.png', '2025-02-19 12:40:06'),
-(12, '167b5d126d795e.png', '2025-02-19 12:40:06'),
-(14, '167b945193908d.png', '2025-02-22 03:31:37'),
-(14, '167b945193958b.png', '2025-02-22 03:31:37'),
-(15, '167bd1c8aaebb9.png', '2025-02-25 01:27:38'),
-(15, '167bd1c8aaf9c6.png', '2025-02-25 01:27:38'),
-(9, '167c6ff0e9b25d.png', '2025-03-04 13:24:30'),
-(9, '167c6ff0e9beea.png', '2025-03-04 13:24:30');
+(20, '167cabfdee898b.png', '2025-03-07 09:43:58'),
+(20, '167cac25832b96.png', '2025-03-07 09:54:32'),
+(20, '167cac25834f15.png', '2025-03-07 09:54:32'),
+(21, '167cac54f2e8a2.png', '2025-03-07 10:07:11'),
+(21, '167cac54f2ed11.png', '2025-03-07 10:07:11'),
+(21, '167cac54f2f091.png', '2025-03-07 10:07:11');
 
 -- --------------------------------------------------------
 
@@ -367,16 +335,19 @@ CREATE TABLE IF NOT EXISTS `room_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`rnotif_id`),
   KEY `room_notification_fk` (`room_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_notification`
 --
 
 INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `room_notification`, `Date`) VALUES
-(1, 9, 'update', '2025-03-03 11:27:27'),
-(2, 9, 'update', '2025-03-03 11:27:40'),
-(3, 9, 'update', '2025-03-04 21:24:30');
+(8, 20, 'create', '2025-03-07 17:43:58'),
+(9, 20, 'update', '2025-03-07 17:53:57'),
+(10, 20, 'update', '2025-03-07 17:54:14'),
+(11, 20, 'update', '2025-03-07 17:54:26'),
+(12, 20, 'update', '2025-03-07 17:54:32'),
+(13, 21, 'create', '2025-03-07 18:07:11');
 
 -- --------------------------------------------------------
 
@@ -394,6 +365,7 @@ CREATE TABLE IF NOT EXISTS `summary_payment` (
 ,`check_in` datetime
 ,`check_out` datetime
 ,`book_status` varchar(9)
+,`amount` decimal(10,2)
 ,`amount_paid` decimal(10,2)
 ,`payment_status` varchar(8)
 ,`payment_type` varchar(11)
@@ -462,7 +434,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `summary_payment`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `summary_payment`  AS SELECT `b`.`book_id` AS `booking_id`, 'User' AS `booking_type`, concat(`cb`.`fname`,' ',`cb`.`lname`) AS `NAME`, `cb`.`room_code` AS `room_code`, `r`.`room_type` AS `room_type`, `r`.`price` AS `price`, `cb`.`check_in` AS `check_in`, `cb`.`check_out` AS `check_out`, `cb`.`status` AS `book_status`, coalesce(`p`.`amount`,0) AS `amount_paid`, coalesce(`p`.`payment_status`,'Pending') AS `payment_status`, coalesce(`p`.`payment_type`,'N/A') AS `payment_type`, `p`.`created_at` AS `payment_created_at` FROM (((`customer_booking` `cb` left join `payment` `p` on(`cb`.`id` = `p`.`book_id`)) join `booking` `b` on(`p`.`book_id` = `b`.`book_id`)) join `room` `r` on(`cb`.`room_code` = `r`.`room_code`))union all select `b`.`book_id` AS `booking_id`,'Guest' AS `booking_type`,concat(`gb`.`fname`,' ',`gb`.`lname`) AS `NAME`,`gb`.`room_code` AS `room_code`,`r`.`room_type` AS `room_type`,`r`.`price` AS `price`,`gb`.`check_in` AS `check_in`,`gb`.`check_out` AS `check_out`,`gb`.`status` AS `book_status`,coalesce(`p`.`amount`,0) AS `amount_paid`,coalesce(`p`.`payment_status`,'Pending') AS `payment_status`,coalesce(`p`.`payment_type`,'N/A') AS `payment_type`,`p`.`created_at` AS `payment_created_at` from (((`guest_booking` `gb` left join `payment` `p` on(`gb`.`id` = `p`.`book_id`)) join `booking` `b` on(`p`.`book_id` = `b`.`book_id`)) join `room` `r` on(`gb`.`room_code` = `r`.`room_code`))  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `summary_payment`  AS SELECT `b`.`book_id` AS `booking_id`, 'User' AS `booking_type`, concat(`cb`.`fname`,' ',`cb`.`lname`) AS `NAME`, `cb`.`room_code` AS `room_code`, `r`.`room_type` AS `room_type`, `r`.`price` AS `price`, `cb`.`check_in` AS `check_in`, `cb`.`check_out` AS `check_out`, `cb`.`status` AS `book_status`, coalesce(`p`.`amount`,0) AS `amount`, coalesce(`p`.`pay_amount`,0) AS `amount_paid`, coalesce(`p`.`payment_status`,'Pending') AS `payment_status`, coalesce(`p`.`payment_type`,'N/A') AS `payment_type`, `p`.`created_at` AS `payment_created_at` FROM (((`customer_booking` `cb` left join `payment` `p` on(`cb`.`id` = `p`.`book_id`)) join `booking` `b` on(`p`.`book_id` = `b`.`book_id`)) join `room` `r` on(`cb`.`room_code` = `r`.`room_code`))union all select `b`.`book_id` AS `booking_id`,'Guest' AS `booking_type`,concat(`gb`.`fname`,' ',`gb`.`lname`) AS `NAME`,`gb`.`room_code` AS `room_code`,`r`.`room_type` AS `room_type`,`r`.`price` AS `price`,`gb`.`check_in` AS `check_in`,`gb`.`check_out` AS `check_out`,`gb`.`status` AS `book_status`,coalesce(`p`.`amount`,0) AS `amount`,coalesce(`p`.`pay_amount`,0) AS `amount_paid`,coalesce(`p`.`payment_status`,'Pending') AS `payment_status`,coalesce(`p`.`payment_type`,'N/A') AS `payment_type`,`p`.`created_at` AS `payment_created_at` from (((`guest_booking` `gb` left join `payment` `p` on(`gb`.`id` = `p`.`book_id`)) join `booking` `b` on(`p`.`book_id` = `b`.`book_id`)) join `room` `r` on(`gb`.`room_code` = `r`.`room_code`))  ;
 
 --
 -- Constraints for dumped tables
