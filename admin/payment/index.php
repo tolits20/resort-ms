@@ -216,7 +216,7 @@ label {
                     <label>Payment Method</label>
                     <select class="form-select" name="payment_method" required>
                         <option value="none" <?= (empty($res2['payment_type'])) ? 'selected' : ''; ?>>N/A</option>
-                        <option value="credit card" <?= ($res2['payment_type'] == 'credit card') ? 'selected' : ''; ?>>Credit Card</option>
+                        <option value="credit_card" <?= ($res2['payment_type'] == 'credit_card') ? 'selected' : ''; ?>>Credit Card</option>
                         <option value="e-payment" <?= ($res2['payment_type'] == 'e-payment') ? 'selected' : ''; ?>>E payment</option>
                         <option value="cash" <?= ($res2['payment_type'] == 'cash') ? 'selected' : ''; ?>>Cash</option>
                     </select>
@@ -225,9 +225,9 @@ label {
                 <div class="form-group">
                     <label>Status</label>
                     <select class="form-select" name="status" required>
-                        <option value="pending" <?= ($res2['payment_status'] == 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                        <option value="paid" <?= ($res2['payment_status'] == 'Completed') ? 'selected' : ''; ?>>Paid</option>
-                        <option value="refunded" <?= ($res2['payment_status'] == 'Failed') ? 'selected' : ''; ?>>Refunded</option>
+                        <option value="pending" <?= ($res2['payment_status'] == 'pending') ? 'selected' : ''; ?>>Pending</option>
+                        <option value="paid" <?= ($res2['payment_status'] == 'paid') ? 'selected' : ''; ?>>Paid</option>
+                        <option value="refunded" <?= ($res2['payment_status'] == 'refunded') ? 'selected' : ''; ?>>Refunded</option>
                     </select>
                 </div>
 

@@ -313,6 +313,9 @@ include("../includes/system_update.php");
                                         <td><span class='status-badge status-{$row['status']}'>{$row['status']}</span></td>
                                         <td>
                                             <div class='action-buttons'>
+                                             <a href='../payment/index.php?id={$row['id']}' class='btn btn-success action-btn payment-btn' title='Process Payment'>
+                                            <i class='fas fa-credit-card'></i>
+                                        </a>
                                                 <a href='../booking/edit.php?switch={$row['identifier']}&&id={$row['id']}' class='btn btn-primary' title='Process Payment'>
                                                     <i class='fas fa-eye'></i>
                                                 </a>
