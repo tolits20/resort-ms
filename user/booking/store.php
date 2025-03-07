@@ -6,6 +6,9 @@ if (!isset($_SESSION['ID'])) {
     exit;
 }
 
+
+
+echo $_GET['price'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $account_id = $_SESSION['ID'];
@@ -14,7 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $check_out = $_POST['check_out'];
         $check_in_time = $_POST['checkInTime'];
         $check_out_time = $_POST['checkOutTime'];
+        // $price = floatval($_POST['price']);
         $book_status = "pending";
+
 
         if (!$room_id || empty($check_in) || empty($check_in_time) || empty($check_out) || empty($check_out_time)) {
             throw new Exception("All booking fields are required.");
@@ -54,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->commit();
 
         // Redirect to payment page
-        header("location: payment.php?book_id=$last_id");
+        // header("location: payment_store.php?book_id=$last_id");
         exit;
     } catch (Exception $e) {
         // Rollback transaction in case of error

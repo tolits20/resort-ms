@@ -10,6 +10,7 @@ if (!isset($_GET['room_id']) || empty($_GET['room_id'])) {
 
 $room_id = intval($_GET['room_id']);
 
+$discounted_price = 0;
 // Fetch room details including discount
 $roomQuery = "SELECT 
     room.room_id,
@@ -221,7 +222,7 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
             <p>Price: 
                 <?php if ($room['discount_percentage'] > 0): ?>
                     <span class="discounted">$<?= number_format($room['price'], 2); ?></span>
-                    <strong id="dynamic-price">$<?= number_format($room['discounted_price'], 2); ?></strong>
+                    <strong  id="dynamic-price">$<?= number_format($room['discounted_price'], 2); ?></strong>
                     (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
                 <?php else: ?>
                     <strong id="dynamic-price">$<?= number_format($room['price'], 2); ?></strong>
@@ -229,7 +230,7 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
             </p>
         </div>
         <input type="hidden" id="original-price" value="<?= $room['discount_percentage'] > 0 ? $room['discounted_price'] : $room['price']; ?>">
-        <form method="POST" action="store.php">
+        <form method="POST" action="store.php?price=<?php echo $discounted_price; ?>">
             <input type="hidden" name="room_id" value="<?= $room_id; ?>">
 
             <label for="check_in">Check-in Date:</label>
@@ -330,17 +331,22 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
                     checkOutTime = "17:00:00";
                     checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
                     newPrice = originalPrice * 2; // Double the price for this time slot
+                    <?php $discounted_price = "<script>document.write(newPrice);</script>"; ?>
+
                     break;
 
                 case "7:00 AM - 5:00 AM":
                     checkInTime = "07:00:00";
                     checkOutTime = "05:00:00";
                     checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-                    newPrice = originalPrice * 2; // Double the price for this time slot
+                    newPrice = originalPrice * 2;
+                    // Update the discounted price in PHP
+                    <?php $discounted_price = "<script>document.write(newPrice);</script>"; ?>
+                    // Double the price for this time slot
                     break;
             }
 
-            console.log("New Price:", newPrice); // Debugging line
+            // console.log("New Price:", newPrice); // Debugging line
 
             // Update the check-out date and time
             let checkOutFormatted = $.datepicker.formatDate("yy-mm-dd", checkOutDateTime);
@@ -349,7 +355,7 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
             $("#check_in_time").val(checkInTime);
             $("#check_out_time").val(checkOutTime);
 
-            // Update the displayed price
+
             $("#dynamic-price").text(`$${newPrice.toFixed(2)}`);
             console.log("Updated #dynamic-price element:", $("#dynamic-price").text()); // Debugging line
         }
