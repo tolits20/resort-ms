@@ -4,8 +4,9 @@ include('../includes/page_authentication.php');
 
 if(isset($_GET['click'])){
     try{
-        $image=$_GET['image'];
-        $id=$_GET['room_id'];
+        $image=$_GET['img'];
+        $id=$_GET['id'];
+        mysqli_begin_transaction($conn);
         $sql1="DELETE FROM room_gallery WHERE room_img=?";
         $stmt1=mysqli_prepare($conn,$sql1);
         mysqli_stmt_bind_param($stmt1,'s',$image);

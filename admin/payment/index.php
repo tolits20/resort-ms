@@ -209,7 +209,12 @@ label {
 
                 <div class="form-group">
                     <label>Amount</label>
-                    <input type="number" class="form-control" name="amount" value="<?= htmlspecialchars($res2['amount_paid']); ?>" required>
+                    <input type="number" class="form-control" name="amount" value="<?= htmlspecialchars($res2['amount']); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount Paid</label>
+                    <input type="number" class="form-control" name="pay_amount" value="<?= htmlspecialchars($res2['amount_paid']); ?>" required>
                 </div>
 
                 <div class="form-group">
@@ -217,7 +222,7 @@ label {
                     <select class="form-select" name="payment_method" required>
                         <option value="none" <?= (empty($res2['payment_type'])) ? 'selected' : ''; ?>>N/A</option>
                         <option value="credit_card" <?= ($res2['payment_type'] == 'credit_card') ? 'selected' : ''; ?>>Credit Card</option>
-                        <option value="e-payment" <?= ($res2['payment_type'] == 'e-payment') ? 'selected' : ''; ?>>E payment</option>
+                        <option value="e-wallet" <?= ($res2['payment_type'] == 'e-wallet') ? 'selected' : ''; ?>>E Wallet</option>
                         <option value="cash" <?= ($res2['payment_type'] == 'cash') ? 'selected' : ''; ?>>Cash</option>
                     </select>
                 </div>

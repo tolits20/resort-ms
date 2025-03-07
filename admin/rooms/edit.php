@@ -319,7 +319,7 @@ $result1 = mysqli_query($conn, $sql1);
         function deleteImage(imageName) {
             if (confirm(`Are you sure you want to delete the image ${imageName}?`)) {
                 // Add AJAX call or form submission to handle image deletion
-                alert('Image deletion functionality to be implemented');
+                window.location.href = `delete.php?id=<?php echo $id; ?>&img=${imageName}&click=1`;
             }
         }
 
@@ -352,4 +352,3 @@ $result1 = mysqli_query($conn, $sql1);
         });
     </script>
 </div>
-

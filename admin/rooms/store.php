@@ -11,6 +11,7 @@ $room_num=trim($_POST['room_number']);
 $type=trim($_POST['type']);
 $status=trim($_POST['status']);
 $price=$_POST['price'];
+$description=trim($_POST['description']);
 $allowed=array('jpg','jpeg','png','webp');
 $c;
 

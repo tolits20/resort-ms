@@ -42,7 +42,10 @@ $booking_id = $_GET['id'];
 $sql = "SELECT * FROM summary_payment WHERE booking_id = $booking_id";
 $result = $conn->query($sql);
 
+
 if ($row = $result->fetch_assoc()) {
+    $check_in = date("F d, Y h:i A", strtotime($row['check_in']));
+    $check_out= date("F d, Y h:i A", strtotime($row['check_out']));
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->Cell(100, 7, 'Invoice No: INV-' . $row['booking_id'], 0, 0, 'L');
     $pdf->Cell(90, 7, 'Invoice Date: ' . date('Y-m-d'), 0, 1, 'R');
@@ -53,8 +56,8 @@ if ($row = $result->fetch_assoc()) {
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(100, 7, 'Customer Name: ' . $row['NAME'], 0, 1, 'L');
     $pdf->Cell(100, 7, 'Room: ' . $row['room_code'] . ' (' . $row['room_type'] . ')', 0, 1, 'L');
-    $pdf->Cell(100, 7, 'Check-in: ' . $row['check_in'], 0, 1, 'L');
-    $pdf->Cell(100, 7, 'Check-out: ' . $row['check_out'], 0, 1, 'L');
+    $pdf->Cell(100, 7, 'Check-in: ' . $check_in, 0, 1, 'L');
+    $pdf->Cell(100, 7, 'Check-out: ' .$check_out, 0, 1, 'L');
     $pdf->Ln(10);
 
     $pdf->SetFont('Arial', 'B', 10);
@@ -66,7 +69,7 @@ if ($row = $result->fetch_assoc()) {
     $pdf->SetFont('Arial', '', 10);
     $pdf->Cell(130, 10, 'Room Booking - ' . $row['room_type'], 1);
     $pdf->Cell(30, 10, "PHP " . number_format($row['price'], 2), 1, 0, 'C');
-    $pdf->Cell(30, 10, "PHP " . number_format($row['price'], 2), 1, 1, 'C');
+    $pdf->Cell(30, 10, "PHP " . number_format($row['amount'], 2), 1, 1, 'C');
 
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(130, 10, 'Total Amount Due:', 1, 0, 'R');
@@ -75,7 +78,7 @@ if ($row = $result->fetch_assoc()) {
     $pdf->Cell(130, 10, 'Amount Paid:', 1, 0, 'R');
     $pdf->Cell(60, 10, "PHP " . number_format($row['amount_paid'], 2), 1, 1, 'C');
 
-    $balance = $row['price'] - $row['amount_paid'];
+    $balance = $row['amount'] - $row['amount_paid'];
     $pdf->Cell(130, 10, 'Balance Due:', 1, 0, 'R', true);
     $pdf->Cell(60, 10, "PHP " . number_format($balance, 2), 1, 1, 'C', true);
 
