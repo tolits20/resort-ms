@@ -8,7 +8,7 @@ if (!isset($_SESSION['ID'])) {
 
 
 
-echo $_GET['price'];
+echo $_POST['updated_price'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $account_id = $_SESSION['ID'];

@@ -231,6 +231,7 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
         </div>
         <input type="hidden" id="original-price" value="<?= $room['discount_percentage'] > 0 ? $room['discounted_price'] : $room['price']; ?>">
         <form method="POST" action="store.php?price=<?php echo $discounted_price; ?>">
+        <input type="hidden" id="updated-price" name="updated_price" value="<?= $room['discount_percentage'] > 0 ? $room['discounted_price'] : $room['price']; ?>">
             <input type="hidden" name="room_id" value="<?= $room_id; ?>">
 
             <label for="check_in">Check-in Date:</label>
@@ -331,8 +332,6 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
                     checkOutTime = "17:00:00";
                     checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
                     newPrice = originalPrice * 2; // Double the price for this time slot
-                    <?php $discounted_price = "<script>document.write(newPrice);</script>"; ?>
-
                     break;
 
                 case "7:00 AM - 5:00 AM":
@@ -341,7 +340,6 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
                     checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
                     newPrice = originalPrice * 2;
                     // Update the discounted price in PHP
-                    <?php $discounted_price = "<script>document.write(newPrice);</script>"; ?>
                     // Double the price for this time slot
                     break;
             }
@@ -357,6 +355,7 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
 
 
             $("#dynamic-price").text(`$${newPrice.toFixed(2)}`);
+            $("#updated-price").val(newPrice);
             console.log("Updated #dynamic-price element:", $("#dynamic-price").text()); // Debugging line
         }
 
