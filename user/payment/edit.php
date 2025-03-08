@@ -17,9 +17,9 @@ if ($payment_id == 0) {
 }
 
 // Fetch payment record from the database
-$sql = "SELECT * FROM payment WHERE payment_id = ? AND account_id = ?";
+$sql = "SELECT * FROM payment WHERE payment_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $payment_id, $_SESSION['ID']);
+$stmt->bind_param("i", $payment_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $payment = $result->fetch_assoc();

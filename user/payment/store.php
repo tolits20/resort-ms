@@ -13,7 +13,7 @@ if (!isset($_SESSION['ID'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         // Retrieve payment information from POST request
-        $account_id = isset($_POST['account_id']) ? intval($_POST['account_id']) : 0;
+        // $account_id = isset($_POST['account_id']) ? intval($_POST['account_id']) : 0;
         $book_id = isset($_POST['book_id']) ? intval($_POST['book_id']) : 0;
         $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0;
         $pay_amount = isset($_POST['pay_amount']) ? floatval($_POST['pay_amount']) : 0;
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $transaction_id = isset($_POST['transaction_id']) ? trim($_POST['transaction_id']) : '';
 
         // Ensure required fields are not empty
-        if ($account_id == 0 || $book_id == 0 || $amount == 0 || $pay_amount == 0 || empty($payment_type) || empty($transaction_id)) {
+        if ($book_id == 0 || $amount == 0 || $pay_amount == 0 || empty($payment_type) || empty($transaction_id)) {
             throw new Exception("Invalid payment details.");
         }
 
@@ -67,10 +67,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Insert payment information into the 'payment' table
-        $sql = "INSERT INTO payment (account_id, book_id, amount, pay_amount, payment_type, payment_img, transaction_id, payment_status, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        $sql = "INSERT INTO payment (book_id, amount, pay_amount, payment_type, payment_img, transaction_id, payment_status, created_at, updated_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iiddssss", $account_id, $book_id, $amount, $pay_amount, $payment_type, $unique_name, $transaction_id, $payment_status);
+        $stmt->bind_param("iddssss", $book_id, $amount, $pay_amount, $payment_type, $unique_name, $transaction_id, $payment_status);
         $stmt->execute();
 
         if ($stmt->affected_rows == 0) {
