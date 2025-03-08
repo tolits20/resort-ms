@@ -78,170 +78,123 @@ include("../includes/system_update.php");
 <script>
     // Initialize default values for demonstration
     document.getElementById('total-bookings').textContent = '156';
-    document.getElementById('total-earnings').textContent = '$24,850';
-    document.getElementById('total-discounts').textContent = '$3,200';
-    document.getElementById('pending-payments').textContent = '$1,850';
+document.getElementById('total-earnings').textContent = '$24,850';
+document.getElementById('total-discounts').textContent = '$3,200';
+document.getElementById('pending-payments').textContent = '$1,850';
 
-    let chart;
+let chart;
 
-    function updateMetrics() {
-        const startDate = document.getElementById("start-date").value;
-        const endDate = document.getElementById("end-date").value;
-        
-        if (!startDate || !endDate) {
-            alert("Please select both start and end dates");
-            return;
-        }
-        
-        // Show loading state
-        document.getElementById('total-bookings').innerHTML = '<small>Loading...</small>';
-        document.getElementById('total-earnings').innerHTML = '<small>Loading...</small>';
-        document.getElementById('total-discounts').innerHTML = '<small>Loading...</small>';
-        document.getElementById('pending-payments').innerHTML = '<small>Loading...</small>';
-        
-        // Fetch data from server using AJAX
-        fetch('get_booking_data.php', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: `start_date=${startDate}&end_date=${endDate}`
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json();
-})
-.then(data => {
-    console.log('Data fetched successfully:', data); // Debugging
-
-    if (!data.success) {
-        throw new Error('Failed to fetch data from server.');
-    }
-
-    // Update the metric cards with real data
-    document.getElementById('total-bookings').textContent = data.data.total_bookings;
-    document.getElementById('total-earnings').textContent = '$' + parseFloat(data.data.total_earnings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    document.getElementById('total-discounts').textContent = '$' + parseFloat(data.data.total_discounts).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    document.getElementById('pending-payments').textContent = '$' + parseFloat(data.data.pending_payments).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+function updateMetrics() {
+    const startDate = document.getElementById("start-date").value;
+    const endDate = document.getElementById("end-date").value;
     
-    // Store the filtered chart data
-    window.chartData = data.data.chart_data;
-
-    // Update the chart
-    updateChart('Total Bookings', window.chartData);
-})
-.catch(error => {
-    console.error('Error fetching data:', error);
-    alert('Failed to fetch data. Please try again later.');
-});
-
+    if (!startDate || !endDate) {
+        alert("Please select both start and end dates");
+        return;
     }
+    
+    document.getElementById('total-bookings').innerHTML = '<small>Loading...</small>';
+    document.getElementById('total-earnings').innerHTML = '<small>Loading...</small>';
+    document.getElementById('total-discounts').innerHTML = '<small>Loading...</small>';
+    document.getElementById('pending-payments').innerHTML = '<small>Loading...</small>';
+    
+    fetch('get_booking_data.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `start_date=${startDate}&end_date=${endDate}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) throw new Error('Failed to fetch data from server.');
 
-    // Update the updateChart function to use real data
-    function updateChart(metric, chartData = null) {
-        // If no data is provided, use the stored chart data
-        if (!chartData) {
-            chartData = window.chartData || defaultChartData;
-        }
+        document.getElementById('total-bookings').textContent = data.data.total_bookings;
+        document.getElementById('total-earnings').textContent = '$' + parseFloat(data.data.total_earnings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('total-discounts').textContent = '$' + parseFloat(data.data.total_discounts).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('pending-payments').textContent = '$' + parseFloat(data.data.pending_payments).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
-        renderChart(metric, chartData);
-    }
+        window.chartData = data.data.chart_data;
+        updateChart('Total Bookings', window.chartData);
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+        alert('Failed to fetch data. Please try again later.');
+    });
+}
 
-    // Function to render the chart with the provided data
-    function renderChart(metric, chartData) {
-        const colorMap = {
-            'Total Bookings': {
-                backgroundColor: 'rgba(52, 152, 219, 0.7)',
-                borderColor: 'rgba(52, 152, 219, 1)'
+function updateChart(metric, chartData = null) {
+    if (!chartData) chartData = window.chartData || defaultChartData;
+    renderChart(metric, chartData);
+}
+
+function renderChart(metric, chartData) {
+    const colorMap = {
+        'Total Bookings': { backgroundColor: 'rgba(52, 152, 219, 0.7)', borderColor: 'rgba(52, 152, 219, 1)' },
+        'Total Earnings': { backgroundColor: 'rgba(46, 204, 113, 0.7)', borderColor: 'rgba(46, 204, 113, 1)' },
+        'Total Discounts': { backgroundColor: 'rgba(243, 156, 18, 0.7)', borderColor: 'rgba(243, 156, 18, 1)' },
+        'Pending Payments': { backgroundColor: 'rgba(231, 76, 60, 0.7)', borderColor: 'rgba(231, 76, 60, 1)' }
+    };
+
+    if (chart) chart.destroy();
+
+    const ctx = document.getElementById('bookingChart').getContext('2d');
+
+    // Find max value for the selected metric and increase by 30%
+    const maxValue = Math.max(...chartData.data[metric]) || 10; // Default to 10 if data is empty
+    const suggestedMax = Math.ceil(maxValue * 1.3); // Increase max value by 30%
+
+    chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: metric,
+                data: chartData.data[metric],
+                backgroundColor: colorMap[metric].backgroundColor,
+                borderColor: colorMap[metric].borderColor,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: metric + ' by ' + chartData.groupBy, font: { size: 16 } }
             },
-            'Total Earnings': {
-                backgroundColor: 'rgba(46, 204, 113, 0.7)',
-                borderColor: 'rgba(46, 204, 113, 1)'
-            },
-            'Total Discounts': {
-                backgroundColor: 'rgba(243, 156, 18, 0.7)',
-                borderColor: 'rgba(243, 156, 18, 1)'
-            },
-            'Pending Payments': {
-                backgroundColor: 'rgba(231, 76, 60, 0.7)',
-                borderColor: 'rgba(231, 76, 60, 1)'
-            }
-        };
-        
-        if (chart) {
-            chart.destroy();
-        }
-        
-        const ctx = document.getElementById('bookingChart').getContext('2d');
-        chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: chartData.labels,
-                datasets: [{
-                    label: metric,
-                    data: chartData.data[metric],
-                    backgroundColor: colorMap[metric].backgroundColor,
-                    borderColor: colorMap[metric].borderColor,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: metric + ' by ' + chartData.groupBy,
-                        font: {
-                            size: 16
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'category',
-                        labels: chartData.labels
-                    },
-                    y: {
-                        beginAtZero: true
+            scales: {
+                x: { type: 'category', labels: chartData.labels },
+                y: { 
+                    beginAtZero: true,
+                    suggestedMax: suggestedMax, // Ensures scaling
+                    ticks: {
+                        stepSize: Math.ceil(suggestedMax / 5), // Dynamic step size
                     }
                 }
             }
-        });
-        
-        // Make the chart container taller for better visibility
-        document.getElementById('bookingChart').style.height = '400px';
-    }
-
-    // Default chart data to use when no selection is made
-    const defaultChartData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        groupBy: 'month',
-        data: {
-            'Total Bookings': [42, 58, 37, 45, 52, 48, 61],
-            'Total Earnings': [3500, 4200, 3100, 3750, 4500, 4000, 5200],
-            'Total Discounts': [450, 580, 390, 520, 630, 550, 710],
-            'Pending Payments': [320, 410, 280, 350, 420, 380, 450]
         }
-    };
+    });
 
-    // Automatically set default date range (last 30 days)
-    window.onload = function() {
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 30);
-        
-        document.getElementById('end-date').valueAsDate = endDate;
-        document.getElementById('start-date').valueAsDate = startDate;
-        
-        // Initialize chart with default data
-        updateMetrics();
-    };
+    document.getElementById('bookingChart').style.height = '400px';
+}
+
+
+
+window.onload = function() {
+    let currentDate = new Date();
+    let startDate = new Date(currentDate.getFullYear(), 0, 1); // January 1st of the current year
+
+    console.log("Default Start Date:", startDate.toISOString().split("T")[0]);
+    console.log("Default End Date:", currentDate.toISOString().split("T")[0]);
+
+    // Set values to date inputs
+    document.getElementById('start-date').value = startDate.toISOString().split("T")[0];
+    document.getElementById('end-date').value = currentDate.toISOString().split("T")[0];
+
+    // Load data based on these dates
+    updateMetrics();
+};
+
+
 
     // Add functionality for PDF generation
     function previewPDF() {

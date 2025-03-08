@@ -68,9 +68,14 @@ try {
                     DATE_FORMAT(b.created_at, '%Y-%m-%d') as day,
                     COUNT(b.book_id) as bookings,
                     COALESCE(SUM(CASE WHEN p.payment_status = 'paid' THEN p.amount ELSE 0 END), 0) as earnings,
-                    COALESCE(SUM(CASE WHEN p.payment_status = 'pending' THEN p.amount ELSE 0 END), 0) as pending
+                    COALESCE(SUM(CASE WHEN p.payment_status = 'pending' THEN p.amount ELSE 0 END), 0) as pending,
+                    COALESCE(SUM(d.discount_percentage * r.price / 100), 0) as discounts
                   FROM booking b
                   LEFT JOIN payment p ON b.book_id = p.book_id
+                  LEFT JOIN room r ON b.room_id = r.room_id
+                  LEFT JOIN discount d ON r.room_type = d.applicable_room
+                    AND d.discount_status = 'activate'
+                    AND b.check_in BETWEEN d.discount_start AND d.discount_end
                   WHERE b.created_at BETWEEN ? AND ?
                   GROUP BY DATE_FORMAT(b.created_at, '%Y-%m-%d')
                   ORDER BY day";
@@ -88,7 +93,8 @@ try {
         'data' => [
             'Total Bookings' => [],
             'Total Earnings' => [],
-            'Pending Payments' => []
+            'Pending Payments' => [],
+            'Total Discounts' => []
         ]
     ];
 
@@ -97,6 +103,7 @@ try {
         $chart_data['data']['Total Bookings'][] = (int)$row['bookings'];
         $chart_data['data']['Total Earnings'][] = (float)($row['earnings'] ?? 0);
         $chart_data['data']['Pending Payments'][] = (float)($row['pending'] ?? 0);
+        $chart_data['data']['Total Discounts'][] = (float)($row['discounts'] ?? 0);
     }
 
     // Prepare response
