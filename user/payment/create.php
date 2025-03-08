@@ -34,7 +34,6 @@ if ($book_id == 0 || $amount == 0) {
     <form action="store.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="book_id" value="<?php echo htmlspecialchars($book_id); ?>">
         <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
-        <!-- <input type="hidden" name="account_id" value="<?php echo htmlspecialchars($account_id); ?>"> -->
 
         <label for="pay_amount">Pay Amount:</label><br>
         <input type="number" id="pay_amount" name="pay_amount" step="0.01" min="1" required><br><br>

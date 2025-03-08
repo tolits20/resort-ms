@@ -58,13 +58,13 @@ $imageResult = $stmt->get_result();
 $room_images = $imageResult->fetch_all(MYSQLI_ASSOC);
 
 // Fetch feedback for the room
-$feedbackQuery = "SELECT a.username, f.rating, f.created_at, b.book_id
+$feedbackQuery = "SELECT a.username, f.rating, f.created_at, b.book_id, b.account_id 
 FROM feedback f 
-INNER JOIN account a ON f.account_id = a.account_id
 INNER JOIN booking b ON f.book_id = b.book_id
+INNER JOIN account a ON b.account_id = a.account_id 
 WHERE b.room_id = ? 
-ORDER BY f.created_at DESC;
-";
+ORDER BY f.created_at DESC";
+
 $stmt = $conn->prepare($feedbackQuery);
 $stmt->bind_param("i", $room_id);
 $stmt->execute();

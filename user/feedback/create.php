@@ -1,6 +1,6 @@
 <?php
-include('../resources/database/config.php');
-include('../user/bootstrap.php');
+include('../../resources/database/config.php');
+include('../bootstrap.php');
 
 
 if (!isset($_SESSION['ID'])) {
@@ -16,6 +16,8 @@ $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, 'i', $account_id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
+$booking = mysqli_fetch_array($result);
+
 
 if (mysqli_num_rows($result) == 0) {
     echo "<div class='alert alert-danger text-center'>You can only submit feedback if you have a completed booking.</div>";
@@ -80,7 +82,7 @@ if (mysqli_num_rows($result) == 0) {
                     <label class="form-label">Your Feedback:</label>
                     <textarea name="comment" class="form-control" rows="4" required></textarea>
                 </div>
-                <input type="hidden" name="account_id" value="<?php echo $account_id; ?>">
+                <input type="hidden" name="book_id" value="<?php echo $booking['book_id'] ?>">
                 <button type="submit" class="btn btn-primary w-100">Submit Feedback</button>
             </form>
         </div>
