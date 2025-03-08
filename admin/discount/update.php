@@ -3,22 +3,64 @@ include('../../resources/database/config.php');
 include('../includes/page_authentication.php');
 include("../includes/system_update.php");
 
-if(isset($_POST['status'])){
-    echo $stat=$_POST['status'];
-   echo  $id=$_GET['id'];
-   mysqli_begin_transaction($conn);
-    echo $sql="UPDATE discount SET discount_status='$stat' WHERE discount_id=$id";
-     $result=$conn->query($sql);
-     if($result){
-         echo 'yes';
-         mysqli_commit($conn);
-         header("location:index.php");
-         exit;
-     }else{
-        mysqli_rollback($conn);
-        exit;
-     }
- }
+if (isset($_POST['status'])) {
+   echo $stat = $_POST['status'];
+   echo $applicable_room = $_POST['applicable_room'];
+    $id = $_GET['id'];
+
+    if ($stat == 'activate') {
+        $check = "SELECT * FROM discount WHERE discount_status='activate' AND applicable_room='$applicable_room'";
+        $result = mysqli_query($conn, $check);
+        $count = mysqli_num_rows($result);
+        echo'hello';
+        if ($count == 0) {
+            try {
+                echo 'hello';
+                mysqli_begin_transaction($conn);
+                $sql = "UPDATE discount SET discount_status=? WHERE discount_id=?";
+                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_bind_param($stmt, 'si', $stat, $id);
+                mysqli_stmt_execute($stmt);
+
+                if (mysqli_stmt_affected_rows($stmt) > 0) {
+                    mysqli_commit($conn);
+                    header("location:index.php");
+                    exit;
+                } else {
+                    throw new Exception("Failed to update discount status.");
+                }
+            } catch (Exception $e) {
+                mysqli_rollback($conn);
+                echo "Error: " . $e->getMessage();
+                exit;
+            }
+        } else {
+            $_SESSION['alert_message'] = "There is already an active discount for this type of room.";
+            header("Location: index.php");
+            exit;
+        }
+    }else{
+        try {
+            mysqli_begin_transaction($conn);
+            $sql = "UPDATE discount SET discount_status=? WHERE discount_id=?";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, 'si', $stat, $id);
+            mysqli_stmt_execute($stmt);
+
+            if (mysqli_stmt_affected_rows($stmt) > 0) {
+                mysqli_commit($conn);
+                header("location:index.php");
+                exit;
+            } else {
+                throw new Exception("Failed to update discount status.");
+            }
+        } catch (Exception $e) {
+            mysqli_rollback($conn);
+            echo "Error: " . $e->getMessage();
+            exit;
+        }
+    }
+}
 
 if (isset($_POST['update'])) {
     $name = $_POST['discount_name'];

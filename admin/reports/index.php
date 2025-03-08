@@ -83,53 +83,88 @@ include("../includes/system_update.php");
     document.getElementById('pending-payments').textContent = '$1,850';
 
     let chart;
+
     function updateMetrics() {
         const startDate = document.getElementById("start-date").value;
         const endDate = document.getElementById("end-date").value;
-        console.log("Updating metrics for date range:", startDate, "to", endDate);
         
-        // Simulating data update for demonstration
-        // In a real application, this would fetch data from the server
-        setTimeout(() => {
-            document.getElementById('total-bookings').textContent = Math.floor(Math.random() * 200 + 100);
-            document.getElementById('total-earnings').textContent = '$' + Math.floor(Math.random() * 30000 + 10000).toLocaleString();
-            document.getElementById('total-discounts').textContent = '$' + Math.floor(Math.random() * 5000 + 1000).toLocaleString();
-            document.getElementById('pending-payments').textContent = '$' + Math.floor(Math.random() * 3000 + 500).toLocaleString();
-            
-            // Update chart with new date range
-            updateChart('Total Bookings');
-        }, 500);
+        if (!startDate || !endDate) {
+            alert("Please select both start and end dates");
+            return;
+        }
+        
+        // Show loading state
+        document.getElementById('total-bookings').innerHTML = '<small>Loading...</small>';
+        document.getElementById('total-earnings').innerHTML = '<small>Loading...</small>';
+        document.getElementById('total-discounts').innerHTML = '<small>Loading...</small>';
+        document.getElementById('pending-payments').innerHTML = '<small>Loading...</small>';
+        
+        // Fetch data from server using AJAX
+        fetch('get_booking_data.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `start_date=${startDate}&end_date=${endDate}`
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('Data fetched successfully:', data); // Debugging
+
+    if (!data.success) {
+        throw new Error('Failed to fetch data from server.');
     }
 
-    function previewPDF() {
-        alert("Preview PDF functionality to be implemented.");
+    // Update the metric cards with real data
+    document.getElementById('total-bookings').textContent = data.data.total_bookings;
+    document.getElementById('total-earnings').textContent = '$' + parseFloat(data.data.total_earnings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('total-discounts').textContent = '$' + parseFloat(data.data.total_discounts).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('pending-payments').textContent = '$' + parseFloat(data.data.pending_payments).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    
+    // Store the filtered chart data
+    window.chartData = data.data.chart_data;
+
+    // Update the chart
+    updateChart('Total Bookings', window.chartData);
+})
+.catch(error => {
+    console.error('Error fetching data:', error);
+    alert('Failed to fetch data. Please try again later.');
+});
+
     }
 
-    function downloadPDF() {
-        alert("Download PDF functionality to be implemented.");
+    // Update the updateChart function to use real data
+    function updateChart(metric, chartData = null) {
+        // If no data is provided, use the stored chart data
+        if (!chartData) {
+            chartData = window.chartData || defaultChartData;
+        }
+        
+        renderChart(metric, chartData);
     }
 
-    function updateChart(metric) {
-        // Sample data - in a real application, this would be fetched from the server
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-        const datasets = {
+    // Function to render the chart with the provided data
+    function renderChart(metric, chartData) {
+        const colorMap = {
             'Total Bookings': {
-                data: [42, 58, 37, 45, 52, 48, 61],
                 backgroundColor: 'rgba(52, 152, 219, 0.7)',
                 borderColor: 'rgba(52, 152, 219, 1)'
             },
             'Total Earnings': {
-                data: [3500, 4200, 3100, 3750, 4500, 4000, 5200],
                 backgroundColor: 'rgba(46, 204, 113, 0.7)',
                 borderColor: 'rgba(46, 204, 113, 1)'
             },
             'Total Discounts': {
-                data: [450, 580, 390, 520, 630, 550, 710],
                 backgroundColor: 'rgba(243, 156, 18, 0.7)',
                 borderColor: 'rgba(243, 156, 18, 1)'
             },
             'Pending Payments': {
-                data: [320, 410, 280, 350, 420, 380, 450],
                 backgroundColor: 'rgba(231, 76, 60, 0.7)',
                 borderColor: 'rgba(231, 76, 60, 1)'
             }
@@ -143,12 +178,12 @@ include("../includes/system_update.php");
         chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: months,
+                labels: chartData.labels,
                 datasets: [{
                     label: metric,
-                    data: datasets[metric].data,
-                    backgroundColor: datasets[metric].backgroundColor,
-                    borderColor: datasets[metric].borderColor,
+                    data: chartData.data[metric],
+                    backgroundColor: colorMap[metric].backgroundColor,
+                    borderColor: colorMap[metric].borderColor,
                     borderWidth: 1
                 }]
             },
@@ -161,13 +196,17 @@ include("../includes/system_update.php");
                     },
                     title: {
                         display: true,
-                        text: metric + ' by Month',
+                        text: metric + ' by ' + chartData.groupBy,
                         font: {
                             size: 16
                         }
                     }
                 },
                 scales: {
+                    x: {
+                        type: 'category',
+                        labels: chartData.labels
+                    },
                     y: {
                         beginAtZero: true
                     }
@@ -179,158 +218,255 @@ include("../includes/system_update.php");
         document.getElementById('bookingChart').style.height = '400px';
     }
 
-    // Initialize chart with default data
-    window.onload = function() {
-        updateChart('Total Bookings');
+    // Default chart data to use when no selection is made
+    const defaultChartData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        groupBy: 'month',
+        data: {
+            'Total Bookings': [42, 58, 37, 45, 52, 48, 61],
+            'Total Earnings': [3500, 4200, 3100, 3750, 4500, 4000, 5200],
+            'Total Discounts': [450, 580, 390, 520, 630, 550, 710],
+            'Pending Payments': [320, 410, 280, 350, 420, 380, 450]
+        }
     };
+
+    // Automatically set default date range (last 30 days)
+    window.onload = function() {
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 30);
+        
+        document.getElementById('end-date').valueAsDate = endDate;
+        document.getElementById('start-date').valueAsDate = startDate;
+        
+        // Initialize chart with default data
+        updateMetrics();
+    };
+
+    // Add functionality for PDF generation
+    function previewPDF() {
+        const startDate = document.getElementById("start-date").value || 'All Time';
+        const endDate = document.getElementById("end-date").value || 'All Time';
+        
+        fetch('generate_pdf.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `start_date=${startDate}&end_date=${endDate}&action=preview`
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            // Create a blob URL for the PDF
+            const url = window.URL.createObjectURL(blob);
+            
+            // Open the PDF in a new tab
+            window.open(url, '_blank');
+        })
+        .catch(error => {
+            console.error('Error generating PDF:', error);
+            alert('Failed to generate PDF preview. Please try again later.');
+        });
+    }
+
+    function downloadPDF() {
+        const startDate = document.getElementById("start-date").value || 'All Time';
+        const endDate = document.getElementById("end-date").value || 'All Time';
+        const filename = `Resort_Report_${startDate}_to_${endDate}.pdf`.replace(/[\/\\]/g, '-');
+        
+        fetch('generate_pdf.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `start_date=${startDate}&end_date=${endDate}&action=download`
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            // Create a blob URL for the PDF
+            const url = window.URL.createObjectURL(blob);
+            
+            // Create a download link
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        })
+        .catch(error => {
+            console.error('Error downloading PDF:', error);
+            alert('Failed to download PDF. Please try again later.');
+        });
+    }
+
+    // Function to switch between data metrics in the chart
+    function switchMetric(metric) {
+        // Update active state in the UI
+        document.querySelectorAll('.metric-switcher button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`.metric-switcher button[data-metric="${metric}"]`).classList.add('active');
+        
+        // Update the chart
+        updateChart(metric);
+    }
+
+    // Function to refresh all data (can be called from a button)
+    function refreshData() {
+        updateMetrics();
+    }
 </script>
 <style>
     /* Dashboard Custom Styles */
-:root {
-  --primary-color: #3498db;
-  --success-color: #2ecc71;
-  --warning-color: #f39c12;
-  --danger-color: #e74c3c;
-  --light-bg: #f8f9fa;
-  --dark-text: #2c3e50;
-  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-body {
-  font-family: 'Open Sans', sans-serif;
-  background-color: #f5f7fa;
-  color: var(--dark-text);
-}
-
-.content {
-  padding: 20px 0;
-}
-
-.dashboard-header {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--card-shadow);
-}
-
-.dashboard-header h2 {
-  color: var(--dark-text);
-  font-weight: 600;
-  margin-bottom: 0;
-}
-
-.date-range-container {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--card-shadow);
-}
-
-.metric-card {
-  border-radius: 8px;
-  padding: 15px;
-  height: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  box-shadow: var(--card-shadow);
-  margin-bottom: 20px;
-}
-
-.metric-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-}
-
-.metric-card .card-title {
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.metric-card .card-text {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-top: 10px;
-  margin-bottom: 0;
-}
-
-.primary-card {
-  background: linear-gradient(135deg, #3498db, #2980b9);
-}
-
-.success-card {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-}
-
-.warning-card {
-  background: linear-gradient(135deg, #f39c12, #e67e22);
-}
-
-.danger-card {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-}
-
-.chart-container {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--card-shadow);
-}
-
-.action-buttons {
-  background-color: white;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: var(--card-shadow);
-}
-
-.btn-custom-primary {
-  background-color: var(--primary-color);
-  border: none;
-  border-radius: 4px;
-  padding: 8px 20px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-custom-primary:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-}
-
-.btn-custom-secondary {
-  background-color: #95a5a6;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 20px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-custom-secondary:hover {
-  background-color: #7f8c8d;
-  transform: translateY(-2px);
-}
-
-.btn-custom-success {
-  background-color: var(--success-color);
-  border: none;
-  border-radius: 4px;
-  padding: 8px 20px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-custom-success:hover {
-  background-color: #27ae60;
-  transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-  .metric-card .card-text {
-    font-size: 1.5rem;
+  :root {
+    --primary-color: #3498db;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-}
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f5f7fa;
+    color: var(--dark-text);
+  }
+
+  .content {
+    padding: 20px 0;
+  }
+
+  .dashboard-header {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .dashboard-header h2 {
+    color: var(--dark-text);
+    font-weight: 600;
+    margin-bottom: 0;
+  }
+
+  .date-range-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .metric-card {
+    border-radius: 8px;
+    padding: 15px;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .metric-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .metric-card .card-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .primary-card {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+  }
+
+  .success-card {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+  }
+
+  .warning-card {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+  }
+
+  .danger-card {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+  }
+
+  .chart-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .action-buttons {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .btn-custom-primary {
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-custom-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+  }
+
+  .btn-custom-secondary {
+    background-color: #95a5a6;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-custom-secondary:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+  }
+
+  .btn-custom-success {
+    background-color: var(--success-color);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-custom-success:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .metric-card .card-text {
+      font-size: 1.5rem;
+    }
+  }
 </style>

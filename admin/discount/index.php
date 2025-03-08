@@ -3,7 +3,10 @@ include('../../resources/database/config.php');
 include('../includes/page_authentication.php');
 include ('../includes/template.php');
 include("../includes/system_update.php");
-
+if (isset($_SESSION['alert_message'])) {
+    echo "<script>alert('" . $_SESSION['alert_message'] . "');</script>";
+    unset($_SESSION['alert_message']);
+}
 $discount="SELECT * FROM discount ";
 $result=mysqli_query($conn,$discount);
 
@@ -85,6 +88,7 @@ $track=mysqli_fetch_assoc($track_result);
                                                 <option value='activate' ". ($status ? "selected" : "") .">Activate</option>
                                                 <option value='deactivate' ". ($status ? "" : "selected") .">Deactivate</option>
                                                 </select>
+                                                <input type='hidden' name='applicable_room' value='{$row['applicable_room']}'>
                                             </form>
                                             </td>
                                             <td>
