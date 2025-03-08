@@ -11,7 +11,9 @@ if (!isset($_SESSION['ID'])) {
 $account_id = $_SESSION['ID'];
 
 // Fetch user's payments from the database
-$sql = "SELECT * FROM payment WHERE account_id = ?";
+$sql = "SELECT p.*, b.account_id FROM payment p
+        JOIN booking b ON p.book_id = b.book_id
+        WHERE b.account_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $account_id);
 $stmt->execute();
