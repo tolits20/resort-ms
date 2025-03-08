@@ -9,6 +9,7 @@ if (!isset($_SESSION['ID'])) {
 
 
 echo $_POST['updated_price'];
+echo $amount = floatval($_POST['updated_price']);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $account_id = $_SESSION['ID'];
@@ -59,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->commit();
 
         // Redirect to payment page
-        // header("location: payment_store.php?book_id=$last_id");
+        header("location: ../payment/create.php?book_id=$last_id&amount=$amount");
         exit;
     } catch (Exception $e) {
         // Rollback transaction in case of error
