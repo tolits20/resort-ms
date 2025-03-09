@@ -32,351 +32,327 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Available Rooms | Resort</title>
-    <!-- Include Font Awesome -->
+    <title>Paradise Resort | Luxury Stays</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --white: #ffffff;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
-            background-color: #f8f9fa;
-            text-align: center;
+            background-color: var(--light);
         }
-        header {
-            background: #34495e;
-            color: white;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+
+        /* Modern Navbar */
+
+
+        /* Hero Section */
+      /* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url('../../resources/assets/resort_images/hero_img.jpg'); /* Add your hero background image */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Creates a parallax effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px; /* Account for fixed navbar */
+}
+
+.hero-content {
+    max-width: 800px;
+    text-align: center;
+    padding: 0 20px;
+    color: var(--white);
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--accent);
+    color: var(--white);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.cta-button:hover {
+    background-color: #d35400;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .cta-button {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+        /* Room Grid */
+        .image-grid {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
         }
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: url('profile.jpg') center/cover;
-            border: 2px solid white;
-            display: block;
-        }
-        .logout-btn {
-            background: #e74c3c;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .logout-btn:hover {
-            background: #c0392b;
-        }
-        .hero {
-            background: url('hero1.jpg') center/cover;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
+
+        .image-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
             position: relative;
         }
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
+
+        .image-card.large {
+            grid-column: span 12;
         }
-        .hero p {
-            font-size: 20px;
-            margin-bottom: 30px;
+
+        .image-card.medium {
+            grid-column: span 6;
         }
-        .explore-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #27ae60;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            z-index: 1000;
+
+        .image-card.small {
+            grid-column: span 4;
         }
-        .explore-button:hover {
-            background: #1e8449;
+
+        .image-card:hover {
+            transform: translateY(-10px);
         }
-        .quick-access {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 30px;
-            max-width: 1200px;
-            margin: auto;
+
+        .image-wrapper {
+            position: relative;
+            overflow: hidden;
         }
-        .quick-access .card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
+
+        .image-card.large .image-wrapper {
+            height: 500px;
         }
-        .quick-access .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+        .image-card.medium .image-wrapper {
+            height: 400px;
         }
-        .quick-access .card i {
-            font-size: 36px;
-            margin-bottom: 10px;
-            color: #34495e;
+
+        .image-card.small .image-wrapper {
+            height: 300px;
         }
-        .quick-access .card h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-        .quick-access .card p {
-            font-size: 14px;
-            color: #555;
-        }
-        .room-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 30px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        .room-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: 0.3s;
-        }
-        .room-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        .room-card img {
+
+        .image-wrapper img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            transition: transform 0.5s ease;
         }
-        .room-card .content {
-            padding: 15px;
+
+        .image-card:hover .image-wrapper img {
+            transform: scale(1.1);
         }
-        .room-card h2 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-        .room-card p {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .price {
-            font-weight: bold;
-            color: #e74c3c;
-            font-size: 16px;
-        }
-        .book-btn {
-            display: block;
-            text-align: center;
-            background: #27ae60;
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 2rem;
             color: white;
-            font-size: 14px;
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-top: 10px;
         }
-        .book-btn:hover {
-            background: #1e8449;
+
+        .image-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
         }
-        .facilities {
-            background: #f8f9fa;
-            padding: 30px;
-            text-align: center;
+
+        .image-desc {
+            font-size: 1rem;
+            opacity: 0.9;
         }
-        .facilities h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #2c3e50;
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .image-card.large,
+            .image-card.medium,
+            .image-card.small {
+                grid-column: span 12;
+            }
+
+            .image-card.large .image-wrapper,
+            .image-card.medium .image-wrapper,
+            .image-card.small .image-wrapper {
+                height: 300px;
+            }
         }
-        .facility-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        .facility-item {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .facility-item i {
-            font-size: 36px;
-            margin-bottom: 10px;
-            color: #34495e;
-        }
-        .facility-item h3 {
-            font-size: 18px;
-            color: #2c3e50;
-        }
-        .testimonials {
-            padding: 30px;
-            background: white;
-            text-align: center;
-        }
-        .testimonials h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-        .testimonial-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        .testimonial-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-        .testimonial-item p {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .testimonial-item strong {
-            font-size: 16px;
-            color: #2c3e50;
-        }
-        .rating {
-            color: #f1c40f;
-            font-size: 14px;
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .room-card.large,
+            .room-card.medium,
+            .room-card.small {
+                grid-column: span 12;
+            }
+
+            .room-card.large .room-img,
+            .room-card.medium .room-img,
+            .room-card.small .room-img {
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div>Explore Our Luxurious Rooms</div>
-        <div class="header-right">
-            <a href="../customer/edit.php" class="profile-icon"></a>
-            <a href="../../logout.php" class="logout-btn">Logout</a>
-        </div>
-    </header>
+    <!-- Navbar -->
 
+<?php include("navbar.php"); ?>
     <!-- Hero Section -->
-    <section class="hero">
-        <div>
-            <h1>Welcome to Paradise Resort</h1>
-            <p>Your perfect getaway awaits.</p>
-        </div>
-    </section>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to Paradise Resort</h1>
+        <p>Experience luxury and comfort in our carefully curated accommodations</p>
+        <p class="current-info" style="font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.8;">
+            <?php echo date('Y-m-d H:i:s'); ?> UTC
+            <br>
+            Welcome, <?php echo htmlspecialchars($row['username']); ?>
+        </p>
+        <a href="#explore" class="cta-button">Explore Resort</a>
+    </div>
+</section>
 
-    <!-- Fixed Explore Rooms Button -->
-    <a href="#room-container" class="explore-button">Explore Rooms</a>
-
-    <!-- Quick Access Cards -->
-    <section class="quick-access">
-        <a href="../booking/create.php" class="card">
-            <i class="fas fa-bed"></i>
-            <h3>Book a Room</h3>
-            <p>Find your perfect stay.</p>
-        </a>
-        <a href="../facilities/index.php" class="card">
-            <i class="fas fa-swimming-pool"></i>
-            <h3>View Facilities</h3>
-            <p>Explore our amenities.</p>
-        </a>
-        <a href="../bookings/index.php" class="card">
-            <i class="fas fa-calendar-check"></i>
-            <h3>Check Bookings</h3>
-            <p>Manage your reservations.</p>
-        </a>
-        <a href="../feedback/create.php" class="card">
-            <i class="fas fa-comment"></i>
-            <h3>Leave Feedback</h3>
-            <p>Share your experience.</p>
-        </a>
-    </section>
-
-    <!-- Room Listing -->
-    <main class="room-container" id="room-container">
-        <?php while ($row = $result->fetch_assoc()) { ?>
-            <div class="room-card">
-                <img src="../../resources/assets/room_images/<?php echo $row['room_img']; ?>" alt="Room Image">
-                <div class="content">
-                    <h2><?php echo $row['room_code']; ?></h2>
-                    <p class="price">$<?php echo $row['price']; ?> per night</p>
-                    <a href="../booking/create.php?room_id=<?php echo $row['room_id']; ?>" class="book-btn">Book Now</a>
+    <!-- Image Grid Section -->
+    <section id="explore" class="image-grid">
+        <!-- Large Featured Image -->
+        <div class="image-card large">
+            <div class="image-wrapper">
+                <img src="../../resources/assets/resort_images/pool.jpg" alt="Luxury Pool">
+                <div class="image-overlay">
+                    <div class="image-title">Infinity Pool</div>
+                    <div class="image-desc">Breathtaking views from our world-class infinity pool</div>
                 </div>
             </div>
-        <?php } ?>
-    </main>
+        </div>
 
-    <!-- Facilities Section -->
-    <section class="facilities">
-        <h2>Our Facilities</h2>
-        <div class="facility-list">
-            <div class="facility-item">
-                <i class="fas fa-swimmer"></i>
-                <h3>Swimming Pool</h3>
+        <!-- Medium Images -->
+        <div class="image-card medium">
+            <div class="image-wrapper">
+                <img src="../../resources/assets/resort_images/resto_img.png" alt="Restaurant">
+                <div class="image-overlay">
+                    <div class="image-title">Fine Dining</div>
+                    <div class="image-desc">Exquisite culinary experiences</div>
+                </div>
             </div>
-            <div class="facility-item">
-                <i class="fas fa-spa"></i>
-                <h3>Spa & Wellness</h3>
+        </div>
+        <div class="image-card medium">
+            <div class="image-wrapper">
+                <img src="../../resources/assets/resort_images/spa_img.jpg" alt="Spa">
+                <div class="image-overlay">
+                    <div class="image-title">Wellness Spa</div>
+                    <div class="image-desc">Rejuvenate your body and mind</div>
+                </div>
             </div>
-            <div class="facility-item">
-                <i class="fas fa-utensils"></i>
-                <h3>Restaurant & Bar</h3>
+        </div>
+
+        <!-- Small Images -->
+        <div class="image-card small">
+            <div class="image-wrapper">
+                <img src="../../resources/assets/resort_images/pool1_img.jpg" alt="Fitness Center">
+                <div class="image-overlay">
+                    <div class="image-title">Fitness Center</div>
+                    <div class="image-desc">State-of-the-art equipment</div>
+                </div>
+            </div>
+        </div>
+        <div class="image-card small">
+            <div class="image-wrapper">
+                <img src="../../resources/assets/resort_images/pool2.jpg" alt="Private Beach">
+                <div class="image-overlay">
+                    <div class="image-title">Private Beach</div>
+                    <div class="image-desc">Your own slice of paradise</div>
+                </div>
+            </div>
+        </div>
+        <div class="image-card small">
+            <div class="image-wrapper">
+                <img src="../../resources/assets/resort_images/pool3.jpg" alt="Lounge Bar">
+                <div class="image-overlay">
+                    <div class="image-title">Lounge Bar</div>
+                    <div class="image-desc">Sophisticated evening entertainment</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <h2>What Our Guests Say</h2>
-        <div class="testimonial-list">
-            <div class="testimonial-item">
-                <p>"Amazing experience! The staff was very friendly."</p>
-                <strong>- John Doe</strong>
-                <div class="rating">★★★★★</div>
-            </div>
-            <div class="testimonial-item">
-                <p>"The rooms were clean and luxurious. Highly recommended!"</p>
-                <strong>- Jane Smith</strong>
-                <div class="rating">★★★★☆</div>
-            </div>
-        </div>
-    </section>
+<?php include("footer.php"); ?>
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 <?php $conn->close(); ?>

@@ -7,6 +7,17 @@ if (!isset($_SESSION['ID'])) {
 }
 
 $account_id = $_SESSION['ID'];
+
+// Get user data for navbar
+$sql_user = "SELECT u.*, a.username FROM user u 
+             JOIN account a ON u.account_id = a.account_id 
+             WHERE u.account_id = ?";
+$stmt_user = mysqli_prepare($conn, $sql_user);
+mysqli_stmt_bind_param($stmt_user, "i", $account_id);
+mysqli_stmt_execute($stmt_user);
+$user_data = mysqli_stmt_get_result($stmt_user)->fetch_assoc();
+
+// Get bookings
 $sql = "SELECT b.book_id, b.room_id, b.check_in, b.check_out, b.book_status, 
                r.room_code, r.room_type, r.price 
         FROM booking b 
@@ -26,88 +37,226 @@ while ($row = mysqli_fetch_array($result)) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>My Bookings</title>
-    <?php include '../bootstrap.php'; ?>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradise Resort | My Bookings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            background: #f8f9fa;
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --white: #ffffff;
         }
-        .table-container {
-            max-width: 900px;
-            margin: 50px auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+        }
+
+        /* Page Header Styles */
+        .page-header {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                        url('../../resources/assets/resort_images/header_room.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--white);
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-content {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Bookings Table Styles */
+        .bookings-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .table th {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--white);
+        }
+
+        .badge-pending { background-color: #f39c12; }
+        .badge-confirmed { background-color: var(--success); }
+        .badge-completed { background-color: var(--primary); }
+        .badge-cancelled { background-color: #e74c3c; }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: var(--white);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .current-info {
+            margin-bottom: 2rem;
+            color: var(--white);
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="table-container">
-            <h2 class="text-center"><i class="fa-solid fa-calendar-check"></i> My Bookings</h2>
-            <table class="table table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Room</th>
-                        <th>Type</th>
-                        <th>Check-in</th>
-                        <th>Check-out</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($bookings)): ?>
-                        <tr>
-                            <td colspan="8" class="text-center">No bookings found.</td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($bookings as $index => $booking): ?>
-                            <tr>
-                                <td><?php echo $index + 1; ?></td>
-                                <td>Room <?php echo htmlspecialchars($booking['room_code']); ?></td>
-                                <td><?php echo ucfirst(htmlspecialchars($booking['room_type'])); ?></td>
-                                <td><?php echo htmlspecialchars($booking['check_in']); ?></td>
-                                <td><?php echo htmlspecialchars($booking['check_out']); ?></td>
-                                <td>$<?php echo number_format((float)$booking['price'], 2); ?></td>
-                                <td>
-                                    <?php
-                                        $status = strtolower($booking['book_status']);
-                                        $badge_class = "secondary";
-                                        if ($status == "pending") $badge_class = "warning";
-                                        if ($status == "completed") $badge_class = "primary";
-                                        if ($status == "confirmed") $badge_class = "success";
-                                        if ($status == "cancelled") $badge_class = "danger";
-                                    ?>
-                                    <span class="badge bg-<?php echo $badge_class; ?>">
-                                        <?php echo ucfirst($booking['book_status']); ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <?php if ($booking['book_status'] == 'pending'): ?>
-                                        <a href="edit.php?booking_id=<?php echo $booking['book_id']; ?>" class="btn btn-primary btn-sm">
-                                            <i class="fa-solid fa-pen"></i> Edit
-                                        </a>
-                                        <a href="cancel.php?booking_id=<?php echo $booking['book_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?');">
-                                            <i class="fa-solid fa-ban"></i> Cancel
-                                        </a>
-                                    <?php else: ?>
-                                        <button class="btn btn-secondary btn-sm" disabled>
-                                            <i class="fa-solid fa-lock"></i> Locked
-                                        </button>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-            <a href="create.php" class="btn btn-success"><i class="fa-solid fa-plus"></i> New Booking</a>
+    <?php include("../view/navbar.php")?>
+
+    <section class="page-header">
+        <h1>My Bookings</h1>
+        <div class="header-content">
+            <div class="current-info">
+                <p>Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted):<br>
+                <strong><?php echo date('Y-m-d H:i:s'); ?></strong></p>
+                <p>Current User's Login: <strong><?php echo htmlspecialchars($user_data['username']); ?></strong></p>
+            </div>
         </div>
+    </section>
+
+    <div class="bookings-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Room</th>
+                    <th>Type</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($bookings)): ?>
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 2rem;">No bookings found.</td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($bookings as $index => $booking): ?>
+                        <tr>
+                            <td><?php echo $index + 1; ?></td>
+                            <td>Room <?php echo htmlspecialchars($booking['room_code']); ?></td>
+                            <td><?php echo ucfirst(htmlspecialchars($booking['room_type'])); ?></td>
+                            <td><?php echo htmlspecialchars($booking['check_in']); ?></td>
+                            <td><?php echo htmlspecialchars($booking['check_out']); ?></td>
+                            <td>₱<?php echo number_format((float)$booking['price'], 2); ?></td>
+                            <td>
+                                <?php
+                                    $status = strtolower($booking['book_status']);
+                                    $badge_class = "badge-secondary";
+                                    if ($status == "pending") $badge_class = "badge-pending";
+                                    if ($status == "completed") $badge_class = "badge-completed";
+                                    if ($status == "confirmed") $badge_class = "badge-confirmed";
+                                    if ($status == "cancelled") $badge_class = "badge-cancelled";
+                                ?>
+                                <span class="badge <?php echo $badge_class; ?>">
+                                    <?php echo ucfirst($booking['book_status']); ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php if ($booking['book_status'] == 'pending'): ?>
+                                    <a href="edit.php?booking_id=<?php echo $booking['book_id']; ?>" class="btn btn-primary">
+                                        <i class="fas fa-pen"></i> Edit
+                                    </a>
+                                    <a href="cancel.php?booking_id=<?php echo $booking['book_id']; ?>" 
+                                       class="btn btn-danger"
+                                       onclick="return confirm('Are you sure you want to cancel this booking?');">
+                                        <i class="fas fa-ban"></i> Cancel
+                                    </a>
+                                <?php else: ?>
+                                    <button class="btn btn-secondary" disabled>
+                                        <i class="fas fa-lock"></i> Locked
+                                    </button>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+        <a href="../booking/rooms.php" class="btn btn-success">
+            <i class="fas fa-plus"></i> New Booking
+        </a>
     </div>
 </body>
 </html>
