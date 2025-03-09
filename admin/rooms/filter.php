@@ -45,43 +45,76 @@ LEFT JOIN discount
 <style>
     
     .top-bar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px;
-        background: #f4f4f4;
-        border-radius: 8px;
-        gap: 15px;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+}
 
-    .back-btn {
-        padding: 8px 16px;
-        border: none;
-        background: #007bff;
-        color: white;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+.back-btn {
+    padding: 10px 18px;
+    border: none;
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
 
-    .back-btn:hover {
-        background: #0056b3;
-    }
+.back-btn:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
 
-    .search-bar {
-        flex: 1;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-    }
+.search-bar {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border 0.3s;
+}
+
+.search-bar:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.btnn-primary {
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btnn-primary i {
+    font-size: 18px;
+}
+
+.btnn-primary:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
 </style>
 <div class="top-bar">
     <button class="back-btn" onclick="history.back()">← Back</button>
     <form action="<?php $_SERVER['PHP_SELF']?>" method="get">
    <input type="text" class="search-bar" name="searchbar"  placeholder="Search...">
-   <button class="btn btn-primary" name="search" ><i class="fas fa-magnifying-glass"></i></button>
+   <button class="btnn btnn-primary" name="search" ><i class="fas fa-magnifying-glass"></i></button>
    </form>
-    <a href="create.php" class="btn btn-primary" style="text-decoration: none; color:white;"><i class="fas fa-add "></i></a>
+    <a href="create.php" class="btnn btnn-primary" style="text-decoration: none; color:white;"><i class="fas fa-add "></i></a>
 </div>
+<br>

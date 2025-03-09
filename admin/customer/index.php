@@ -6,7 +6,7 @@ include("../includes/system_update.php");
 
 function timeAgo($datetime) {
     $timestamp = strtotime($datetime);
-        if (!$timestamp || $timestamp == 0) {
+    if (!$timestamp || $timestamp == 0) {
         return "Last active: Unknown";
     }
 
@@ -30,11 +30,10 @@ function timeAgo($datetime) {
     }
 }
 ?>
-    <title>Customer Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-
+<title>Customer Management</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<style>
 :root {
     --primary-color: #3a7bd5;
     --secondary-color: #f4f7f6;
@@ -121,8 +120,8 @@ function timeAgo($datetime) {
     color: white;
 }
 
-.role-badge.role-manager {
-    background-color: #45b7d1;
+.role-badge.role-staff {
+    background-color: #f39c12;
     color: white;
 }
 
@@ -267,16 +266,6 @@ function timeAgo($datetime) {
     }
 </script>
 
-    </style>
-    <script>
-        function openPopup(accountId) {
-            document.getElementById('popup-' + accountId).style.display = 'flex';
-        }
-
-        function closePopup(accountId) {
-            document.getElementById('popup-' + accountId).style.display = 'none';
-        }
-    </script>
 </head>
 <body>
     <div class="content">
@@ -345,3 +334,5 @@ function timeAgo($datetime) {
         </tbody>
     </table>
     </div>
+</body>
+</html>

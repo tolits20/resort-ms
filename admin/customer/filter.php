@@ -1,34 +1,36 @@
 <?php 
 $id = $_SESSION['ID'];
 $result;
+$role = isset($_GET['role']) ? $_GET['role'] : '';
+
 if(isset($_GET['search']) && !empty($_GET['searchbar'])){
- $find=isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
-$sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL AND username LIKE ? ";
-$stmt = mysqli_prepare($conn, $sql1);
-$search="%$find%";
-mysqli_stmt_bind_param($stmt, 'is', $id,$search);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-}else{
-$sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL ";
-$stmt = mysqli_prepare($conn, $sql1);
-mysqli_stmt_bind_param($stmt, 'i', $id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+    $find = isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
+    $sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL AND username LIKE ? AND (role = ? OR ? = '')";
+    $stmt = mysqli_prepare($conn, $sql1);
+    $search = "%$find%";
+    mysqli_stmt_bind_param($stmt, 'isss', $id, $search, $role, $role);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+} else {
+    $sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL AND (role = ? OR ? = '')";
+    $stmt = mysqli_prepare($conn, $sql1);
+    mysqli_stmt_bind_param($stmt, 'iss', $id, $role, $role);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 }
 
 if(isset($_GET['sort'])){
- $sort=$_GET['sort'];
- $find=$_GET['searchbar'];
-  $sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL AND username LIKE ? ORDER BY username $sort";
-$stmt = mysqli_prepare($conn, $sql1);
-$search="%$find%";
-mysqli_stmt_bind_param($stmt, 'is', $id,$search);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+    $sort = $_GET['sort'];
+    $find = $_GET['searchbar'];
+    $sql1 = "SELECT * FROM account WHERE account_id <> ? AND deleted_at IS NULL AND username LIKE ? AND (role = ? OR ? = '') ORDER BY username $sort";
+    $stmt = mysqli_prepare($conn, $sql1);
+    $search = "%$find%";
+    mysqli_stmt_bind_param($stmt, 'isss', $id, $search, $role, $role);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 }
-
 ?>
+
 <div class="advanced-search-container">
     <div class="search-navigation">
         <button class="navigation-btn back-btn" onclick="history.back()">
@@ -67,6 +69,17 @@ $result = mysqli_stmt_get_result($stmt);
                     >
                         Z to A
                     </option>
+                </select>
+
+                <select 
+                    name="role" 
+                    class="sort-select" 
+                    onchange="this.form.submit()"
+                >
+                    <option value="" <?php echo ($role === '' ? 'selected' : '') ?>>All Roles</option>
+                    <option value="admin" <?php echo ($role === 'admin' ? 'selected' : '') ?>>Admin</option>
+                    <option value="user" <?php echo ($role === 'user' ? 'selected' : '') ?>>User</option>
+                    <option value="staff" <?php echo ($role === 'staff' ? 'selected' : '') ?>>Staff</option>
                 </select>
             </div>
         </form>

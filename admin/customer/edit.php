@@ -12,144 +12,144 @@ $row=mysqli_fetch_assoc($result);
 $_SESSION['update_id']=$id;
 ?> 
 
-    <title>Profile Update</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f4f7f6;
-            --text-color: #333;
-            --border-radius: 12px;
-        }
+<title>Profile Update</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #4a90e2;
+        --secondary-color: #f4f7f6;
+        --text-color: #333;
+        --border-radius: 12px;
+    }
 
-        .content {
-            background-color: var(--secondary-color);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
+    .content {
+        background-color: var(--secondary-color);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        color: var(--text-color);
+        line-height: 1.6;
+    }
 
-        .profile-container {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            padding: 40px;
-            margin-top: 50px;
-            max-width: 800px;
-        }
+    .profile-container {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        padding: 40px;
+        margin-top: 50px;
+        max-width: 800px;
+    }
 
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--secondary-color);
+    }
+
+    .profile-photo-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin-right: 30px;
+    }
+
+    .profile-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid var(--primary-color);
+    }
+
+    .photo-upload {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .form-control, .form-select {
+        background-color: var(--secondary-color);
+        border: 1px solid #e0e4e7;
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(74,144,226,0.25);
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #3a7bd5;
+        transform: translateY(-2px);
+    }
+
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        width: 400px;
+        padding: 30px;
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 24px;
+        color: #999;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+        color: var(--primary-color);
+    }
+
+    @media (max-width: 768px) {
         .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--secondary-color);
+            flex-direction: column;
+            text-align: center;
         }
 
         .profile-photo-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin-right: 30px;
+            margin-right: 0;
+            margin-bottom: 20px;
         }
-
-        .profile-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid var(--primary-color);
-        }
-
-        .photo-upload {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .form-control, .form-select {
-            background-color: var(--secondary-color);
-            border: 1px solid #e0e4e7;
-            border-radius: 8px;
-            padding: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(74,144,226,0.25);
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #3a7bd5;
-            transform: translateY(-2px);
-        }
-
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .popup-content {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 400px;
-            padding: 30px;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            color: #999;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .close-btn:hover {
-            color: var(--primary-color);
-        }
-
-        @media (max-width: 768px) {
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-photo-container {
-                margin-right: 0;
-                margin-bottom: 20px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <div class="content">
     <div class="container">
@@ -218,6 +218,7 @@ $_SESSION['update_id']=$id;
                             <select name="role" class="form-select">
                                 <option value="admin" <?php echo ($row['role']=='admin' ? 'selected' : '') ?>>Admin</option>
                                 <option value="user" <?php echo ($row['role']=='user' ? 'selected' : '') ?>>User</option>
+                                <option value="staff" <?php echo ($row['role']=='staff' ? 'selected' : '') ?>>Staff</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3 d-flex align-items-end">

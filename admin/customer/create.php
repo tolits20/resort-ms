@@ -4,7 +4,6 @@ if(!empty($_GET['create'])) {
     include('../includes/system_update.php');
     include('../includes/template.php');
 }
-
 ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -245,6 +244,7 @@ if(!empty($_GET['create'])) {
                         <option value="">Select Account Type</option>
                         <option value="user">Regular User</option>
                         <option value="admin">Administrator</option>
+                        <option value="staff">Staff</option>
                     </select>
                 </div>
 

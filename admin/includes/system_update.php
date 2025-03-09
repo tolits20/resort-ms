@@ -3,7 +3,7 @@
 //booking real time tracking and update
 $check="SELECT * FROM booking";
 $check_set=mysqli_query($conn,$check);
-echo $today = date("Y-m-d H:i:s");
+$today = date("Y-m-d H:i:s");
 while($check_record=mysqli_fetch_assoc($check_set)){
     if($check_record['check_out']==$today && $check_record['book_status']=="confirmed"){
         echo $set="UPDATE booking SET book_status='completed' WHERE book_id={$check_record['book_id']}";
@@ -262,7 +262,7 @@ $track_query="SELECT
 //auto cancel booking after check-in
 $check="SELECT * FROM booking";
 $check_set=mysqli_query($conn,$check);
-echo $today = date("Y-m-d H:i:s");
+$today = date("Y-m-d H:i:s");
 while($check_record=mysqli_fetch_assoc($check_set)){
     if($check_record['check_in']<=$today && $check_record['book_status']=="pending"){
         echo $set="UPDATE booking SET book_status='cancelled' WHERE book_id={$check_record['book_id']}";

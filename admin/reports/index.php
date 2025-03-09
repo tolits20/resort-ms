@@ -285,14 +285,11 @@ window.onload = function() {
     --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: #f5f7fa;
-    color: var(--dark-text);
-  }
 
   .content {
     padding: 20px 0;
+    background-color: white;
+
   }
 
   .dashboard-header {
