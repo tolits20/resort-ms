@@ -149,7 +149,7 @@ if (isset($_SESSION['ID'])) {
             <a href="../booking/rooms.php"><i class="fas fa-bed"></i> <span>Rooms</span></a>
             <a href="../booking/index.php"><i class="fas fa-calendar-check"></i> <span>Bookings</span></a>
             <a href="../payment/index.php"><i class="fas fa-credit-card"></i> <span>Payments</span></a>
-            <a href="#"><i class="fas fa-comment"></i> <span>Feedback</span></a>
+            <a href="../feedback/index.php"><i class="fas fa-comment"></i> <span>Feedback</span></a>
             <a href="../customer/edit.php" class="profile-img">
                 <img src="../../resources/assets/images/<?php echo htmlspecialchars($user_data['profile_img']); ?>" 
                      alt="Profile Image"

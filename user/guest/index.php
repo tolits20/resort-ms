@@ -1,5 +1,5 @@
 <?php
-include ("../resources/database/config.php");
+include ("../../resources/database/config.php");
 
 // Fetch rooms data
 $sql = "SELECT r.room_id, r.room_code, r.room_type, r.price, g.room_img 
@@ -46,7 +46,7 @@ $result = $conn->query($sql);
 .hero {
     height: 100vh;
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                url('../resources/assets/resort_images/hero_img.jpg'); /* Add your hero background image */
+                url('../../resources/assets/resort_images/hero_img.jpg'); /* Add your hero background image */
     background-size: cover;
     background-position: center;
     background-attachment: fixed; /* Creates a parallax effect */
@@ -242,7 +242,7 @@ $result = $conn->query($sql);
     </style>
 </head>
 <body>
-    <?php include("view/guest_navbar.php"); ?>
+    <?php include("guest_navbar.php"); ?>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -261,7 +261,7 @@ $result = $conn->query($sql);
         <!-- Large Featured Image -->
         <div class="image-card large">
             <div class="image-wrapper">
-                <img src="../resources/assets/resort_images/pool.jpg" alt="Luxury Pool">
+                <img src="../../resources/assets/resort_images/pool.jpg" alt="Luxury Pool">
                 <div class="image-overlay">
                     <div class="image-title">Infinity Pool</div>
                     <div class="image-desc">Breathtaking views from our world-class infinity pool</div>
@@ -272,7 +272,7 @@ $result = $conn->query($sql);
         <!-- Medium Images -->
         <div class="image-card medium">
             <div class="image-wrapper">
-                <img src="../resources/assets/resort_images/resto_img.png" alt="Restaurant">
+                <img src="../../resources/assets/resort_images/resto_img.png" alt="Restaurant">
                 <div class="image-overlay">
                     <div class="image-title">Fine Dining</div>
                     <div class="image-desc">Exquisite culinary experiences</div>
@@ -281,7 +281,7 @@ $result = $conn->query($sql);
         </div>
         <div class="image-card medium">
             <div class="image-wrapper">
-                <img src="../resources/assets/resort_images/spa_img.jpg" alt="Spa">
+                <img src="../../resources/assets/resort_images/spa_img.jpg" alt="Spa">
                 <div class="image-overlay">
                     <div class="image-title">Wellness Spa</div>
                     <div class="image-desc">Rejuvenate your body and mind</div>
@@ -292,7 +292,7 @@ $result = $conn->query($sql);
         <!-- Small Images -->
         <div class="image-card small">
             <div class="image-wrapper">
-                <img src="../resources/assets/resort_images/pool1_img.jpg" alt="Fitness Center">
+                <img src="../../resources/assets/resort_images/pool1_img.jpg" alt="Fitness Center">
                 <div class="image-overlay">
                     <div class="image-title">Fitness Center</div>
                     <div class="image-desc">State-of-the-art equipment</div>
@@ -301,7 +301,7 @@ $result = $conn->query($sql);
         </div>
         <div class="image-card small">
             <div class="image-wrapper">
-                <img src="../resources/assets/resort_images/pool2.jpg" alt="Private Beach">
+                <img src="../../resources/assets/resort_images/pool2.jpg" alt="Private Beach">
                 <div class="image-overlay">
                     <div class="image-title">Private Beach</div>
                     <div class="image-desc">Your own slice of paradise</div>
@@ -310,7 +310,7 @@ $result = $conn->query($sql);
         </div>
         <div class="image-card small">
             <div class="image-wrapper">
-                <img src="../resources/assets/resort_images/pool3.jpg" alt="Lounge Bar">
+                <img src="../../resources/assets/resort_images/pool3.jpg" alt="Lounge Bar">
                 <div class="image-overlay">
                     <div class="image-title">Lounge Bar</div>
                     <div class="image-desc">Sophisticated evening entertainment</div>
@@ -319,7 +319,7 @@ $result = $conn->query($sql);
         </div>
     </section>
 
-    <?php include("view/guest_footer.php"); ?>
+    <?php include("guest_footer.php"); ?>
 
     <script>
         // Your existing JavaScript remains the same
