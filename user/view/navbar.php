@@ -5,6 +5,31 @@ if (!isset($_SESSION['ID'])) {
 }
 
 
+if (isset($_SESSION['ID'])) {
+    $account_id = $_SESSION['ID'];
+
+    // Single query to get all user data including profile image
+    $sql1 = "SELECT u.*, a.username, a.password, u.profile_img 
+             FROM user u 
+             JOIN account a ON u.account_id = a.account_id 
+             WHERE u.account_id = ?";
+    $stmt = $conn->prepare($sql1);
+    $stmt->bind_param("i", $account_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user_data = $result->fetch_assoc(); // Changed from $row to $user_data
+
+    if (!$user_data) {
+        echo "User data not found.";
+        exit;
+    }
+
+    $_SESSION['update_id'] = $account_id;
+} else {
+    echo "User not logged in.";
+    exit;
+}
+
 ?>
 
 
@@ -84,7 +109,7 @@ if (!isset($_SESSION['ID'])) {
         <a href="../booking/index.php"><i class="fas fa-calendar-check"></i> Bookings</a>
         <a href="#"><i class="fas fa-comment"></i> Feedback</a>
         <a href="../customer/edit.php" class="profile-img">
-            <img src="../../resources/assets/images/<?php echo htmlspecialchars($row['profile_img']); ?>" alt="Profile Image">
+            <img src="../../resources/assets/images/<?php echo htmlspecialchars($user_data['profile_img']); ?>" alt="Profile Image">
         </a>
         <a href="../../logout.php" class="logout-btn">Logout</a>
     </div>
