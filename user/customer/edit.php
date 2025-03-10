@@ -30,8 +30,23 @@ if (!isset($row['password'])) {
 
 ?>
 
-<style>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradise Resort | Update Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --white: #ffffff;
+        }
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -170,19 +185,93 @@ select {
 .back-button:hover {
     color: #007bff;
 }
+.main-container {
+            max-width: 1200px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
+        }
 
+        .info-bar {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .datetime-info {
+            text-align: right;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Update container styles */
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .info-bar {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .datetime-info {
+                text-align: center;
+            }
+
+            .container {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .content {
+                flex-direction: column;
+            }
+
+            .div1, .div2, .div3 {
+                width: 100%;
+            }
+        }
 </style>
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body> 
-   <center><h2>Update Account</h2></center>
-   <div class="container">
-        <a href="../view/home.php" class="back-button">
-            <i class="fas fa-arrow-left"></i> 
-        </a>
-        
+   <?php include("../view/navbar.php"); ?>
+
+<div class="main-container">
+    <!-- Info Bar -->
+    <div class="info-bar">
+        <div class="page-title">Update Account</div>
+        <div class="datetime-info">
+            <div>2025-03-10 14:01:54 UTC</div>
+            <div>Welcome, <?php echo $user_data['username'];?></div>
+        </div>
+    </div>
+
+
         <form action="update.php" method="post" enctype="multipart/form-data">
             <div class="content">
                 <div class="div3">
@@ -251,5 +340,7 @@ select {
             </div>
         </form>
     </div>
+    <?php include("../view/footer.php"); ?>
+
 </body>
 

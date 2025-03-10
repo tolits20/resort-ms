@@ -69,8 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             throw new Exception("Failed to update payment.");
         }
 
-        // Redirect to a success page or show a success message
-        echo "Payment information updated successfully.";
+        header("Location: index.php");
     } catch (Exception $e) {
         echo "<script>alert('Error: " . $e->getMessage() . "'); window.history.back();</script>";
     }

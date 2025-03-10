@@ -58,156 +58,262 @@ while ($row = $bookingResult->fetch_assoc()) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Booking for <?= htmlspecialchars($booking['room_code']); ?></title>
+    <title>Paradise Resort | Edit Booking</title>
     
     <!-- Include jQuery & jQuery UI -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!-- Include Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Custom Styling -->
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --white: #ffffff;
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .back-button {
-            display: inline-block;
-            margin: 20px;
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+
+        body {
+            background-color: var(--light);
         }
-        .back-button:hover {
-            background-color: #218838;
+
+        .main-container {
+            max-width: 1200px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
         }
-        .back-button i {
-            margin-right: 5px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        .price-box {
+
+        /* Room Info Bar */
+        .room-info-bar {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
             text-align: center;
-            margin-bottom: 15px;
         }
+
+        .room-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Container Updates */
+        .container {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Booking Form Updates */
+        .booking-form {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .price-box {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .price-box p {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin: 0;
+        }
+
         .discounted {
+            color: #e74c3c;
             text-decoration: line-through;
-            color: red;
-            font-size: 14px;
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
         }
-        .discounted strong {
-            color: green;
-            font-size: 18px;
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
+
         label {
-            margin-top: 10px;
-            font-weight: bold;
-            color: #555;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
         }
-        input, select, button {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+
+        input, select {
             width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--white);
+            transition: border-color 0.3s ease;
         }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
         input[readonly] {
-            background: #e9ecef;
-            cursor: text;
-        }
-        button {
-            margin-top: 20px;
-            background: #28a745;
-            color: white;
-            border: none;
+            background-color: var(--light);
             cursor: pointer;
         }
+
+        button {
+            background: var(--success);
+            color: var(--white);
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
         button:hover {
-            background: #218838;
+            background: #219653;
+            transform: translateY(-2px);
+        }
+
+        button i {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+
+            .booking-form {
+                padding: 1rem;
+            }
+
+            .room-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
+    <?php include("../view/navbar.php"); ?>
 
-<!-- Back Button -->
-<a href="javascript:history.back()" class="back-button">
-    <i class="fas fa-arrow-left"></i> Back
-</a>
-
-<div class="container">
-    <!-- Booking Form -->
-    <div class="booking-form">
-        <h2>Edit Booking for <?= htmlspecialchars($booking['room_code']); ?></h2>
-
-        <div class="price-box">
-            <p>Price: 
-                <?php if ($booking['discount_percentage'] > 0): ?>
-                    <span class="discounted">$<?= number_format($booking['price'], 2); ?></span>
-                    <strong id="dynamic-price">$<?= number_format($booking['discounted_price'], 2); ?></strong>
-                    (<?= htmlspecialchars($booking['discount_percentage']); ?>% off)
-                <?php else: ?>
-                    <strong id="dynamic-price">$<?= number_format($booking['price'], 2); ?></strong>
-                <?php endif; ?>
-            </p>
+    <div class="main-container">
+        <!-- Info Bar -->
+        <div class="room-info-bar">
+            <div class="room-title">
+                Edit Booking for Room <?= htmlspecialchars($booking['room_code']); ?>
+            </div>
         </div>
-        <input type="hidden" id="original-price" value="<?= $booking['discount_percentage'] > 0 ? $booking['discounted_price'] : $booking['price']; ?>">
-        <form method="POST" action="update.php">
-            <input type="hidden" name="booking_id" value="<?= $booking_id; ?>">
 
-            <label for="room_id">Room:</label>
-            <select name="room_id" id="room_id" required>
-                <?php foreach ($rooms as $room): ?>
-                    <option value="<?= $room['room_id']; ?>" <?= $room['room_id'] == $booking['room_id'] ? 'selected' : ''; ?>>
-                        <?= htmlspecialchars($room['room_code']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+        <!-- Main Content -->
+        <div class="container">
+            <div class="booking-form">
+                <div class="price-box">
+                    <p>Price: 
+                        <?php if ($booking['discount_percentage'] > 0): ?>
+                            <span class="discounted">₱<?= number_format($booking['price'], 2); ?></span>
+                            <strong id="dynamic-price">₱<?= number_format($booking['discounted_price'], 2); ?></strong>
+                            (<?= htmlspecialchars($booking['discount_percentage']); ?>% off)
+                        <?php else: ?>
+                            <strong id="dynamic-price">₱<?= number_format($booking['price'], 2); ?></strong>
+                        <?php endif; ?>
+                    </p>
+                </div>
 
-            <label for="check_in">Check-in Date:</label>
-            <input type="text" id="check_in" name="check_in" readonly required value="<?= htmlspecialchars(date("Y-m-d", strtotime($booking['check_in']))); ?>">
+                <form method="POST" action="update.php">
+                    <input type="hidden" name="booking_id" value="<?= $booking_id; ?>">
+                    <input type="hidden" id="original-price" value="<?= $booking['discount_percentage'] > 0 ? $booking['discounted_price'] : $booking['price']; ?>">
 
-            <label for="time_slot">Check-in Time Slot:</label>
-            <select name="time_slot" id="time_slot" required>
-                <option value="7:00 AM - 5:00 PM" <?= $booking['check_in'] == "07:00:00" && $booking['check_out'] == "17:00:00" ? 'selected' : ''; ?>>7:00 AM - 5:00 PM</option>
-                <option value="7:00 PM - 5:00 AM" <?= $booking['check_in'] == "19:00:00" && $booking['check_out'] == "05:00:00" ? 'selected' : ''; ?>>7:00 PM - 5:00 AM</option>
-                <option value="7:00 PM - 5:00 PM" <?= $booking['check_in'] == "19:00:00" && $booking['check_out'] == "17:00:00" ? 'selected' : ''; ?>>7:00 PM - 5:00 PM</option>
-                <option value="7:00 AM - 5:00 AM" <?= $booking['check_in'] == "07:00:00" && $booking['check_out'] == "05:00:00" ? 'selected' : ''; ?>>7:00 AM - 5:00 AM</option>
-            </select>
+                    <div class="form-group">
+                        <label for="room_id">Room:</label>
+                        <select name="room_id" id="room_id" required>
+                            <?php foreach ($rooms as $room): ?>
+                                <option value="<?= $room['room_id']; ?>" 
+                                        <?= $room['room_id'] == $booking['room_id'] ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($room['room_code']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-            <label for="check_out">Check-out Date:</label>
-            <input type="text" id="check_out" name="check_out" readonly disabled value="<?= htmlspecialchars(date("Y-m-d", strtotime($booking['check_out']))); ?>">
-            <input type="hidden" id="hidden_check_out" name="check_out">
-            <input type="hidden" id="check_in_time" name="checkInTime" value="<?= htmlspecialchars($booking['check_in']); ?>">
-            <input type="hidden" id="check_out_time" name="checkOutTime" value="<?= htmlspecialchars($booking['check_out']); ?>">
+                    <div class="form-group">
+                        <label for="check_in">Check-in Date:</label>
+                        <input type="text" id="check_in" name="check_in" readonly required 
+                               value="<?= htmlspecialchars(date("Y-m-d", strtotime($booking['check_in']))); ?>">
+                    </div>
 
-            <button type="submit">Update Booking</button>
-        </form>
+                    <div class="form-group">
+                        <label for="time_slot">Check-in Time Slot:</label>
+                        <select name="time_slot" id="time_slot" required>
+                            <option value="7:00 AM - 5:00 PM">7:00 AM - 5:00 PM</option>
+                            <option value="7:00 PM - 5:00 AM">7:00 PM - 5:00 AM</option>
+                            <option value="7:00 PM - 5:00 PM">7:00 PM - 5:00 PM</option>
+                            <option value="7:00 AM - 5:00 AM">7:00 AM - 5:00 AM</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="check_out">Check-out Date:</label>
+                        <input type="text" id="check_out" name="check_out" readonly disabled 
+                               value="<?= htmlspecialchars(date("Y-m-d", strtotime($booking['check_out']))); ?>">
+                    </div>
+
+                    <input type="hidden" id="hidden_check_out" name="check_out">
+                    <input type="hidden" id="check_in_time" name="checkInTime" value="<?= htmlspecialchars($booking['check_in']); ?>">
+                    <input type="hidden" id="check_out_time" name="checkOutTime" value="<?= htmlspecialchars($booking['check_out']); ?>">
+
+                    <button type="submit">
+                        <i class="fas fa-save"></i> Update Booking
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+
+    <?php include("../view/footer.php"); ?>
 
 <script>
     $(document).ready(function () {
