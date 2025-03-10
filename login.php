@@ -32,7 +32,7 @@ if(isset($_POST['login'])){
             }elseif($role=='staff' ){
                 $_SESSION['ID']=$ID;
                 $_SESSION['role']=$role;
-                header('location:staff/index.php');
+                header('location:staff/dashboard.php');
                 }else{
                     $_SESSION["status_check"]="yes";
                     include("alert.php");

@@ -88,7 +88,7 @@
       <li><a href="http:/resort-ms/staff/task/index.php" id="tasks-link"><i class="fas fa-tasks"></i> My Tasks</a></li>
       <li><a href="http:/resort-ms/staff/notification/index.php" id="notifications-link"><i class="fas fa-bell"></i> Notifications</a></li>
       <li><a href="profile-settings.html" id="settings-link"><i class="fas fa-cog"></i> Settings</a></li>
-      <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      <li><a href="../../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
   </nav>
   
