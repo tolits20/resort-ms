@@ -158,6 +158,7 @@ include('system_update.php');
             <li><a href="http:/resort-ms/admin/booking/index.php?switch="><i class="fas fa-calendar-check"></i> Bookings</a></li>
             <li><a href="http:/resort-ms/admin/customer/index.php"><i class="fas fa-users"></i> Customers</a></li>
             <li><a href="http:/resort-ms/admin/rooms/index.php"><i class="fas fa-bed"></i> Rooms</a></li>
+            <li><a href="http:/resort-ms/admin/task/task_assigned_list.php"><i class="fas fa-thumbtack"></i>Task</a></li>
             <li><a href="http:/resort-ms/admin/discount/index.php"><i class="fas fa-tags"></i> Discount</a></li>
             <li><a href="http:/resort-ms/admin/reports/index.php"><i class="fas fa-chart-bar"></i> Reports</a></li>
             <li><a href="http:/resort-ms/admin/activity_logs/index.php"><i class="fas fa-scroll"></i> Activity Logs</a></li>

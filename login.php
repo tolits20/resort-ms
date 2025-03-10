@@ -29,7 +29,14 @@ if(isset($_POST['login'])){
             $_SESSION['ID']=$ID;
             $_SESSION['role']=$role;
             header('location:user/view/home.php');
-            }
+            }elseif($role=='staff' ){
+                $_SESSION['ID']=$ID;
+                $_SESSION['role']=$role;
+                header('location:staff/index.php');
+                }else{
+                    $_SESSION["status_check"]="yes";
+                    include("alert.php");
+                }
            }else{
             $_SESSION["status_check"]="yes";
              include("alert.php");

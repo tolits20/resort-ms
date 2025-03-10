@@ -152,3 +152,194 @@ ORDER BY `Date` ASC;
             <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
             <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
         </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <?php 
+include('../includes/template.php');
+
+?>
+    <div id="content" class="container mt-5">
+    <h2 class="text-center mb-4">Task Management Dashboard</h2>
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Task List</h4>
+            <button class="btn btn-light btn-sm">+ Add New Task</button>
+        </div>
+        
+        <div class="card-body">
+            <div class="form-row mb-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Search tasks...">
+                </div>
+                <div class="col-md-3 ml-auto">
+                    <select class="form-control">
+                        <option>All Statuses</option>
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Completed</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Task ID</th>
+                            <th>Task Name</th>
+                            <th>Assigned To</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample Data -->
+                        <tr>
+                            <td>1</td>
+                            <td>Clean Pool</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-info mr-2">JD</div>
+                                    John Doe
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-warning">2023-10-15</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-secondary">Pending</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary"><i class="fa fa-edit"></i> Edit</button>
+                                    <button class="btn btn-outline-danger"><i class="fa fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Fix Fence</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-success mr-2">JS</div>
+                                    Jane Smith
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-danger">2023-10-10</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-primary">In Progress</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary"><i class="fa fa-edit"></i> Edit</button>
+                                    <button class="btn btn-outline-danger"><i class="fa fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Mow Lawn</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-warning mr-2">RJ</div>
+                                    Robert Johnson
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-success">2023-10-20</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-success">Completed</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary"><i class="fa fa-edit"></i> Edit</button>
+                                    <button class="btn btn-outline-danger"><i class="fa fa-trash"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    <span class="text-muted">Showing 1-3 of 3 tasks</span>
+                </div>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .avatar-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .badge {
+            font-size: 85%;
+            font-weight: normal;
+            padding: 5px 8px;
+        }
+        
+        .badge-warning {
+            background-color: #ffdd57;
+            color: #222;
+        }
+        
+        .badge-danger {
+            background-color: #ff3860;
+        }
+        
+        .badge-success {
+            background-color: #23d160;
+        }
+        
+        .badge-primary {
+            background-color: #3273dc;
+        }
+        
+        .badge-secondary {
+            background-color: #7a7a7a;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(0,0,0,.03);
+        }
+    </style>
+</div>

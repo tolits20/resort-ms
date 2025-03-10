@@ -8,6 +8,8 @@ $status = '';
 if(isset($_GET['search']) && isset($_GET['searchbar'])){
     $find = isset($_GET['searchbar']) ? $_GET['searchbar'] : '';
     $search = "%$find%";
+} else {
+    $search = '%'; // Show all rooms by default
 }
 
 if(isset($_GET['status'])){
@@ -131,11 +133,11 @@ $result = mysqli_stmt_get_result($stmt);
     <form id="filterForm" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
         <input type="text" class="search-bar" name="searchbar" placeholder="Search..." value="<?php echo isset($_GET['searchbar']) ? $_GET['searchbar'] : '' ?>">
         <select name="status" class="status-select" onchange="triggerSearch()">
-    <option value="">All Statuses</option>
-    <option value="Booked" <?php echo ($status === 'Booked' ? 'selected' : '') ?>>Booked</option>
-    <option value="Available" <?php echo ($status === 'Available' ? 'selected' : '') ?>>Available</option>
-    <option value="Under Maintenance" <?php echo ($status === 'Under Maintenance' ? 'selected' : '') ?>>Under Maintenance</option>
-</select>
+            <option value="">All Statuses</option>
+            <option value="Booked" <?php echo ($status === 'Booked' ? 'selected' : '') ?>>Booked</option>
+            <option value="Available" <?php echo ($status === 'Available' ? 'selected' : '') ?>>Available</option>
+            <option value="Under Maintenance" <?php echo ($status === 'Under Maintenance' ? 'selected' : '') ?>>Under Maintenance</option>
+        </select>
         <button class="btnn btnn-primary" name="search"><i class="fas fa-magnifying-glass"></i></button>
     </form>
     <a href="create.php" class="btnn btnn-primary" style="text-decoration: none; color:white;"><i class="fas fa-add "></i></a>
@@ -144,6 +146,6 @@ $result = mysqli_stmt_get_result($stmt);
 
 <script>
 function triggerSearch() {
-    document.querySelector('.btnn-primary[name="search"]').click();
+    document.getElementById('filterForm').submit();
 }
 </script>

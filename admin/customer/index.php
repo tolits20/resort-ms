@@ -5,14 +5,15 @@ include ('../includes/template.php');
 include("../includes/system_update.php");
 
 function timeAgo($datetime) {
+    date_default_timezone_set('Asia/Manila'); // Change to your timezone if needed
     $timestamp = strtotime($datetime);
     if (!$timestamp || $timestamp == 0) {
         return "Last active: Unknown";
     }
 
     $current_time = time();
+    
     $diff = $current_time - $timestamp;
-
     if ($diff < 60) {
         return "Last active just now";
     } elseif ($diff < 3600) { 
@@ -22,13 +23,17 @@ function timeAgo($datetime) {
     } elseif ($diff < 7 * 86400) { 
         return "Last active " . floor($diff / 86400) . " days ago";
     } elseif ($diff < 30 * 86400) { 
-        return "Last active " . floor($diff / (7 * 86400)) . " weeks ago";
+        return "Last active " . floor($diff / (7 * 86400)) . " weeks ago"; // Fix: divide by 7
     } elseif ($diff < 365 * 86400) { 
         return "Last active " . floor($diff / (30 * 86400)) . " months ago";
     } else { 
         return "Last active " . floor($diff / (365 * 86400)) . " years ago";
     }
 }
+
+
+$sql = "SELECT account_id, username, role, last_active FROM account";
+$result = mysqli_query($conn, $sql);
 ?>
 <title>Customer Management</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
