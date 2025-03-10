@@ -1,22 +1,5 @@
 <?php 
-
-//booking real time tracking and update
-$check="SELECT * FROM booking";
-$check_set=mysqli_query($conn,$check);
-$today = date("Y-m-d H:i:s");
-while($check_record=mysqli_fetch_assoc($check_set)){
-    if($check_record['check_out']==$today && $check_record['book_status']=="confirmed"){
-        echo $set="UPDATE booking SET book_status='completed' WHERE book_id={$check_record['book_id']}";
-        $set1=mysqli_query($conn,$set); 
-        if(mysqli_affected_rows($conn)>0){
-           echo $set2="UPDATE room SET room_status='available' WHERE room_id={$check_record['room_id']}";
-            if (!mysqli_query($conn, $set2)) {
-                echo "Error updating room status: " . mysqli_error($conn);
-            }
-        }
-    }
-}
-
+ date_default_timezone_set('Asia/Manila'); // Change to your timezone if needed
 
 //automatic email sending
 try{
@@ -24,7 +7,7 @@ try{
 
 // 1. Send reminder email 24 hours before check-in
     $sql = "SELECT 
-        'user' AS identntifier,
+        'user' AS identifier,
         b.book_id,
         b.created_at,
         b.check_in,
@@ -134,7 +117,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 try{
     mysqli_begin_transaction($conn);
         $sql2 = "SELECT 
-        'user' AS identntifier,
+        'user' AS identifier,
         b.book_id,
         b.check_in,
         b.check_out,
@@ -150,7 +133,7 @@ try{
     INNER JOIN account a ON b.account_id = a.account_id
     WHERE b.book_status = 'completed' 
     AND b.completion_sent IS NULL 
-    AND b.check_out >= NOW()
+    AND b.check_out <= NOW()
 
     UNION ALL
 
@@ -170,8 +153,8 @@ try{
     INNER JOIN room r ON b.room_id = r.room_id
     WHERE b.book_status = 'completed' 
     AND b.completion_sent IS NULL 
-    AND b.check_out>=NOW();
-    ";
+    AND b.check_out<=NOW();
+    ";  
 $result2 = mysqli_query($conn, $sql2);
 
 while ($row = mysqli_fetch_assoc($result2)) {
@@ -246,6 +229,29 @@ while ($row = mysqli_fetch_assoc($result2)) {
     mysqli_rollback($conn);
     echo 'Error: ' . $e->getMessage();
 }
+
+
+
+
+//booking real time tracking and update
+$check="SELECT * FROM booking";
+$check_set=mysqli_query($conn,$check);
+$today = date("Y-m-d H:i:s");
+while($check_record=mysqli_fetch_assoc($check_set)){
+    if($check_record['check_out']>=$today && $check_record['book_status']=="confirmed"){
+        echo $set="UPDATE booking SET book_status='completed' WHERE book_id={$check_record['book_id']}";
+        $set1=mysqli_query($conn,$set); 
+        if(mysqli_affected_rows($conn)>0){
+           echo $set2="UPDATE room SET room_status='available' WHERE room_id={$check_record['room_id']}";
+            if (!mysqli_query($conn, $set2)) {
+                echo "Error updating room status: " . mysqli_error($conn);
+            }
+        }
+    }
+}
+
+
+
 
 
 
