@@ -319,7 +319,7 @@ $result = $conn->query($sql);
         </div>
     </section>
 
-    <?php include("view/footer.php"); ?>
+    <?php include("view/guest_footer.php"); ?>
 
     <script>
         // Your existing JavaScript remains the same

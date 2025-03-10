@@ -62,16 +62,7 @@
                 <h3>About Us</h3>
                 <p>Paradise Resort offers luxurious accommodations with world-class amenities and exceptional service.</p>
             </div>
-            <div class="footer-column">
-                <h3>Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="../view/home.php">Home</a></li>
-                    <li><a href="../booking/rooms.php">Rooms</a></li>
-                    <li><a href="../booking/index.ph">Bookings</a></li>
-                    <li><a href="../payment/index.php">Payment</a></li>
-                    <li><a href="../feedback/index.php">Feedback</a></li>
-                </ul>
-            </div>
+
             <div class="footer-column">
                 <h3>Contact Us</h3>
                 <ul class="footer-links">

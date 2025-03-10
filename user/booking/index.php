@@ -183,13 +183,7 @@ while ($row = mysqli_fetch_array($result)) {
 
     <section class="page-header">
         <h1>My Bookings</h1>
-        <div class="header-content">
-            <div class="current-info">
-                <p>Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted):<br>
-                <strong><?php echo date('Y-m-d H:i:s'); ?></strong></p>
-                <p>Current User's Login: <strong><?php echo htmlspecialchars($user_data['username']); ?></strong></p>
-            </div>
-        </div>
+
     </section>
 
     <div class="bookings-container">
