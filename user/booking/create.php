@@ -89,111 +89,193 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
 
     <!-- Custom Styling -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .back-button {
-            display: inline-block;
-            margin: 20px;
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .back-button:hover {
-            background-color: #218838;
-        }
-        .back-button i {
-            margin-right: 5px;
-        }
+    :root {
+        --primary: #2c3e50;
+        --secondary: #34495e;
+        --accent: #e67e22;
+        --light: #f8f9fa;
+        --dark: #2c3e50;
+        --success: #27ae60;
+        --white: #ffffff;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: var(--light);
+    }
+
+    /* Room Info Bar */
+    .room-info-bar {
+        background: var(--white);
+        padding: 1rem 2rem;
+        margin: 80px auto 0;
+        max-width: 1200px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .room-title {
+        font-size: 1.5rem;
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    /* .user-info {
+        text-align: right;
+    }
+
+    .user-info .datetime {
+        font-size: 0.9rem;
+        color: var(--secondary);
+        margin-bottom: 0.3rem;
+    }
+
+    .user-info .username {
+        color: var(--primary);
+        font-weight: 500;
+    } */
+
+    /* Container Updates */
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: var(--white);
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 2rem;
+    }
+
+    /* Gallery Updates */
+    .room-gallery {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .room-gallery img:first-child {
+        grid-column: 1 / -1;
+        height: 400px;
+        object-fit: cover;
+    }
+
+    .room-gallery img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .room-gallery img:hover {
+        transform: scale(1.02);
+        cursor: pointer;
+    }
+
+    /* Booking Form Updates */
+    .booking-form {
+        background: var(--light);
+        padding: 2rem;
+        border-radius: 10px;
+    }
+
+    .price-box {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .price-box p {
+        font-size: 1.4rem;
+        color: var(--primary);
+        margin: 0;
+    }
+
+    .discounted {
+        color: #e74c3c;
+        text-decoration: line-through;
+        margin-right: 0.5rem;
+    }
+
+    /* Form Elements */
+    label {
+        color: var(--primary);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    button {
+        background: var(--success);
+        color: var(--white);
+        padding: 1rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background: #219653;
+        transform: translateY(-2px);
+    }
+
+    /* Feedback Section Updates */
+    .feedback-section {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: var(--white);
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .feedback-item {
+        background: var(--light);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+        border-left: 4px solid var(--accent);
+    }
+
+    @media (max-width: 968px) {
         .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            grid-template-columns: 1fr;
         }
+        
         .room-gallery {
-            flex: 1;
-            margin-right: 20px;
+            grid-template-columns: 1fr;
         }
-        .room-gallery img {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 10px;
+
+        .room-gallery img:first-child {
+            height: 300px;
         }
-        .booking-form {
-            flex: 1;
-            padding: 20px;
-        }
-        .price-box {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .discounted {
-            text-decoration: line-through;
-            color: red;
-            font-size: 14px;
-        }
-        .discounted strong {
-            color: green;
-            font-size: 18px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-top: 10px;
-            font-weight: bold;
-            color: #555;
-        }
-        input, select, button {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 100%;
-        }
-        input[readonly] {
-            background: #e9ecef;
-            cursor: text;
-        }
-        button {
-            margin-top: 20px;
-            background: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #218838;
-        }
-        .feedback-section {
-            margin-top: 40px;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
-        }
-        .feedback-item {
-            margin-bottom: 15px;
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
-        }
-        .feedback-item strong {
-            color: #333;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
@@ -201,6 +283,8 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
 <a href="javascript:history.back()" class="back-button">
     <i class="fas fa-arrow-left"></i> Back
 </a>
+<?php include("../view/navbar.php")?>
+<!-- Add this right after the body tag and navbar include -->
 
 <div class="container">
     <!-- Room Images -->
@@ -273,7 +357,7 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
         <p>No feedback available for this room.</p>
     <?php endif; ?>
 </div>
-
+<?php include("../view/footer.php")?>
 <script>
     $(document).ready(function () {
         let bookedDates = <?= json_encode($bookedDates); ?>;
