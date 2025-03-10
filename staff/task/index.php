@@ -23,7 +23,11 @@ $pending_tasks_result = mysqli_query($conn, $pending_tasks_sql);
 $pending_tasks_count = mysqli_fetch_assoc($pending_tasks_result)['count'];
 
 // Fetch tasks
-$tasks_sql = "SELECT t.id, t.title, t.due_date, t.priority, ta.assignee_task AS 'display_status' 
+$tasks_sql = "SELECT t.id, t.title, t.due_date, t.priority, 
+              CASE 
+                WHEN t.due_date < NOW() AND ta.assignee_task != 'completed' THEN 'overdue' 
+                ELSE ta.assignee_task 
+              END AS display_status 
               FROM tasks t 
               INNER JOIN task_assignees ta ON t.id = ta.task_id 
               WHERE ta.staff_id = $id 

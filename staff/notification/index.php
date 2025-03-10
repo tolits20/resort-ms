@@ -1,6 +1,12 @@
 <?php 
 include("../../resources/database/config.php"); 
 include("../includes/template.php");
+
+$id = $_SESSION['ID'];
+
+// Fetch notifications
+$notifications_sql = "SELECT message, created_at, is_read FROM task_notifications WHERE staff_id = $id ORDER BY created_at DESC";
+$notifications_result = mysqli_query($conn, $notifications_sql);
 ?>
 
 <div id="main-content" class="container mt-5">
@@ -20,81 +26,25 @@ include("../includes/template.php");
         
         <div class="card shadow-sm border-0 rounded-lg">
             <div class="card-body p-0">
-                <!-- Unread Notifications -->
-                <div class="notification-item unread">
-                    <div class="d-flex p-3">
-                        <div class="notification-icon bg-soft-primary mr-3">
-                            <i class="fa fa-tasks text-primary"></i>
-                        </div>
-                        <div class="notification-content flex-grow-1">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="mb-1">New Task Assigned</h6>
-                                <small class="text-muted">Just now</small>
+                <?php while ($notification = mysqli_fetch_assoc($notifications_result)): ?>
+                    <div class="notification-item <?php echo $notification['is_read'] == '0' ? '1' : ''; ?>">
+                        <div class="d-flex p-3">
+                            <div class="notification-icon bg-soft-<?php echo $notification['is_read'] == '0' ? 'primary' : 'secondary'; ?> mr-3">
+                                <i class="fa fa-<?php echo $notification['is_read'] == '0' ? 'tasks' : 'check-circle'; ?> text-<?php echo $notification['is_read'] == 'unread' ? 'primary' : 'secondary'; ?>"></i>
                             </div>
-                            <p class="mb-1 text-dark">You have been assigned a new task: "Repair Deck"</p>
-                            <div class="notification-actions">
-                                <button class="btn btn-soft-primary btn-sm rounded-pill mr-2">View Task</button>
-                                <button class="btn btn-link btn-sm text-muted p-0">Dismiss</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="notification-item unread">
-                    <div class="d-flex p-3">
-                        <div class="notification-icon bg-soft-danger mr-3">
-                            <i class="fa fa-exclamation-circle text-danger"></i>
-                        </div>
-                        <div class="notification-content flex-grow-1">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="mb-1">Task Overdue</h6>
-                                <small class="text-muted">2 hours ago</small>
-                            </div>
-                            <p class="mb-1 text-dark">The task "Clean Pool" is now overdue. The due date was yesterday.</p>
-                            <div class="notification-actions">
-                                <button class="btn btn-soft-danger btn-sm rounded-pill mr-2">Update Status</button>
-                                <button class="btn btn-link btn-sm text-muted p-0">Dismiss</button>
+                            <div class="notification-content flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1"><?php echo htmlspecialchars($notification['message']); ?></h6>
+                                    <small class="text-muted"><?php echo date_format(new DateTime($notification['created_at']), 'F j, Y, g:i a'); ?></small>
+                                </div>
+                                <div class="notification-actions">
+                                    <button class="btn btn-soft-primary btn-sm rounded-pill mr-2">View Task</button>
+                                    <button class="btn btn-link btn-sm text-muted p-0">Dismiss</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Read Notifications -->
-                <div class="notification-item">
-                    <div class="d-flex p-3">
-                        <div class="notification-icon bg-soft-success mr-3">
-                            <i class="fa fa-check-circle text-success"></i>
-                        </div>
-                        <div class="notification-content flex-grow-1">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="mb-1 text-muted">Task Completed</h6>
-                                <small class="text-muted">Yesterday</small>
-                            </div>
-                            <p class="mb-1 text-muted">You successfully completed the task "Mow Lawn".</p>
-                            <div class="notification-actions">
-                                <button class="btn btn-link btn-sm text-muted p-0">Dismiss</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="notification-item">
-                    <div class="d-flex p-3">
-                        <div class="notification-icon bg-soft-info mr-3">
-                            <i class="fa fa-comment text-info"></i>
-                        </div>
-                        <div class="notification-content flex-grow-1">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="mb-1 text-muted">New Comment</h6>
-                                <small class="text-muted">3 days ago</small>
-                            </div>
-                            <p class="mb-1 text-muted">John added a comment to your task "Fix Fence": "Please use the new materials in the garage."</p>
-                            <div class="notification-actions">
-                                <button class="btn btn-link btn-sm text-muted p-0">Dismiss</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endwhile; ?>
             </div>
             
             <div class="card-footer bg-light border-top-0 text-center p-3">
@@ -175,6 +125,10 @@ include("../includes/template.php");
         
         .text-warning {
             color: #f7b247 !important;
+        }
+        
+        .text-secondary {
+            color: #8e8e8e !important;
         }
         
         /* Soft Buttons */
