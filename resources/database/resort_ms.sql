@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2025 at 04:19 PM
+-- Generation Time: Mar 11, 2025 at 06:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,12 +46,12 @@ CREATE TABLE IF NOT EXISTS `account` (
 --
 
 INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `last_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-03-10 22:19:13', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
+(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-03-11 22:02:51', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
 (9, 'tolits@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', '2025-03-09 13:13:34', '2025-02-15 05:24:00', '2025-03-04 14:20:11', NULL),
 (10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', NULL, '2025-02-16 10:43:34', '2025-02-27 13:42:18', NULL),
-(12, 'catuera@example.com', '9d2dd1c52280572bf5d0aedd5aeda096fc1f8f54', 'staff', '2025-03-10 21:27:01', '2025-02-23 15:06:58', '2025-03-10 08:09:10', NULL),
-(27, 'lems.leviasherpenaverde@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', '2025-03-10 22:13:56', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
-(38, 'asherxd102345@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-04 13:33:51', '2025-03-06 13:43:42', '2025-03-09 11:35:45'),
+(12, 'catuera@example.com', '9d2dd1c52280572bf5d0aedd5aeda096fc1f8f54', 'staff', '2025-03-11 23:26:56', '2025-02-23 15:06:58', '2025-03-10 08:09:10', NULL),
+(27, 'lems.leviasherpenaverde@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', '2025-03-11 23:04:00', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
+(38, 'asherxd102345@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-04 13:33:51', '2025-03-06 13:43:42', '2025-03-11 23:13:41'),
 (40, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-06 09:39:23', '2025-03-06 01:39:18', '2025-03-06 10:44:32', NULL),
 (45, 'jyren@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'staff', '2025-03-09 15:34:29', '2025-03-09 03:04:02', '2025-03-09 05:40:58', NULL);
 
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `book_room_fk` (`room_id`),
   KEY `book_account_fk` (`account_id`),
   KEY `book_guest_fk` (`guest_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
@@ -120,7 +120,8 @@ CREATE TABLE IF NOT EXISTS `booking` (
 
 INSERT INTO `booking` (`book_id`, `account_id`, `guest_id`, `room_id`, `check_in`, `check_out`, `book_status`, `reminder_sent`, `completion_sent`, `created_at`, `updated_at`) VALUES
 (25, 27, NULL, 20, '2025-03-08 07:00:00', '2025-03-09 05:00:00', 'cancelled', NULL, NULL, '2025-03-06 21:23:43', '2025-03-07 13:23:43'),
-(29, 27, NULL, 21, '2025-03-10 19:00:00', '2025-03-10 05:00:00', 'completed', '2025-03-10 16:05:12', '2025-03-10 16:05:32', '2025-03-08 22:13:56', '2025-03-09 03:36:39');
+(29, 27, NULL, 21, '2025-03-10 19:00:00', '2025-03-10 05:00:00', 'completed', '2025-03-10 16:05:12', '2025-03-10 16:05:32', '2025-03-08 22:13:56', '2025-03-09 03:36:39'),
+(30, 27, NULL, 22, '2025-03-12 19:00:00', '2025-03-13 22:00:00', 'completed', '2025-03-11 23:12:10', NULL, '2025-03-11 23:04:21', '2025-03-11 15:12:55');
 
 -- --------------------------------------------------------
 
@@ -135,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`booking_notif_id`),
   KEY `booking_notif_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_notification`
@@ -143,7 +144,8 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
 
 INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `booking_status`, `Date`) VALUES
 (9, 25, 'pending', '2025-03-07 21:23:43'),
-(13, 29, 'pending', '2025-03-08 22:13:56');
+(13, 29, 'pending', '2025-03-08 22:13:56'),
+(14, 30, 'pending', '2025-03-11 23:04:21');
 
 -- --------------------------------------------------------
 
@@ -290,14 +292,15 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`payment_id`),
   KEY `payment_book_fk` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `payment`
 --
 
 INSERT INTO `payment` (`payment_id`, `book_id`, `amount`, `pay_amount`, `payment_type`, `payment_img`, `transaction_id`, `payment_status`, `created_at`, `updated_at`) VALUES
-(6, 29, 1360.00, 1360.00, 'credit_card', 'pay_67cc50bb27adc3.09603118.png', '09876', 'paid', '2025-03-08 22:14:19', '2025-03-08 22:14:19');
+(6, 29, 1360.00, 1360.00, 'credit_card', 'pay_67cc50bb27adc3.09603118.png', '09876', 'paid', '2025-03-08 22:14:19', '2025-03-08 22:14:19'),
+(7, 30, 1920.00, 1920.00, 'e-wallet', 'pay_67d05109a5fd30.08234857.jpg', '234234', 'pending', '2025-03-11 23:04:41', '2025-03-11 23:04:41');
 
 -- --------------------------------------------------------
 
@@ -325,7 +328,7 @@ CREATE TABLE IF NOT EXISTS `room` (
 INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `description`, `price`, `created_at`, `updated_at`) VALUES
 (20, 'room101', 'standard', 'available', 'i want you all to like this room ', 2500.00, '2025-03-07 09:43:58', '2025-03-07 09:54:32'),
 (21, 'room103', 'standard', 'available', '', 2000.00, '2025-03-07 10:07:11', '2025-03-09 03:22:54'),
-(22, 'room102', 'standard', 'booked', '', 1200.00, '2025-03-07 13:44:19', '2025-03-07 13:44:19');
+(22, 'room102', 'standard', 'available', '', 1200.00, '2025-03-07 13:44:19', '2025-03-07 13:44:19');
 
 -- --------------------------------------------------------
 
@@ -418,23 +421,22 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `title` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `priority` enum('Low','Medium','High') NOT NULL,
-  `status` enum('Pending','In Progress','Completed','Cancelled') NOT NULL DEFAULT 'Pending',
+  `status` enum('Pending','Overdue','Completed') NOT NULL DEFAULT 'Pending',
   `due_date` date NOT NULL,
   `recurrence` enum('None','Daily','Weekly','Monthly') DEFAULT 'None',
   `template_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `template_id` (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=318 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tasks`
 --
 
 INSERT INTO `tasks` (`id`, `title`, `description`, `priority`, `status`, `due_date`, `recurrence`, `template_id`, `created_at`, `updated_at`) VALUES
-(7, 'Clean Pool', 'you guys need to clean the pool every time the resort is under maintenance got it??', 'High', 'Pending', '2025-03-10', 'Daily', 2, '2025-03-10 01:53:36', '2025-03-10 13:43:21'),
-(8, 'clean AC', 'clean the AC do maintenance after customer bookings', 'Medium', 'Pending', '2025-03-15', 'Weekly', 11, '2025-03-10 13:43:53', '2025-03-10 13:43:53');
+(306, 'Clean Pool', 'you guys need to clean the pool every time the resort is under maintenance got it??', 'High', 'Overdue', '2025-03-11', 'Daily', 2, '2025-03-11 17:33:10', '2025-03-11 17:33:42'),
+(317, 'Clean Pool', 'you guys need to clean the pool every time the resort is under maintenance got it??', 'High', 'Pending', '2025-03-12', 'Daily', 2, '2025-03-11 17:58:25', '2025-03-11 17:58:25');
 
 -- --------------------------------------------------------
 
@@ -446,21 +448,21 @@ CREATE TABLE IF NOT EXISTS `task_assignees` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `task_id` int(11) NOT NULL,
   `staff_id` int(11) NOT NULL,
-  `assignee_task` enum('pending','completed','overdue') NOT NULL DEFAULT 'pending',
-  `completion_time` datetime DEFAULT NULL,
+  `assignee_task` enum('Pending','Complete','Overdue') NOT NULL DEFAULT 'Pending',
   PRIMARY KEY (`id`),
-  KEY `task_assignees_ibfk_2` (`staff_id`),
-  KEY `task_assigness_fk_1` (`task_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `task_id` (`task_id`),
+  KEY `task_assigness_fk_1` (`staff_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_assignees`
 --
 
-INSERT INTO `task_assignees` (`id`, `task_id`, `staff_id`, `assignee_task`, `completion_time`) VALUES
-(61, 7, 12, 'overdue', NULL),
-(62, 7, 45, 'overdue', NULL),
-(63, 8, 12, 'completed', '2025-03-10 23:17:02');
+INSERT INTO `task_assignees` (`id`, `task_id`, `staff_id`, `assignee_task`) VALUES
+(25, 306, 12, 'Overdue'),
+(26, 306, 45, 'Overdue'),
+(44, 317, 12, 'Pending'),
+(45, 317, 45, 'Pending');
 
 -- --------------------------------------------------------
 
@@ -478,16 +480,17 @@ CREATE TABLE IF NOT EXISTS `task_notifications` (
   PRIMARY KEY (`id`),
   KEY `task_notifications_ibfk_2` (`staff_id`),
   KEY `task_notification_fk_1` (`task_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_notifications`
 --
 
 INSERT INTO `task_notifications` (`id`, `task_id`, `staff_id`, `message`, `is_read`, `created_at`) VALUES
-(26, 7, 45, 'New task assigned: Clean Pool', 0, '2025-03-10 01:53:36'),
-(29, 7, 12, 'You have been assigned a new task: Clean Pool', 0, '2025-03-10 13:43:21'),
-(30, 8, 12, 'New task assigned: clean AC', 0, '2025-03-10 13:43:53');
+(41, 306, 12, 'New task assigned: Clean Pool', 0, '2025-03-11 17:33:10'),
+(42, 306, 45, 'New task assigned: Clean Pool', 0, '2025-03-11 17:33:10'),
+(57, 317, 12, 'You have a new task: Clean Pool', 0, '2025-03-11 17:58:25'),
+(58, 317, 45, 'You have a new task: Clean Pool', 0, '2025-03-11 17:58:25');
 
 -- --------------------------------------------------------
 
@@ -646,8 +649,8 @@ ALTER TABLE `tasks`
 -- Constraints for table `task_assignees`
 --
 ALTER TABLE `task_assignees`
-  ADD CONSTRAINT `task_assignees_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `task_assigness_fk_1` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `task_assignees_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `task_assigness_fk_1` FOREIGN KEY (`staff_id`) REFERENCES `account` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `task_notifications`
