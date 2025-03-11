@@ -1,5 +1,6 @@
 <?php 
 include("../resources/database/config.php"); 
+include("../admin/includes/system_update.php");
 $id = $_SESSION['ID'];
 
 // Fetch task counts - Fixed status field names
@@ -17,7 +18,7 @@ $overdue_task_result = mysqli_query($conn, $overdue_task_sql);
 $overdue_task_count = mysqli_fetch_assoc($overdue_task_result)['count'];
 
 // Fetch recent tasks
-$recent_tasks_sql = "SELECT t.title, t.due_date, t.status FROM tasks t INNER JOIN task_assignees ta ON t.id = ta.task_id WHERE ta.staff_id = $id ORDER BY t.due_date DESC LIMIT 5";
+$recent_tasks_sql = "SELECT t.title, t.due_date, ta.assignee_task FROM tasks t INNER JOIN task_assignees ta ON t.id = ta.task_id WHERE ta.staff_id = $id ORDER BY t.due_date DESC LIMIT 5";
 $recent_tasks_result = mysqli_query($conn, $recent_tasks_sql);
 
 // Fetch recent notifications
@@ -71,14 +72,11 @@ include("includes/template.php");
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
                     <h6 class="mb-1"><?php echo htmlspecialchars($task['title']); ?></h6>
-                    <small class="text-muted">Due: <?php echo date_format(new DateTime($task['due_date']), 'F j, Y, g:i a'); ?></small>
+                    <small class="text-muted">Due: <?php echo date_format(new DateTime($task['due_date']), 'F j, Y'); ?></small>
                   </div>
                   <?php
-                  // Determine if task is overdue regardless of status
-                  $is_overdue = strtotime($task['due_date']) < time() && $task['status'] != 'completed';
-                  $status = $is_overdue ? 'overdue' : $task['status'];
                   ?>
-                  <span class="status-badge badge-<?php echo strtolower($status); ?>"><?php echo $is_overdue ? 'Overdue' : ucfirst($task['status']); ?></span>
+                  <span class="status-badge badge-<?php echo strtolower($task['assignee_task']); ?>"><?php echo ucfirst($task['assignee_task']); ?></span>
                 </div>
               </div>
             <?php endwhile; ?>

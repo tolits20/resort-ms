@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_query($conn, $sql)) {
         $last_id = mysqli_insert_id($conn); // Get the inserted task_id
         echo "Task inserted successfully with ID: $last_id <br>";
+        mysqli_commit($conn);
     } else {
         die("Error inserting task: " . mysqli_error($conn));
     }
@@ -40,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (mysqli_query($conn, $staff_sql)) {
             echo "Assigned staff ID: $staff_id to task ID: $last_id <br>";
+            mysqli_commit($conn);
         } else {
             die("Error assigning staff: " . mysqli_error($conn));
         }
@@ -48,10 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Insert notifications
     foreach ($assignees as $staff_id) {
         $message = "New task assigned: " . mysqli_real_escape_string($conn, $task['title']);
-        $notification_sql = "INSERT INTO task_notifications (task_id, staff_id, message) VALUES ($last_id, $staff_id, '$message')";
+        echo $notification_sql = "INSERT INTO task_notifications (task_id, staff_id, message) VALUES ($last_id, $staff_id, '$message')";
 
         if (mysqli_query($conn, $notification_sql)) {
             echo "Notification sent to staff ID: $staff_id <br>";
+            mysqli_commit($conn);
         } else {
             die("Error inserting notification: " . mysqli_error($conn));
         }

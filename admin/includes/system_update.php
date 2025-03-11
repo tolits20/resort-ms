@@ -252,11 +252,6 @@ while($check_record=mysqli_fetch_assoc($check_set)){
 
 
 
-
-
-
-
-
 //realtime discount tracking
 $track_query="SELECT 
 (SELECT COUNT(*) FROM discount WHERE discount_start<=NOW() && discount_end>=NOW()) AS active_discount,
@@ -284,6 +279,115 @@ while($check_record=mysqli_fetch_assoc($check_set)){
 
 
 
+try {
+    mysqli_begin_transaction($conn);
 
+    // Step 1: Fetch old tasks that need to be duplicated
+    $fetch_old_tasks = "SELECT id, title, description, priority, recurrence, due_date, template_id FROM tasks 
+                        WHERE recurrence <> 'None' 
+                        AND due_date = DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
+    $old_tasks_result = mysqli_query($conn, $fetch_old_tasks);
+
+    // Store new task IDs
+    $task_mapping = [];
+
+    while ($row = mysqli_fetch_assoc($old_tasks_result)) {
+        // Step 2: Calculate the new due date
+        if ($row['recurrence'] == 'Daily') {
+            $new_due_date = date('Y-m-d', strtotime($row['due_date'] . ' +1 day'));
+        } elseif ($row['recurrence'] == 'Weekly') {
+            $new_due_date = date('Y-m-d', strtotime($row['due_date'] . ' +1 week'));
+        } elseif ($row['recurrence'] == 'Monthly') {
+            $new_due_date = date('Y-m-d', strtotime($row['due_date'] . ' +1 month'));
+        } else {
+            continue;
+        }
+
+        // Step 3: Check if the task already exists
+        $check_task = "SELECT id FROM tasks WHERE title = '{$row['title']}' 
+                        AND description = '{$row['description']}'
+                        AND priority = '{$row['priority']}'
+                        AND due_date = '$new_due_date'
+                        AND recurrence = '{$row['recurrence']}'
+                        LIMIT 1";
+        $task_exists_result = mysqli_query($conn, $check_task);
+
+        if (mysqli_num_rows($task_exists_result) > 0) {
+            continue; // Task already exists, skip inserting
+        }
+
+        // Step 4: Insert new task
+        $insert_task = "INSERT INTO tasks (title, description, priority, status, due_date, recurrence, template_id)
+                        VALUES ('{$row['title']}', '{$row['description']}', '{$row['priority']}', 'Pending', '$new_due_date', '{$row['recurrence']}', '{$row['template_id']}')";
+
+        if (mysqli_query($conn, $insert_task)) {
+            $new_task_id = mysqli_insert_id($conn); // Get newly inserted task ID
+            $task_mapping[$row['id']] = $new_task_id;
+        } else {
+            throw new Exception("Error inserting new task: " . mysqli_error($conn));
+        }
+    }
+
+    // Step 5: Assign staff to new tasks
+    foreach ($task_mapping as $old_task_id => $new_task_id) {
+        $fetch_assignees = "SELECT staff_id FROM task_assignees WHERE task_id = '$old_task_id'";
+        $assignees_result = mysqli_query($conn, $fetch_assignees);
+
+        if ($assignees_result) {
+            while ($assignee = mysqli_fetch_assoc($assignees_result)) {
+                $staff_id = $assignee['staff_id'];
+
+                $assign_task = "INSERT INTO task_assignees (task_id, staff_id, assignee_task)
+                                VALUES ('$new_task_id', '$staff_id', 'Pending')";
+
+                if (!mysqli_query($conn, $assign_task)) {
+                    throw new Exception("Error assigning staff: " . mysqli_error($conn));
+                }
+            }
+        }
+    }
+
+    // Update staff notifications for new tasks
+    foreach ($task_mapping as $old_task_id => $new_task_id) {
+    $fetch_assignees = "SELECT ta.staff_id,t.title FROM task_assignees ta INNER JOIN tasks t WHERE task_id = '$old_task_id' GROUP BY ta.staff_id";
+        $assignees_result = mysqli_query($conn, $fetch_assignees);
+
+        if ($assignees_result) {
+            while ($assignee = mysqli_fetch_assoc($assignees_result)) {
+                $staff_id = $assignee['staff_id'];
+
+                $notif_message = "You have a new task: {$assignee['title']}";
+                $insert_notif = "INSERT INTO task_notifications (task_id, staff_id, message, is_read, created_at)
+                                 VALUES ('$new_task_id', '$staff_id', '$notif_message', 0, NOW())";
+
+                if (!mysqli_query($conn, $insert_notif)) {
+                    throw new Exception("Error inserting notification: " . mysqli_error($conn));
+                }
+            }
+        }
+    }
+
+    // Commit the transaction if all queries are successful
+    mysqli_commit($conn);
+
+} catch (Exception $e) {
+    mysqli_rollback($conn);
+    echo 'Error: ' . $e->getMessage();
+}
+
+
+
+
+
+
+
+$task_complete="UPDATE tasks INNER JOIN task_assignees ta ON tasks.id=ta.task_id SET status='Completed' WHERE ta.assignee_task='completed'";
+$task_complete_set=mysqli_query($conn,$task_complete);
+
+$set_overdue="UPDATE tasks t INNER JOIN task_assignees ta ON t.id=ta.task_id SET t.status='Overdue' WHERE t.status='Pending' AND t.due_date<CURDATE()";
+$set_overdue_set=mysqli_query($conn,$set_overdue);
+
+$set_staff_overdue="UPDATE task_assignees ta INNER JOIN tasks t ON ta.task_id=t.id SET ta.assignee_task='overdue' WHERE t.status='Overdue' AND ta.assignee_task='pending'";
+$set_staff_overdue_set=mysqli_query($conn,$set_staff_overdue);
 
 ?>

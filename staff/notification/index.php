@@ -1,6 +1,8 @@
 <?php 
 include("../../resources/database/config.php"); 
 include("../includes/template.php");
+include("../../admin/includes/system_update.php");
+
 
 $id = $_SESSION['ID'];
 

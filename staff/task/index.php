@@ -1,6 +1,8 @@
 <?php 
 include("../../resources/database/config.php"); 
 include('../includes/template.php');
+// include("../../admin/includes/system_update.php");
+
 
 $id = $_SESSION['ID'];
 
@@ -10,9 +12,9 @@ $total_tasks_sql = "SELECT COUNT(*) AS count FROM
 $total_tasks_result = mysqli_query($conn, $total_tasks_sql);
 $total_tasks_count = mysqli_fetch_assoc($total_tasks_result)['count'];
 
-$overdue_tasks_sql = "SELECT COUNT(*) AS count FROM
+$overdue_tasks_sql = "SELECT COUNT(ta.id) AS count FROM
  tasks t INNER JOIN task_assignees ta ON t.id = ta.task_id 
- WHERE ta.staff_id = $id AND t.due_date < NOW() AND ta.assignee_task = 'overdue'";
+ WHERE ta.staff_id = $id AND ta.assignee_task = 'overdue'";
 $overdue_tasks_result = mysqli_query($conn, $overdue_tasks_sql);
 $overdue_tasks_count = mysqli_fetch_assoc($overdue_tasks_result)['count'];
 
@@ -25,7 +27,7 @@ $pending_tasks_count = mysqli_fetch_assoc($pending_tasks_result)['count'];
 // Fetch tasks
 $tasks_sql = "SELECT t.id, t.title, t.due_date, t.priority, 
               CASE 
-                WHEN t.due_date < NOW() AND ta.assignee_task != 'completed' THEN 'overdue' 
+                WHEN t.due_date < CURDATE() AND ta.assignee_task != 'completed' THEN 'overdue' 
                 ELSE ta.assignee_task 
               END AS display_status 
               FROM tasks t 
