@@ -1,5 +1,6 @@
 <?php
 include ("../../resources/database/config.php");
+include("../../admin/includes/system_update.php");
 
 // Fetch rooms with one image per room
 $sql = "SELECT r.room_id, r.room_code, r.room_type, r.price, 

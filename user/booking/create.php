@@ -1,5 +1,7 @@
 <?php
 require '../../resources/database/config.php';
+include("../../admin/includes/system_update.php");
+
 
 // Ensure a room is selected
 

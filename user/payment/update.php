@@ -1,6 +1,8 @@
 <?php
 // Include database connection
 include ('../../resources/database/config.php');
+include("../../admin/includes/system_update.php");
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {

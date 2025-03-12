@@ -1,5 +1,6 @@
 <?php
 require '../../resources/database/config.php';
+include("../../admin/includes/system_update.php");
 
 // Ensure a booking ID is provided
 if (!isset($_GET['booking_id']) || empty($_GET['booking_id'])) {

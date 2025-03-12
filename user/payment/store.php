@@ -1,9 +1,6 @@
 <?php
-// Start session
-session_start();
-
-// Include database connection
 include ('../../resources/database/config.php');
+include("../../admin/includes/system_update.php");
 
 if (!isset($_SESSION['ID'])) {
     header("location: ../../login.php");
@@ -81,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->close();
 
         // Redirect to a success page or show a success message
-        echo "<script>alert('Payment submitted successfully.'); window.location.href='success.php';</script>";
+        echo "<script>alert('Payment submitted successfully.'); window.location.href='index.php';</script>";
     } catch (Exception $e) {
         echo "<script>alert('Error: " . $e->getMessage() . "'); window.history.back();</script>";
     }

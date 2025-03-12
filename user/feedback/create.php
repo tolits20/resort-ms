@@ -1,6 +1,7 @@
 <?php
 include('../../resources/database/config.php');
 include('../bootstrap.php');
+include("../../admin/includes/system_update.php");
 
 if (!isset($_SESSION['ID'])) {
     header("location: ../login.php");

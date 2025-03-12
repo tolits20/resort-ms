@@ -1,5 +1,6 @@
 <?php
 require '../../resources/database/config.php';
+include("../../admin/includes/system_update.php");
 
 // Ensure all required POST data is provided
 if (!isset($_POST['booking_id']) || !isset($_POST['room_id']) || !isset($_POST['check_in']) || !isset($_POST['check_out']) || !isset($_POST['checkInTime']) || !isset($_POST['checkOutTime'])) {
