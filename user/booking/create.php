@@ -58,7 +58,7 @@ $imageResult = $stmt->get_result();
 $room_images = $imageResult->fetch_all(MYSQLI_ASSOC);
 
 // Fetch feedback for the room
-$feedbackQuery = "SELECT a.username, f.rating, f.created_at, b.book_id, b.account_id 
+$feedbackQuery = "SELECT a.username, f.rating, f.comment, f.created_at, b.book_id, b.account_id 
 FROM feedback f 
 INNER JOIN booking b ON f.book_id = b.book_id
 INNER JOIN account a ON b.account_id = a.account_id 
@@ -305,11 +305,11 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
         <div class="price-box">
             <p>Price: 
                 <?php if ($room['discount_percentage'] > 0): ?>
-                    <span class="discounted">$<?= number_format($room['price'], 2); ?></span>
-                    <strong  id="dynamic-price">$<?= number_format($room['discounted_price'], 2); ?></strong>
+                    <span class="discounted">₱<?= number_format($room['price'], 2); ?></span>
+                    <strong  id="dynamic-price">₱<?= number_format($room['discounted_price'], 2); ?></strong>
                     (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
                 <?php else: ?>
-                    <strong id="dynamic-price">$<?= number_format($room['price'], 2); ?></strong>
+                    <strong id="dynamic-price">₱<?= number_format($room['price'], 2); ?></strong>
                 <?php endif; ?>
             </p>
         </div>
