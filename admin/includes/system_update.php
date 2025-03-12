@@ -238,7 +238,7 @@ $check="SELECT * FROM booking";
 $check_set=mysqli_query($conn,$check);
 $today = date("Y-m-d H:i:s");
 while($check_record=mysqli_fetch_assoc($check_set)){
-    if($check_record['check_out']>=$today && $check_record['book_status']=="confirmed"){
+    if($check_record['check_out']<=$today && $check_record['book_status']=="confirmed"){
         echo $set="UPDATE booking SET book_status='completed' WHERE book_id={$check_record['book_id']}";
         $set1=mysqli_query($conn,$set); 
         if(mysqli_affected_rows($conn)>0){
