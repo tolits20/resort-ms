@@ -213,7 +213,7 @@ if(!empty($_GET['create'])) {
 
                 <div class="form-group">
                     <label for="contact" class="form-label">Contact Number</label>
-                    <input type="tel" id="contact" name="contact" class="form-control" pattern="[0-9]{10}" required>
+                    <input type="tel" id="contact" name="contact" class="form-control" pattern="[0-9]{11}" required>
                     <div class="invalid-feedback">Please enter a valid 10-digit phone number</div>
                 </div>
             </div>
@@ -238,7 +238,7 @@ if(!empty($_GET['create'])) {
                     <div class="invalid-feedback">Passwords do not match</div>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="role" class="form-label">Account Type</label>
                     <select id="role" name="role" class="form-select" required>
                         <option value="">Select Account Type</option>
@@ -246,7 +246,7 @@ if(!empty($_GET['create'])) {
                         <option value="admin">Administrator</option>
                         <option value="staff">Staff</option>
                     </select>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <label for="file" class="form-label">Profile Picture (Optional)</label>

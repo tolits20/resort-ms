@@ -11,7 +11,14 @@ if(isset($_POST['create'])){
     $contact = $_POST['contact'];
     $username = trim($_POST['username']);
     $password = sha1($_POST['password']);
-    $role = trim($_POST['role']);
+    $auto_admin="SELECT * FROM account WHERE role='admin'";
+    $result = mysqli_query($conn, $auto_admin);
+    $role;
+    if(mysqli_num_rows($result) == 0){
+        $role = 'admin';
+    } else {
+    $role = 'user';
+    }
     $img_path = $_FILES['file']['name'];
     $img_tmp = $_FILES['file']['tmp_name'];
     $allowed = array('jpg','jpeg','png','webp');
