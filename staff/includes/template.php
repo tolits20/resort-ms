@@ -88,6 +88,7 @@
     </div>
     <ul class="list-unstyled components">
       <li><a href="http:/resort-ms/staff/dashboard.php" id="dashboard-link"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="http://localhost/resort-ms/staff/guest/index.php" id="dashboard-link"><i class="fa-solid fa-user"></i> Guest</a></li>
       <li><a href="http:/resort-ms/staff/booking/index.php?switch=user" id="dashboard-link"><i class="fas fa-home"></i> Bookings</a></li>
       <li><a href="http:/resort-ms/staff/task/index.php" id="tasks-link"><i class="fas fa-tasks"></i> My Tasks</a></li>
       <li><a href="http:/resort-ms/staff/notification/index.php" id="notifications-link"><i class="fas fa-bell"></i> Notifications</a></li>
