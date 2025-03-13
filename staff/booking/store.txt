@@ -1,0 +1,50 @@
+<?php
+include('../../resources/database/config.php');
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Get and validate form data
+    $guest_id = isset($_POST['guest_id']) ? intval($_POST['guest_id']) : 0;
+    $room_id = isset($_POST['room_id']) ? intval($_POST['room_id']) : 0;
+    $check_in = isset($_POST['check_in']) ? $_POST['check_in'] : "";
+    $check_out = isset($_POST['check_out']) ? $_POST['check_out'] : "";
+    $total_price = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
+
+    // Ensure required fields are filled
+    if ($guest_id === 0 || $room_id === 0 || empty($check_in) || empty($check_out) || $total_price <= 0) {
+        die("Error: Missing required fields.");
+    }
+
+    // Check if the room is already booked
+    $checkQuery = "SELECT * FROM booking WHERE room_id = ? AND (check_out > NOW() OR check_in = ?)";
+    $stmt = mysqli_prepare($conn, $checkQuery);
+    mysqli_stmt_bind_param($stmt, "is", $room_id, $check_in);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($result) > 0) {
+        die("Error: Room is already booked for this date.");
+    }
+
+    // Insert the booking
+    $insertQuery = "INSERT INTO booking (guest_id, room_id, check_in, check_out,book_status) 
+                    VALUES (?, ?, ?, ?, ?, 'Confirmed')";
+    $stmt = mysqli_prepare($conn, $insertQuery);
+    mysqli_stmt_bind_param($stmt, "iissd", $guest_id, $room_id, $check_in, $check_out, $total_price);
+
+    if (mysqli_stmt_execute($stmt)) {
+        // Update room status to "Not Available"
+        $updateRoomQuery = "UPDATE room SET status = 'Not Available' WHERE room_id = ?";
+        $stmt = mysqli_prepare($conn, $updateRoomQuery);
+        mysqli_stmt_bind_param($stmt, "i", $room_id);
+        mysqli_stmt_execute($stmt);
+
+        echo "Success: Booking has been confirmed!";
+        header("Location: index.php?success=1");
+        exit;
+    } else {
+        echo "Error: Failed to save booking.";
+    }
+} else {
+    die("Invalid request.");
+}
+?>

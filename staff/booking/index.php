@@ -70,12 +70,8 @@ $switch=$_SESSION['identifier'];
                                 <td><span class='status-badge status-{$row['status']}'>{$row['status']}</span></td>
                                 <td>
                                     <div class='action-buttons'>
-                                        <a href='../payment/index.php?id={$row['id']}' class='action-btn payment-btn' title='Process Payment'>
-                                            <i class='fas fa-credit-card'></i>
-                                        </a>
-                                        <a href='edit.php?switch=$switch&&id={$row['id']}' class='action-btn edit-btn' title='Edit Booking'>
-                                            <i class='fas fa-edit'></i>
-                                        </a>
+
+
                                         <button class='action-btn delete-btn' type='button' onclick='openPopup({$row['id']})' title='Delete Booking'>
                                             <i class='fas fa-trash'></i>
                                         </button>

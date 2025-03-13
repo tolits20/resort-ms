@@ -1,6 +1,6 @@
 <?php
-include('../../resources/database/config.php');
-include("../../admin/includes/system_update.php"); 
+include ('../../resources/database/config.php');
+include("../../admin/includes/system_update.php");
 
 if (!isset($_SESSION['ID'])) {
     header("location: ../../login.php");
@@ -8,60 +8,52 @@ if (!isset($_SESSION['ID'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize input data
-    $guest_id = mysqli_real_escape_string($conn, $_POST['guest_id']);
-    $room_id = mysqli_real_escape_string($conn, $_POST['room_id']);
-    $check_in = mysqli_real_escape_string($conn, $_POST['check_in']);
-    $check_out = mysqli_real_escape_string($conn, $_POST['check_out']);
-    $created_at = date('Y-m-d H:i:s');
-    $status = 'Pending';
-
-    // Calculate number of nights and total amount
-    $check_in_obj = new DateTime($check_in);
-    $check_out_obj = new DateTime($check_out);
-    $interval = $check_in_obj->diff($check_out_obj);
-    $nights = $interval->days;
-
-    // Get room price
-    $room_query = "SELECT price FROM rooms WHERE id = '$room_id'";
-    $room_result = mysqli_query($conn, $room_query);
-    $room = mysqli_fetch_assoc($room_result);
-    $total_amount = $nights * $room['price'];
-
-    // Start transaction
-    mysqli_begin_transaction($conn);
-
     try {
-        // Insert booking
-        $booking_query = "INSERT INTO bookings (guest_id, room_id, check_in, check_out, nights, total_amount, status, created_at) 
-                         VALUES ('$guest_id', '$room_id', '$check_in', '$check_out', '$nights', '$total_amount', '$status', '$created_at')";
-        
-        mysqli_query($conn, $booking_query);
+        $staff_id = $_SESSION['ID'];
+        $guest_id = intval($_POST['guest_id']);
+        $room_id = intval($_POST['room_id']);
+        $check_in = $_POST['check_in'];
+        $check_out = $_POST['check_out'];
+        $check_in_time = $_POST['checkInTime'];
+        $check_out_time = $_POST['checkOutTime'];
+        $amount = floatval($_POST['updated_price']);
+        $book_status = "confirmed";
 
-        // Update room status
-        $update_room = "UPDATE rooms SET status = 'Booked' WHERE id = '$room_id'";
-        mysqli_query($conn, $update_room);
+        if (!$room_id || !$guest_id || empty($check_in) || empty($check_in_time) || empty($check_out) || empty($check_out_time)) {
+            throw new Exception("All booking fields are required.");
+        }
 
-        // Update guest status
-        $update_guest = "UPDATE guests SET status = 'Booked' WHERE id = '$guest_id'";
-        mysqli_query($conn, $update_guest);
+        $check_in_datetime = "$check_in $check_in_time";
+        $check_out_datetime = "$check_out $check_out_time";
+
+        // Start transaction
+        $conn->begin_transaction();
+
+        // Insert guest booking
+        $sql = "INSERT INTO booking (guest_id, room_id, check_in, check_out, book_status, created_at) 
+        VALUES (?, ?, ?, ?, ?, NOW())";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("iisss", $guest_id, $room_id, $check_in_datetime, $check_out_datetime, $book_status);
+
+        $stmt->execute();
+        header("location: http://localhost/resort-ms/staff/booking/index.php?switch=guest");
+        if ($stmt->affected_rows == 0) {
+            throw new Exception("Failed to insert booking.");
+        }
+
+        $last_id = $stmt->insert_id;
+
+
+
 
         // Commit transaction
-        mysqli_commit($conn);
+        $conn->commit();
 
-        $_SESSION['success'] = "Booking created successfully!";
-        header("Location: index.php");
         exit;
-
     } catch (Exception $e) {
-        // Rollback transaction on error
-        mysqli_rollback($conn);
-        $_SESSION['error'] = "Error: " . $e->getMessage();
-        header("Location: create.php?guest_id=" . $guest_id);
-        exit;
+        // Rollback transaction in case of error
+        $conn->rollback();
+        echo "<script>alert('Error: " . $e->getMessage() . "'); window.history.back();</script>";
     }
-} else {
-    header("Location: create.php");
-    exit;
 }
 ?>
