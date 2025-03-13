@@ -65,11 +65,11 @@
             <div class="footer-column">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
-                    <li><a href="../view/home.php">Home</a></li>
-                    <li><a href="../booking/rooms.php">Rooms</a></li>
-                    <li><a href="../booking/index.ph">Bookings</a></li>
-                    <li><a href="../payment/index.php">Payment</a></li>
-                    <li><a href="../feedback/index.php">Feedback</a></li>
+                    <li><a href="http://localhost/resort-ms/user/view/home.php">Home</a></li>
+                    <li><a href="http://localhost/resort-ms/user/booking/rooms.php">Rooms</a></li>
+                    <li><a href="http://localhost/resort-ms/user/booking/index.php">Bookings</a></li>
+                    <li><a href="http://localhost/resort-ms/user/payment/index.php">Payment</a></li>
+                    <li><a href="http://localhost/resort-ms/user/feedback/index.php">Feedback</a></li>
                 </ul>
             </div>
             <div class="footer-column">
