@@ -108,9 +108,9 @@ function updateMetrics() {
         if (!data.success) throw new Error('Failed to fetch data from server.');
 
         document.getElementById('total-bookings').textContent = data.data.total_bookings;
-        document.getElementById('total-earnings').textContent = '$' + parseFloat(data.data.total_earnings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        document.getElementById('total-discounts').textContent = '$' + parseFloat(data.data.total_discounts).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        document.getElementById('pending-payments').textContent = '$' + parseFloat(data.data.pending_payments).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('total-earnings').textContent = '₱' + parseFloat(data.data.total_earnings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('total-discounts').textContent = '₱' + parseFloat(data.data.total_discounts).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('pending-payments').textContent = '₱' + parseFloat(data.data.pending_payments).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
         window.chartData = data.data.chart_data;
         updateChart('Total Bookings', window.chartData);

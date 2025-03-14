@@ -4,6 +4,7 @@ include('includes/page_authentication.php');
 include('includes/template.php');
 include("includes/system_update.php");
 
+// Count new customers
 $sql="SELECT COUNT(account_id) as 'cnew' 
       FROM account 
       INNER JOIN user USING(account_id)
@@ -11,6 +12,7 @@ $sql="SELECT COUNT(account_id) as 'cnew'
 $result=mysqli_query($conn,$sql);
 $new_customer=mysqli_fetch_assoc($result);
 
+// Count notifications
 $ctmr_count_notif="SELECT 
     (SELECT COUNT(*) 
      FROM account
@@ -45,46 +47,38 @@ $bookings=mysqli_fetch_assoc($result2);
 
 // Fetch notifications for the last 7 days
 $_notif="SELECT 
-    'customer' as indicator, 
-    CONCAT(user.fname, ' ', user.lname) AS name,
-    account_notification.account_notification AS status,
-    account.created_at as c_created,
-    account.updated_at as c_updated,
-    account_notification.Date 
-FROM account
-INNER JOIN user USING(account_id)
-INNER JOIN account_notification USING(account_id)
-WHERE DATE(account_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+    SUM(total_notifications) AS total_unread_notifications
+FROM (
+    SELECT COUNT(*) AS total_notifications
+    FROM account_notification
+    WHERE DATE(account_notification.Date) >= CURDATE()  
+    AND is_read = 1
 
-UNION
+    UNION ALL
 
-SELECT 
-    'room' as indicator, 	
-    room.room_code AS name, 
-    room_notification.room_notification AS status,
-    created_at as r_created,
-    updated_at as r_updated,
-    room_notification.Date 
-FROM room
-INNER JOIN room_notification USING(room_id)
-WHERE DATE(room_notification.Date) >= CURDATE() - INTERVAL 2 DAY
+    SELECT COUNT(*) AS total_notifications
+    FROM room_notification
+    WHERE DATE(room_notification.Date) >= CURDATE() 
+    AND is_read = 1
 
-UNION 
+    UNION ALL
 
-SELECT
-    'book' as indicator, 
-    CONCAT(user.fname, ' ', user.lname) AS name,
-    booking_notification.booking_status,
-    booking.check_in,
-    booking.check_out,
-    booking.created_at 
-FROM account 
-INNER JOIN user USING(account_id) 
-INNER JOIN booking USING(account_id)
-INNER JOIN booking_notification USING(book_id)
-WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY   
-ORDER BY `Date` DESC";
+    SELECT COUNT(DISTINCT tasks.title) AS total_notifications
+    FROM task_notifications
+    INNER JOIN tasks ON tasks.id = task_notifications.task_id
+    WHERE DATE(tasks.created_at) >= CURDATE()  
+    AND task_notifications.is_read = 1
+
+    UNION ALL
+
+    SELECT COUNT(*) AS total_notifications
+    FROM booking_notification
+    INNER JOIN booking ON booking_notification.book_id = booking.book_id
+    WHERE DATE(booking_notification.Date) >= CURDATE() 
+    AND booking_notification.is_read = 1
+) AS notification_counts;";
 $notif=mysqli_query($conn,$_notif);
+$notif_count=mysqli_fetch_assoc($notif);
 ?>
 
 <style>
@@ -437,28 +431,28 @@ $notif=mysqli_query($conn,$_notif);
             <i class="fas fa-user"></i>
             <h3>New Customers</h3>
             <p><?php echo $new_customer['cnew'] ?></p>
-            <a href="customers.php" class="card-link" aria-label="View customers"></a>
+            <a href="customer/index.php" class="card-link" aria-label="View customers"></a>
         </div>
 
         <div class="card card-rooms" onclick="openModal('rooms-modal')">
             <i class="fas fa-bed"></i>
             <h3>Rooms Available</h3>
             <p><?php echo (empty($available_room['available']) ? 0 : $available_room['available']) ?></p>
-            <a href="rooms.php" class="card-link" aria-label="View rooms"></a>
+            <a href="rooms/index.php" class="card-link" aria-label="View rooms"></a>
         </div>
 
         <div class="card card-bookings" onclick="openModal('bookings-modal')">
             <i class="fas fa-calendar-check"></i>
             <h3>Bookings</h3>
             <p><?php echo (empty($bookings['books']) ? 0 : $bookings['books']) ?></p>
-            <a href="bookings.php" class="card-link" aria-label="View bookings"></a>
+            <a href="booking/index.php" class="card-link" aria-label="View bookings"></a>
         </div>
 
         <div class="card card-notifications" onclick="openModal('notifications-modal')">
             <i class="fas fa-bell"></i>
             <h3>Notifications</h3>
-            <p><?php echo $c_final_count['total_count'] ?></p>
-            <a href="notifications.php" class="card-link" aria-label="View notifications"></a>
+            <p><?php echo $notif_count['total_unread_notifications'] ?></p>
+            <a href="notification.php" class="card-link" aria-label="View notifications"></a>
         </div>
     </div>
 
@@ -486,3 +480,38 @@ $notif=mysqli_query($conn,$_notif);
                 <i class="fas fa-trash"></i>
                 <p>Recently Deleted</p>
             </a>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div id="notifications-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Notifications</h2>
+                <span class="modal-close" onclick="closeModal('notifications-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <?php while ($notification = mysqli_fetch_assoc($notif)): ?>
+                    <div class="notification-item <?php echo $notification['indicator']; ?>">
+                        <i class="fas fa-info-circle"></i>
+                        <span><?php echo $notification['name']; ?> - <?php echo $notification['status']; ?></span>
+                        <small class="text-muted"><?php echo date('F j, Y, g:i a', strtotime($notification['Date'])); ?></small>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('notifications-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+</script>
