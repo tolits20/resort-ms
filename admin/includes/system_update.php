@@ -259,7 +259,22 @@ while($check_record=mysqli_fetch_assoc($check_set)){
 
 
 
-//auto set of booked of room (Update everyday)
+// Auto set room status to "booked" if the current date is within the check-in and check-out period
+$room_status = "SELECT DISTINCT room_id FROM booking WHERE NOW() BETWEEN booking.check_in AND booking.check_out";
+$notif = mysqli_query($conn, $room_status);
+if ($notif) {
+    $room_ids = [];
+    while ($status = mysqli_fetch_assoc($notif)) {
+        $room_ids[] = $status['room_id']; // Store room_id in an array
+    }
+    
+    if (!empty($room_ids)) {
+        // Convert room_ids to a comma-separated string
+        $room_id_list = implode(',', $room_ids);
+        $room_update = "UPDATE room SET room_status='booked' WHERE room_id IN ($room_id_list)";
+        mysqli_query($conn, $room_update);
+    }
+}
 
 
 
