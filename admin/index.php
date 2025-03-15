@@ -12,27 +12,6 @@ $sql="SELECT COUNT(account_id) as 'cnew'
 $result=mysqli_query($conn,$sql);
 $new_customer=mysqli_fetch_assoc($result);
 
-// Count notifications
-$ctmr_count_notif="SELECT 
-    (SELECT COUNT(*) 
-     FROM account
-     INNER JOIN user USING(account_id)
-     INNER JOIN account_notification USING(account_id)
-     WHERE DATE(account_notification.Date) >= CURDATE() - INTERVAL 2 DAY
-    ) 
-    + 
-    (SELECT COUNT(*) 
-     FROM room
-     INNER JOIN room_notification USING(room_id)
-     WHERE DATE(room_notification.Date) >= CURDATE() - INTERVAL 2 DAY
-    ) +
-    (SELECT COUNT(*)
-     FROM booking_notification
-     WHERE DATE(booking_notification.Date) >= CURDATE() - INTERVAL 2 DAY
-    ) 
-AS total_count";
-$c_count=mysqli_query($conn,$ctmr_count_notif);
-$c_final_count=mysqli_fetch_assoc($c_count);
 
 // Count available rooms
 $sql1="SELECT COUNT(room_id) as 'available' FROM room INNER JOIN booking USING(room_id)
@@ -51,31 +30,27 @@ $_notif="SELECT
 FROM (
     SELECT COUNT(*) AS total_notifications
     FROM account_notification
-    WHERE DATE(account_notification.Date) >= CURDATE()  
-    AND is_read = 1
+    WHERE  is_read = 1
 
     UNION ALL
 
     SELECT COUNT(*) AS total_notifications
     FROM room_notification
-    WHERE DATE(room_notification.Date) >= CURDATE() 
-    AND is_read = 1
+    WHERE  is_read = 1
 
     UNION ALL
 
-    SELECT COUNT(DISTINCT tasks.title) AS total_notifications
+    SELECT COUNT(tasks.title) AS total_notifications
     FROM task_notifications
     INNER JOIN tasks ON tasks.id = task_notifications.task_id
-    WHERE DATE(tasks.created_at) >= CURDATE()  
-    AND task_notifications.is_read = 1
+    WHERE  task_notifications.is_read = 1
 
     UNION ALL
 
     SELECT COUNT(*) AS total_notifications
     FROM booking_notification
     INNER JOIN booking ON booking_notification.book_id = booking.book_id
-    WHERE DATE(booking_notification.Date) >= CURDATE() 
-    AND booking_notification.is_read = 1
+    WHERE booking_notification.is_read = 1
 ) AS notification_counts;";
 $notif=mysqli_query($conn,$_notif);
 $notif_count=mysqli_fetch_assoc($notif);

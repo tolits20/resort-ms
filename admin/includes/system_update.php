@@ -230,6 +230,7 @@ while ($row = mysqli_fetch_assoc($result2)) {
     echo 'Error: ' . $e->getMessage();
 }
 
+//auto booked when meets the check_in date
 
 
 
@@ -381,7 +382,7 @@ try {
 
 
 
-$task_complete="UPDATE tasks INNER JOIN task_assignees ta ON tasks.id=ta.task_id SET status='Completed' WHERE ta.assignee_task='completed'";
+$task_complete="UPDATE tasks INNER JOIN task_assignees ta ON tasks.id=ta.task_id SET status='Completed' WHERE ta.assignee_task='Complete' AND tasks.status='Pending'";
 $task_complete_set=mysqli_query($conn,$task_complete);
 
 $set_overdue="UPDATE tasks t INNER JOIN task_assignees ta ON t.id=ta.task_id SET t.status='Overdue' WHERE t.status='Pending' AND t.due_date<CURDATE()";

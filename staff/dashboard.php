@@ -4,11 +4,11 @@ include("../admin/includes/system_update.php");
 $id = $_SESSION['ID'];
 
 // Fetch task counts - Fixed status field names
-$pending_task_sql = "SELECT COUNT(*) AS count FROM tasks t INNER JOIN task_assignees ta ON t.id = ta.task_id WHERE ta.staff_id = $id AND ta.assignee_task = 'pending'";
+$pending_task_sql = "SELECT COUNT(*) AS count FROM tasks t INNER JOIN task_assignees ta ON t.id = ta.task_id WHERE ta.staff_id = $id AND ta.assignee_task = 'Pending'";
 $pending_task_result = mysqli_query($conn, $pending_task_sql);
 $pending_task_count = mysqli_fetch_assoc($pending_task_result)['count'];
 
-$completed_task_sql = "SELECT COUNT(*) AS count FROM tasks t INNER JOIN task_assignees ta ON t.id = ta.task_id WHERE ta.staff_id = $id AND ta.assignee_task = 'completed'";
+$completed_task_sql = "SELECT COUNT(*) AS count FROM tasks t INNER JOIN task_assignees ta ON t.id = ta.task_id WHERE ta.staff_id = $id AND ta.assignee_task = 'Complete'";
 $completed_task_result = mysqli_query($conn, $completed_task_sql);
 $completed_task_count = mysqli_fetch_assoc($completed_task_result)['count'];
 

@@ -27,7 +27,7 @@ $pending_tasks_count = mysqli_fetch_assoc($pending_tasks_result)['count'];
 // Fetch tasks
 $tasks_sql = "SELECT t.id, t.title, t.due_date, t.priority, 
               CASE 
-                WHEN t.due_date < CURDATE() AND ta.assignee_task != 'completed' THEN 'overdue' 
+                WHEN t.due_date < CURDATE() AND ta.assignee_task != 'Complete' THEN 'overdue' 
                 ELSE ta.assignee_task 
               END AS display_status 
               FROM tasks t 
@@ -91,7 +91,7 @@ $tasks_result = mysqli_query($conn, $tasks_sql);
                   <?php 
                     $due_date = new DateTime($task['due_date']);
                     $formatted_due_date = $due_date->format('F j, Y, g:i a');
-                    $badge_class = ($due_date < new DateTime() && $task['display_status'] != 'completed') ? 'badge-soft-danger' : 'badge-soft-success';
+                    $badge_class = ($due_date < new DateTime() && $task['display_status'] != 'Complete') ? 'badge-soft-danger' : 'badge-soft-success';
                   ?>
                   <span class="badge <?php echo $badge_class; ?> p-2"><?php echo $formatted_due_date; ?></span>
                 </td>
@@ -105,7 +105,7 @@ $tasks_result = mysqli_query($conn, $tasks_sql);
                   <button class="btn btn-soft-success btn-sm rounded-pill mr-1" 
                           onclick="window.location.href='update_task.php?id=<?php echo $task['id']; ?>'" 
                           title="Mark as Complete" 
-                          <?php echo ($task['display_status'] == 'overdue' || $task['display_status'] == 'completed') ? 'disabled' : ''; ?>>
+                          <?php echo ($task['display_status'] == 'overdue' || $task['display_status'] == 'Complete') ? 'disabled' : ''; ?>>
                     Complete
                   </button>
                   <button class="btn btn-soft-info btn-sm rounded-pill" title="View Details">Details</button>
