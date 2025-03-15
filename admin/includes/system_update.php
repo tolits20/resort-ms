@@ -235,7 +235,7 @@ while ($row = mysqli_fetch_assoc($result2)) {
 
 
 //booking real time tracking and update
-$check="SELECT * FROM booking";
+$check="SELECT * FROM booking INNER JOIN room USING(room_id)";
 $check_set=mysqli_query($conn,$check);
 $today = date("Y-m-d H:i:s");
 while($check_record=mysqli_fetch_assoc($check_set)){
@@ -246,10 +246,21 @@ while($check_record=mysqli_fetch_assoc($check_set)){
            echo $set2="UPDATE room SET room_status='available' WHERE room_id={$check_record['room_id']}";
             if (!mysqli_query($conn, $set2)) {
                 echo "Error updating room status: " . mysqli_error($conn);
+            }else{
+                $message="'Room #[{$check_record['room_code']}] is now availble'";
+                $room_notif="INSERT INTO room_notification(room_id,message,Date)Values({$check_record['room_id']},$message,NOW())";
+                $confirm_notif=mysqli_query($conn,$room_notif);
+                
             }
         }
     }
 }
+
+
+
+
+//auto set of booked of room (Update everyday)
+
 
 
 

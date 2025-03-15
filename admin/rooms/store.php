@@ -22,7 +22,8 @@ try{
     mysqli_stmt_bind_param($stmt1,'sssi',$room_num,$type,$status,$price);
     mysqli_stmt_execute($stmt1);
     $last_id=mysqli_insert_id($conn);
-    $notif="INSERT INTO room_notification(room_id,room_notification) Values($last_id,'create')";
+    $message="'$room_num added to the system successfully'";
+    $notif="INSERT INTO room_notification(room_id,message) Values($last_id,$message)";
     if(mysqli_stmt_affected_rows($stmt1)>0 && mysqli_query($conn,$notif)){
        if(!empty($_FILES['images']['name'][0])){
             $locaton="../../resources/assets/images/";

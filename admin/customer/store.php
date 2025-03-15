@@ -71,8 +71,8 @@ if(isset($_POST['create'])){
                 $stmt2 = mysqli_prepare($conn, $sql2);
                 mysqli_stmt_bind_param($stmt2, 'issisis', $last_id, $fname, $lname, $age, $gender, $contact, $newfile);
                 mysqli_stmt_execute($stmt2);
-
-                $notif = "INSERT INTO account_notification(account_id,account_notification) VALUES ($last_id,'create')";
+                $message="'New User $fname $lname Registered!'";
+               echo $notif = "INSERT INTO account_notification(account_id,message) VALUES ($last_id,$message)";
 
                 if(mysqli_stmt_affected_rows($stmt2) > 0 && mysqli_query($conn, $notif)) {
                     $_SESSION['create_success'] = 'yes';

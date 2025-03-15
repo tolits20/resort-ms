@@ -74,8 +74,8 @@ if(isset($_POST['update'])){
                 $sql2 = "UPDATE user SET fname=?, lname=?, age=?, gender=?, contact=? WHERE account_id=?";
                 $stmt2 = mysqli_prepare($conn, $sql2);
                 mysqli_stmt_bind_param($stmt2, 'ssissi', $fname, $lname, $age, $gender, $contact, $id);
-
-                $notif = "INSERT INTO account_notification(account_id, account_notification) VALUES ($id, 'update')";
+                $message="'$fname $lname Account is Updated Succesfully'";
+                $notif = "INSERT INTO account_notification(account_id, message) VALUES ($id, $message)";
         
                 if(mysqli_stmt_execute($stmt2) && mysqli_query($conn, $notif)) {
                     mysqli_commit($conn);

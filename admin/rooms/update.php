@@ -16,7 +16,8 @@ if(isset($_POST['update'])){
     try{
         mysqli_begin_transaction($conn);
         $sql1="UPDATE room SET room_code=?, room_type=?, room_status=?,description=?, price=?, updated_at=now() WHERE room_id=?";
-        $notif="INSERT INTO room_notification(room_id,room_notification) Values($id,'update')";
+        $message="'Details for Room #[$code] have been modified'";
+        $notif="INSERT INTO room_notification(room_id,message) Values($id,$message)";
         $stmt1=mysqli_prepare($conn,$sql1);
         mysqli_stmt_bind_param($stmt1,'ssssii',$code,$type,$status,$description,$price,$id);
         mysqli_stmt_execute($stmt1);
