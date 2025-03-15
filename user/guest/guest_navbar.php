@@ -112,7 +112,7 @@
             <i class="fas fa-bed"></i>
             <span>Rooms</span>
         </a>
-        <a href="http://localhost/resort-ms/user/feedback/index.php" class="nav-link">
+        <a href="http://localhost/resort-ms/user/guest/feedback.php" class="nav-link">
             <i class="fas fa-comment"></i>
             <span>Feedback</span>
         </a>
