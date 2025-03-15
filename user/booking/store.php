@@ -47,10 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $last_id = $stmt->insert_id;
 
         // Insert booking notification
-        $sql_notif = "INSERT INTO booking_notification (book_id, booking_status, Date) VALUES (?, ?, NOW())";
+        $message="New Booking";
+        $sql_notif = "INSERT INTO booking_notification (book_id, message, Date) VALUES (?, ?, NOW())";
         $stmt_notif = $conn->prepare($sql_notif);
         $booking_status = 'pending';
-        $stmt_notif->bind_param("is", $last_id, $booking_status);
+        $stmt_notif->bind_param("is", $last_id, $message);
         $stmt_notif->execute();
 
         if ($stmt_notif->affected_rows == 0) {
