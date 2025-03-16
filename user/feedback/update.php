@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('../../resources/database/config.php');
 include("../../admin/includes/system_update.php");
 

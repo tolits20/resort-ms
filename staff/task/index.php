@@ -33,7 +33,7 @@ $tasks_sql = "SELECT t.id, t.title, t.due_date, t.priority,
               FROM tasks t 
               INNER JOIN task_assignees ta ON t.id = ta.task_id 
               WHERE ta.staff_id = $id 
-              ORDER BY t.due_date ASC";
+              ORDER BY t.created_at DESC";
 $tasks_result = mysqli_query($conn, $tasks_sql);
 ?>
 
