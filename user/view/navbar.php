@@ -153,7 +153,7 @@ if (isset($_SESSION['ID'])) {
             <a href="../customer/edit.php" class="profile-img">
                 <img src="../../resources/assets/images/<?php echo htmlspecialchars($user_data['profile_img']); ?>" 
                      alt="Profile Image"
-                     onerror="this.src='../../resources/assets/images/default-profile.jpg'">
+                     onerror="this.src='../../resources/assets/images/default-profile.png'">
             </a>
             <a href="../../logout.php" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
