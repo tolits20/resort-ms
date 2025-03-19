@@ -53,9 +53,10 @@ if ($row = mysqli_fetch_array($result_check)) {
         }
 
         // Insert booking notification
-        $sql_notif = "INSERT INTO booking_notification (book_id, booking_status, Date) VALUES (?, 'cancelled', NOW())";
+        $message = "Booking cancelled";
+        $sql_notif = "INSERT INTO booking_notification (book_id, message, Date) VALUES (?, ?, NOW())";
         $stmt_notif = $conn->prepare($sql_notif);
-        $stmt_notif->bind_param("i", $book_id);
+        $stmt_notif->bind_param("is", $book_id, $message);
         $stmt_notif->execute();
 
         if ($stmt_notif->affected_rows == 0) {

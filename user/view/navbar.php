@@ -143,7 +143,7 @@ if (isset($_SESSION['ID'])) {
 
 <nav class="navbar">
     <div class="navbar-content">
-        <a href="#" class="nav-brand">Paradise Resort</a>
+        <a href="http://localhost/resort-ms/user/view/home.php" class="nav-brand">Paradise Resort</a>
         <div class="nav-links">
             <a href="../view/home.php"><i class="fas fa-home"></i> <span>Home</span></a>
             <a href="../booking/rooms.php"><i class="fas fa-bed"></i> <span>Rooms</span></a>
@@ -152,7 +152,7 @@ if (isset($_SESSION['ID'])) {
             <a href="../feedback/index.php"><i class="fas fa-comment"></i> <span>Feedback</span></a>
             <a href="../customer/edit.php" class="profile-img">
                 <img src="../../resources/assets/images/<?php echo htmlspecialchars($user_data['profile_img']); ?>" 
-                     alt="Profile Image"
+                     alt="No Profile Image"
                      onerror="this.src='../../resources/assets/images/default-profile.png'">
             </a>
             <a href="../../logout.php" class="logout-btn">

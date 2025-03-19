@@ -388,7 +388,7 @@ while ($row = $bookingResult->fetch_assoc()) {
             $("#check_out_time").val(checkOutTime);
 
             // Update the displayed price
-            $("#dynamic-price").text(`$${newPrice.toFixed(2)}`);
+            $("#dynamic-price").text(`₱${newPrice.toFixed(2)}`);
         }
 
         // Initialize the price and check-out date on page load
