@@ -25,10 +25,10 @@ try {
 
     if ($stmt->execute()) {
         // Insert a record into booking_notification
-        $notifQuery = "INSERT INTO booking_notification (book_id, booking_status) VALUES (?, ?)";
+        $notifQuery = "INSERT INTO booking_notification (book_id, message) VALUES (?, ?)";
         $notifStmt = $conn->prepare($notifQuery);
-        $booking_status = 'updated'; // assuming you want to log the status as 'updated'
-        $notifStmt->bind_param("is", $booking_id, $booking_status);
+        $message = 'Updated Booking'; // assuming you want to log the status as 'updated'
+        $notifStmt->bind_param("is", $booking_id, $message);
         
         if ($notifStmt->execute()) {
             // Commit transaction
