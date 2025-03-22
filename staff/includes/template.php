@@ -1,4 +1,8 @@
 <?php 
+$staff="SELECT CONCAT(u.fname,' ',u.lname) AS name FROM user u INNER JOIN account a USING(account_id) WHERE u.account_id={$_SESSION['ID']}";
+$staff_result=mysqli_query($conn,$staff);
+$staff_name=mysqli_fetch_assoc($staff_result);
+
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +104,7 @@
     <nav id="topbar" class="navbar navbar-light">
       <div class="container-fluid">
         <button class="btn btn-light d-lg-none" id="sidebarCollapse"><i class="fas fa-bars"></i></button>
-        <span class="ms-auto">Welcome, John Doe</span>
+        <span class="ms-auto">Welcome, <?php echo $staff_name['name']?></span>
       </div>
     </nav>
 

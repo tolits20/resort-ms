@@ -34,6 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("iisss", $guest_id, $room_id, $check_in_datetime, $check_out_datetime, $book_status);
         $stmt->execute();
+        $message="[Guest] New Booking";
+        $sql_notif = "INSERT INTO booking_notification (book_id, message, Date) VALUES (?, ?, NOW())";
+        $stmt_notif = $conn->prepare($sql_notif);
 
         if ($stmt->affected_rows == 0) {
             throw new Exception("Failed to insert booking.");
@@ -43,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $payment_type = "cash";
         $sql2 = "INSERT INTO payment (book_id, amount, pay_amount, payment_type, payment_status, created_at)
                  VALUES (?, ?, ?, ?, ?, NOW())";
-        $stmt2 = $conn->prepare($sql2);
+        $stmt2 = $conn->prepare($sql2); 
         $stmt2->bind_param("iddss", $last_id, $amount, $amount, $payment_type, $payment_status);
         $stmt2->execute();
 

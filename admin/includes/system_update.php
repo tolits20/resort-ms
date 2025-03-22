@@ -256,7 +256,13 @@ while($check_record=mysqli_fetch_assoc($check_set)){
     }
 }
 
-
+$sql="UPDATE room 
+JOIN booking ON room.room_id = booking.room_id
+SET room.room_status = 'available'
+WHERE room.room_status = 'booked' 
+AND NOW() > booking.check_out;
+";
+$execute=mysqli_query($conn,$sql);
 
 
 // Auto set room status to "booked" if the current date is within the check-in and check-out period
@@ -275,6 +281,8 @@ if ($notif) {
         mysqli_query($conn, $room_update);
     }
 }
+ 
+
 
 
 

@@ -9,7 +9,7 @@ if (isset($_POST['status'])) {
     $id = $_GET['id'];
 
     if ($stat == 'activate') {
-        $check = "SELECT * FROM discount WHERE discount_status='activate' AND applicable_room='$applicable_room'";
+        $check = "SELECT * FROM discount WHERE discount_status='activate' AND applicable_room='$applicable_room' AND discount_start <= NOW() AND discount_en>=NOW()";
         $result = mysqli_query($conn, $check);
         $count = mysqli_num_rows($result);
         echo'hello';
