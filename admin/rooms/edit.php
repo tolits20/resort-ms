@@ -245,8 +245,20 @@ $result1 = mysqli_query($conn, $sql1);
                             <option value="standard" <?php echo ($room['room_type'] == 'standard') ? 'selected' : ''; ?>>
                                 Standard Room
                             </option>
-                            <option value="premium" <?php echo ($room['room_type'] == 'premium') ? 'selected' : ''; ?>>
+                            <option value="single_room" <?php echo ($room['room_type'] == 'single_room') ? 'selected' : ''; ?>>
                                 Premium Room
+                            </option>
+                            <option value="family_room" <?php echo ($room['room_type'] == 'family_room') ? 'selected' : ''; ?>>
+                                Family Room
+                            </option>
+                            <option value="studio_room" <?php echo ($room['room_type'] == 'studio_room') ? 'selected' : ''; ?>>
+                                Studio Room
+                            </option>
+                            <option value="suite" <?php echo ($room['room_type'] == 'suite') ? 'selected' : ''; ?>>
+                                Suite Room
+                            </option>
+                            <option value="deluxe" <?php echo ($room['room_type'] == 'deluxe') ? 'selected' : ''; ?>>
+                                Deluxe Room
                             </option>
                         </select>
                     </div>

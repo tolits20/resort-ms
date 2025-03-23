@@ -422,10 +422,14 @@ include("../includes/system_update.php");
                         <label class="form-label" for="room_type">Room Type</label>
                         <select name="type" id="room_type" class="form-select" required>
                             <option value="">Select room type</option>
-                            <option value="standard">Standard</option>
-                            <option value="premium">Premium</option>
-                            <option value="deluxe">Deluxe</option>
+                            <option value="single_room">Single Room</option>
+                            <option value="family_room">Family Room</option>
+                            <option value="studio_room">Studio Room</option>
+                             <option value="standard">Standard Room</option>
+                            <option value="deluxe">Deluxe Room</option>
                             <option value="suite">Suite</option>
+                     
+
                         </select>
                     </div>
                     

@@ -63,6 +63,9 @@ $row = mysqli_fetch_assoc($result);
                         <div class="form-floating">
                             <select class="form-select shadow-sm" name="applicable_room" required>
                                 <option value="standard" <?= ($row['applicable_room'] == 'standard') ? 'selected' : '' ?>>Standard Room</option>
+                                <option value="single_room" <?= ($row['applicable_room'] == 'single_room') ? 'selected' : '' ?>>Single Room</option>
+                                <option value="family_room" <?= ($row['applicable_room'] == 'family_room') ? 'selected' : '' ?>>Family Room</option>
+                                <option value="studio_room" <?= ($row['applicable_room'] == 'studio_room') ? 'selected' : '' ?>>Studio Room</option>
                                 <option value="deluxe" <?= ($row['applicable_room'] == 'deluxe') ? 'selected' : '' ?>>Deluxe Room</option>
                                 <option value="suite" <?= ($row['applicable_room'] == 'suite') ? 'selected' : '' ?>>Suite</option>
                             </select>
