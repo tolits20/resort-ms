@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+use Dom\Mysql;
+
  date_default_timezone_set('Asia/Manila'); // Change to your timezone if needed
 
 //automatic email sending
@@ -425,4 +428,110 @@ $set_overdue_set=mysqli_query($conn,$set_overdue);
 $set_staff_overdue="UPDATE task_assignees ta INNER JOIN tasks t ON ta.task_id=t.id SET ta.assignee_task='overdue' WHERE t.status='Overdue' AND ta.assignee_task='pending'";
 $set_staff_overdue_set=mysqli_query($conn,$set_staff_overdue);
 
+
+//sent receipt email
+
+// Fetch payment details
+$payment_sent = "SELECT * FROM summary_payment WHERE attached_receipt IS NULL AND payment_status ='paid'";
+$pres = mysqli_query($conn, $payment_sent);
+
+if (mysqli_num_rows($pres) > 0) {
+    while ($row = mysqli_fetch_assoc($pres)) {
+        require_once('../../resources/fpdf186/fpdf.php');
+
+        $booking_id = $row['booking_id'];
+        $customer_email = $row['email'];
+        $customer_name = $row['NAME'];
+        $amount_paid = $row['amount_paid'];
+        $check_in = date("F d, Y", strtotime($row['check_in']));
+        $check_out = date("F d, Y", strtotime($row['check_out']));
+        $room_code = $row['room_code'];
+        $room_type = $row['room_type'];
+
+        // Generate PDF Invoice
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 16);
+
+        // Header
+        $pdf->Cell(190, 10, 'Resort Management System', 0, 1, 'C');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(190, 10, '123 Beachfront Road, Paradise Island', 0, 1, 'C');
+        $pdf->Cell(190, 10, 'Email: info@resort.com | Phone: (123) 456-7890', 0, 1, 'C');
+        $pdf->Ln(10);
+
+        // Title
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(190, 10, 'INVOICE', 0, 1, 'C');
+        $pdf->Ln(5);
+
+        // Customer Details
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(190, 10, 'Customer Details', 0, 1, 'L');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(190, 10, 'Name: ' . $customer_name, 0, 1, 'L');
+        $pdf->Cell(190, 10, 'Email: ' . $customer_email, 0, 1, 'L');
+        $pdf->Ln(5);
+
+        // Booking Details
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(190, 10, 'Booking Details', 0, 1, 'L');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(190, 10, 'Booking ID: ' . $booking_id, 0, 1, 'L');
+        $pdf->Cell(190, 10, 'Room: ' . $room_code . ' (' . $room_type . ')', 0, 1, 'L');
+        $pdf->Cell(190, 10, 'Check-in: ' . $check_in, 0, 1, 'L');
+        $pdf->Cell(190, 10, 'Check-out: ' . $check_out, 0, 1, 'L');
+        $pdf->Ln(10);
+
+        // Payment Details
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(190, 10, 'Payment Details', 0, 1, 'L');
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(190, 10, 'Amount Paid: PHP ' . number_format($amount_paid, 2), 0, 1, 'L');
+        $pdf->Ln(10);
+
+        // Footer
+        $pdf->SetFont('Arial', 'I', 10);
+        $pdf->Cell(190, 10, 'Thank you for choosing our resort!', 0, 1, 'C');
+        $pdf->Cell(190, 10, 'For inquiries, contact us at (123) 456-7890', 0, 1, 'C');
+
+        // Save PDF to a file
+        $pdf_file = "invoice_{$booking_id}.pdf";
+        $pdf->Output($pdf_file, 'F');
+
+        // Prepare Email
+        $to = $customer_email;
+        $subject = "Payment Receipt - Booking #$booking_id";
+        $from_email = "info@resort.com";
+        $boundary = md5(time());
+        $headers = "From: Resort Management <$from_email>\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+
+        // Email body
+        $message = "--$boundary\r\n";
+        $message .= "Content-Type: text/plain; charset=\"UTF-8\"\r\n";
+        $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+        $message .= "Dear $customer_name,\n\nThank you for your payment. Please find your invoice attached.\n\nBest Regards,\nResort Management System\r\n";
+
+        // Read and attach PDF
+        $file_content = chunk_split(base64_encode(file_get_contents($pdf_file)));
+        $message .= "--$boundary\r\n";
+        $message .= "Content-Type: application/pdf; name=\"$pdf_file\"\r\n";
+        $message .= "Content-Transfer-Encoding: base64\r\n";
+        $message .= "Content-Disposition: attachment; filename=\"$pdf_file\"\r\n\r\n";
+        $message .= $file_content . "\r\n";
+        $message .= "--$boundary--";
+
+        // Send email
+        if (mail($to, $subject, $message, $headers)) {
+            // Mark email as sent
+            $update_query = "UPDATE payment SET email_receipt = NOW() WHERE book_id = $booking_id";
+            mysqli_query($conn, $update_query);
+        }
+
+        // Delete the temporary PDF file
+        unlink($pdf_file);
+    }
+}
 ?>
