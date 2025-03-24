@@ -35,11 +35,11 @@ if(isset($_POST['login'])){
                 header('location:staff/dashboard.php');
                 }else{
                     $_SESSION["status_check"]="yes";
-                    include("alert.php");
+                    //  include("alert.php");
                 }
            }else{
             $_SESSION["status_check"]="yes";
-             include("alert.php");
+             //  include("alert.php");
 
            }
            mysqli_commit($conn);

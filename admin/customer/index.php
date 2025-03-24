@@ -275,7 +275,7 @@ $result = mysqli_query($conn, $sql);
 <body>
     <div class="content">
         <?php
-        include("alert.php");
+        //  //  //  //  include("alert.php");
         include('filter.php');
         ?>
         <br>
