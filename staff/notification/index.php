@@ -20,9 +20,6 @@ $notifications_result = mysqli_query($conn, $notifications_sql);
                 <button class="btn btn-soft-secondary btn-sm rounded-pill mr-2">
                     <i class="fa fa-check-circle mr-1"></i> Mark All as Read
                 </button>
-                <button class="btn btn-soft-primary btn-sm rounded-pill">
-                    <i class="fa fa-cog mr-1"></i> Settings
-                </button>
             </div>
         </div>
         

@@ -49,27 +49,6 @@ $tasks_result = mysqli_query($conn, $tasks_sql);
     </div>
     
     <div class="card-body bg-white p-4">
-      <div class="form-row mb-4">
-        <div class="col-md-4">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text bg-white border-right-0">
-                <i class="fa fa-search text-muted"></i>
-              </span>
-            </div>
-            <input type="text" class="form-control border-left-0" placeholder="Search my tasks...">
-          </div>
-        </div>
-        <div class="col-md-3 ml-auto">
-          <select class="form-control bg-light border-0">
-            <option>All Statuses</option>
-            <option>Pending</option>
-            <option>In Progress</option>
-            <option>Completed</option>
-          </select>
-        </div>
-      </div>
-      
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -119,11 +98,6 @@ $tasks_result = mysqli_query($conn, $tasks_sql);
       <div class="d-flex justify-content-between align-items-center mt-4">
         <div>
           <span class="text-muted">Showing all <?php echo $total_tasks_count; ?> of your assigned tasks</span>
-        </div>
-        <div>
-          <button class="btn btn-outline-secondary btn-sm rounded-pill">
-            <i class="fa fa-download mr-1"></i> Export Tasks
-          </button>
         </div>
       </div>
     </div>

@@ -88,7 +88,7 @@ include("includes/template.php");
           <?php endif; ?>
         </div>
         <div class="card-footer">
-          <a href="tasks.php" class="btn btn-primary">View All Tasks</a>
+          <a href="task/index.php" class="btn btn-primary">View All Tasks</a>
         </div>
       </div>
     </div>
@@ -119,7 +119,7 @@ include("includes/template.php");
           <?php endif; ?>
         </div>
         <div class="card-footer">
-          <a href="notifications.php" class="btn btn-primary">View All Notifications</a>
+          <a href="notification/index.php" class="btn btn-primary">View All Notifications</a>
         </div>
       </div>
     </div>

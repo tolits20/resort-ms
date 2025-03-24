@@ -14,8 +14,8 @@ $new_customer=mysqli_fetch_assoc($result);
 
 
 // Count available rooms
-$sql1="SELECT COUNT(room_id) as 'available' FROM room INNER JOIN booking USING(room_id)
-    WHERE room_status = 'available' && booking.check_in <> NOW()";
+$sql1="SELECT COUNT(DISTINCT room_id) as 'available' FROM room INNER JOIN booking USING(room_id)
+    WHERE room_status = 'available' && DATE(booking.check_in) <> CURDATE()";
 $result1=mysqli_query($conn,$sql1);
 $available_room=mysqli_fetch_assoc($result1);
 

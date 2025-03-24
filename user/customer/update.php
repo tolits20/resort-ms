@@ -21,7 +21,7 @@ if (isset($_POST['update'])) {
         echo $username = trim($_POST['username']);
         echo $current_image = trim($_POST['current']);
         echo $filename = $_FILES['file']['name'];
-        
+        echo "../../resources/assets/images/" . $current_image;
         $file_tmp = $_FILES['file']['tmp_name'];
         $allowed = array('png', 'jpg', 'jpeg');
         $file_delete = trim($_POST['current']);
@@ -55,7 +55,7 @@ if (isset($_POST['update'])) {
                         mysqli_stmt_execute($stmt_with_img);
 
                         if (mysqli_stmt_affected_rows($stmt_with_img) > 0) {
-                            if (file_exists("../../resources/assets/images/" . $current_image)) {
+                            if (file_exists("../../resources/assets/images/" . $current_image) && !empty($file_delete)) {
                                 if (!unlink("../../resources/assets/images/" . $current_image)) {
                                     throw new Exception("Failed to delete the current profile picture");
                                 }
@@ -66,7 +66,7 @@ if (isset($_POST['update'])) {
                                 unset($_SESSION['update_id']);
                                 exit;
                             } else {
-                                throw new Exception("Failed to move the new image to the given location");
+                                throw new Exception("Failed to move the new image to the given location");  
                             }
                         } else {
                             throw new Exception("Failed to update the record in the user table (with image)");
