@@ -246,7 +246,7 @@ $rooms_result = $conn->query($sql); // Changed from $result to $rooms_result
             <div class="room-details">
                 <div class="room-type"><?php echo htmlspecialchars($room['room_type']); ?></div>
                 <h3 class="room-name"><?php echo htmlspecialchars($room['room_code']); ?></h3>
-                <div class="room-price">₱<?php echo number_format($room['price'], 2); ?> <span style="font-size: 0.8rem; font-weight: normal;">per night</span></div>
+                <div class="room-price">₱<?php echo number_format($room['price'], 2); ?> <span style="font-size: 0.8rem; font-weight: normal;"></span></div>
                 <a href="../booking/create.php?room_id=<?php echo $room['room_id']; ?>" class="book-btn">Book Room</a>
             </div>
         </div>

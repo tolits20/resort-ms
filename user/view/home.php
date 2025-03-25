@@ -316,8 +316,8 @@ $result = $conn->query($sql);
             <div class="image-wrapper">
                 <img src="../../resources/assets/resort_images/pool1_img.jpg" alt="Fitness Center">
                 <div class="image-overlay">
-                    <div class="image-title">Fitness Center</div>
-                    <div class="image-desc">State-of-the-art equipment</div>
+                    <div class="image-title">Serene Oasis</div>
+                    <div class="image-desc">Immerse yourself in the tranquility of our resort pools.</div>
                 </div>
             </div>
         </div>
@@ -325,8 +325,8 @@ $result = $conn->query($sql);
             <div class="image-wrapper">
                 <img src="../../resources/assets/resort_images/pool2.jpg" alt="Private Beach">
                 <div class="image-overlay">
-                    <div class="image-title">Private Beach</div>
-                    <div class="image-desc">Your own slice of paradise</div>
+                    <div class="image-title">Refreshing Escape</div>
+                    <div class="image-desc">Enjoy a leisurely swim or simply bask in the sun by our pristine pools.</div>
                 </div>
             </div>
         </div>
@@ -334,8 +334,8 @@ $result = $conn->query($sql);
             <div class="image-wrapper">
                 <img src="../../resources/assets/resort_images/pool3.jpg" alt="Lounge Bar">
                 <div class="image-overlay">
-                    <div class="image-title">Lounge Bar</div>
-                    <div class="image-desc">Sophisticated evening entertainment</div>
+                    <div class="image-title">Family-Friendly Fun </div>
+                    <div class="image-desc">Dive into excitement with our spacious resort pools.</div>
                 </div>
             </div>
         </div>
