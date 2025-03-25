@@ -440,7 +440,7 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
             $("#check_out_time").val(checkOutTime);
 
 
-            $("#dynamic-price").text(`$${newPrice.toFixed(2)}`);
+            $("#dynamic-price").text(`₱${newPrice.toFixed(2)}`);
             $("#updated-price").val(newPrice);
             console.log("Updated #dynamic-price element:", $("#dynamic-price").text()); // Debugging line
         }
