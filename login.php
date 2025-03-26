@@ -1,6 +1,6 @@
 <?php 
 include('resources/database/config.php');
-include("admin/customer/alert.php");
+// include("admin/customer/alert.php");
 if(isset($_POST['login'])){
     $username=trim($_POST['username']);
     $password=trim(sha1($_POST['password']));
@@ -34,11 +34,11 @@ if(isset($_POST['login'])){
                 $_SESSION['role']=$role;
                 header('location:staff/dashboard.php');
                 }else{
-                    $_SESSION["status_check"]="yes";
+                    // $_SESSION["status_check"]="yes";
                     //  include("alert.php");
                 }
            }else{
-            $_SESSION["status_check"]="yes";
+            // $_SESSION["status_check"]="yes";
              //  include("alert.php");
 
            }

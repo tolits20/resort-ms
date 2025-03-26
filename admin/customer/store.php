@@ -11,14 +11,16 @@ if(isset($_POST['create'])){
     $contact = $_POST['contact'];
     $username = trim($_POST['username']);
     $password = sha1($_POST['password']);
-    $auto_admin="SELECT * FROM account WHERE role='admin'";
+    $auto_admin = "SELECT * FROM account WHERE role='admin'";
     $result = mysqli_query($conn, $auto_admin);
+    
     $role;
     if(mysqli_num_rows($result) == 0){
         $role = 'admin';
     } else {
-    $role = 'user';
+        $role = 'user';
     }
+    
     $img_path = $_FILES['file']['name'];
     $img_tmp = $_FILES['file']['tmp_name'];
     $allowed = array('jpg','jpeg','png','webp');
@@ -30,6 +32,7 @@ if(isset($_POST['create'])){
         mysqli_stmt_bind_param($stmt1, 'sss', $username, $password, $role);
         mysqli_stmt_execute($stmt1);
 
+        // Changed from mysqli_stmt_num_rows to mysqli_stmt_affected_rows
         if(mysqli_stmt_affected_rows($stmt1) > 0) {
             $last_id = mysqli_insert_id($conn);
             if($_FILES['file']['error'] == 0) {
@@ -45,8 +48,8 @@ if(isset($_POST['create'])){
                     mysqli_stmt_execute($stmt2);
                     
                     $notif = "INSERT INTO account_notification(account_id,account_notification) VALUES ($last_id,'create')";
-
-                    if(mysqli_stmt_affected_rows($stmt2) > 0 && mysqli_query($conn, $notif)) {
+                    mysqli_query($conn, $notif);
+                    if(mysqli_stmt_affected_rows($stmt2) > 0 ) {
                         if(move_uploaded_file($img_tmp, $location)) {
                             $_SESSION['create_success'] = 'yes';
                             mysqli_commit($conn);
@@ -61,7 +64,7 @@ if(isset($_POST['create'])){
                             throw new Exception("Failed to move the file");
                         }
                     } else {
-                        throw new Exception("Failed to insert in user table");
+                        throw new Exception("Failed to insert in user table1");
                     }
                 } else {
                     throw new Exception("Invalid file type");
@@ -71,13 +74,14 @@ if(isset($_POST['create'])){
                 $stmt2 = mysqli_prepare($conn, $sql2);
                 mysqli_stmt_bind_param($stmt2, 'issisis', $last_id, $fname, $lname, $age, $gender, $contact, $newfile);
                 mysqli_stmt_execute($stmt2);
-                $message="'New User $fname $lname Registered!'";
-               echo $notif = "INSERT INTO account_notification(account_id,message) VALUES ($last_id,$message)";
+                $message = "New User $fname $lname Registered!";
+                $notif = "INSERT INTO account_notification(account_id,message) VALUES ($last_id,'$message')";
 
                 if(mysqli_stmt_affected_rows($stmt2) > 0 && mysqli_query($conn, $notif)) {
                     $_SESSION['create_success'] = 'yes';
                     mysqli_commit($conn);
                     header("location:../../login.php");
+                    exit;
                 }
             }
         } else {
@@ -85,7 +89,7 @@ if(isset($_POST['create'])){
         }
     } catch(Exception $e) {
         mysqli_rollback($conn);
-        echo $e->getMessage();
+        echo "Error: " . $e->getMessage();
     }
 }
 ?>
