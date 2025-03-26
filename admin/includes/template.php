@@ -156,7 +156,7 @@ include('system_update.php');
         <ul>
             <li><a href="http:/resort-ms/admin/index.php"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="http:/resort-ms/admin/booking/index.php?switch="><i class="fas fa-calendar-check"></i> Bookings</a></li>
-            <li><a href="http:/resort-ms/admin/customer/index.php"><i class="fas fa-users"></i> Customers</a></li>
+            <li><a href="http:/resort-ms/admin/customer/index.php"><i class="fas fa-users"></i> Users</a></li>
             <li><a href="http:/resort-ms/admin/rooms/index.php"><i class="fas fa-bed"></i> Rooms</a></li>
             <li><a href="http:/resort-ms/admin/task/task_assigned_list.php"><i class="fas fa-thumbtack"></i>Task</a></li>
             <li><a href="http:/resort-ms/admin/discount/index.php"><i class="fas fa-tags"></i> Discount</a></li>

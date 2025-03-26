@@ -240,7 +240,6 @@ if (!$result) {
             <div class="banner-actions">
                 <a href="task_template.php" class="banner-btn"><i class="fas fa-arrow-left"></i> Back to Tasks</a>
                 <a href="task_template.php" class="banner-btn"><i class="fas fa-plus"></i> Assign New Task</a>
-                <a href="export_tasks.php" class="banner-btn"><i class="fas fa-file-export"></i> Export</a>
             </div>
         </div>
         
