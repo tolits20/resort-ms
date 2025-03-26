@@ -165,7 +165,7 @@ include("../includes/system_update.php");
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Assign Task</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
+            <a href="task_template.php" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

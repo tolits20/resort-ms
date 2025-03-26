@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_execute($stmt);
 
     if (mysqli_stmt_affected_rows($stmt) > 0) {
-        header('Location: index.php');
+        header('Location: task_template.php');
         exit;
     } else {
         $error = "Failed to create task.";

@@ -38,10 +38,10 @@ if(isset($_POST['update'])){
                     mysqli_stmt_bind_param($stmt2, 'ssisssi', $fname, $lname, $age, $gender, $contact, $newfile, $id);
                     mysqli_stmt_execute($stmt2);
                     
-                    $notif = "INSERT INTO account_notification(account_id, account_notification) VALUES ($id, 'update')";
+                    $notif = "INSERT INTO account_notification(account_id, message) VALUES ($id, '$fname $lname updated successfully!')";
 
                     if(mysqli_stmt_affected_rows($stmt2) > 0 && mysqli_query($conn, $notif)) {
-                        if(file_exists("../../resources/assets/images/" . $current_img)) {
+                        if(file_exists("../../resources/assets/images/" . $current_img && !empty($current_img))) {
                             if(unlink("../../resources/assets/images/" . $current_img)) {
                                 if(move_uploaded_file($img_tmp, $location)) {
                                     mysqli_commit($conn);

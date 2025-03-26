@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_execute($stmt);
 
     if (mysqli_stmt_affected_rows($stmt) > 0) {
-        header('Location: index.php');
+        header('Location: task_template.php');
         exit;
     } else {
         $error = "Failed to update task.";
@@ -117,7 +117,7 @@ include("../includes/system_update.php");
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Update Task</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
+            <a href="task_template.php" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

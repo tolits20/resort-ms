@@ -51,10 +51,6 @@ $result3 = $conn->query($sql3);
         <div class="dashboard-header">
             <div class="header-info">
                 <h2>Resort Management Dashboard</h2>
-                <div class="user-datetime">
-                    <span class="datetime">UTC: 2025-03-24 08:42:23</span>
-                    <span class="user">User: S1ngularty</span>
-                </div>
             </div>
         </div>
         
