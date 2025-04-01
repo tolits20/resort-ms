@@ -234,8 +234,121 @@ while ($row = mysqli_fetch_assoc($result2)) {
 }
 
 //auto booked when meets the check_in date
+$auto_booked_query = "SELECT * FROM booking WHERE book_status='pending' AND check_in <= NOW()";
+$auto_booked_result = mysqli_query($conn, $auto_booked_query);
 
+if ($auto_booked_result) {
+    while ($booking = mysqli_fetch_assoc($auto_booked_result)) {
+        $update_booking_status = "UPDATE booking SET book_status='booked' WHERE book_id={$booking['book_id']}";
+        if (mysqli_query($conn, $update_booking_status)) {
+            $update_room_status = "UPDATE room SET room_status='booked' WHERE room_id={$booking['room_id']}";
+            if (!mysqli_query($conn, $update_room_status)) {
+                echo "Error updating room status: " . mysqli_error($conn);
+            }
+        } else {
+            echo "Error updating booking status: " . mysqli_error($conn);
+        }
+    }
+}
 
+// Notify users of double bookings and ensure double booking checks are properly implemented
+
+// Check for double bookings
+$double_booking_query = "SELECT b1.book_id AS booking1, b2.book_id AS booking2, r.room_code, b1.check_in, b1.check_out, b1.book_status AS status1, b2.book_status AS status2, b2.account_id AS pending_account_id
+                         FROM booking b1
+                         INNER JOIN booking b2 ON b1.room_id = b2.room_id AND b1.book_id != b2.book_id
+                         INNER JOIN room r ON b1.room_id = r.room_id
+                         WHERE b1.check_in < b2.check_out 
+                         AND b1.check_out > b2.check_in";
+$double_booking_result = mysqli_query($conn, $double_booking_query);
+
+if (mysqli_num_rows($double_booking_result) > 0) {
+    while ($row = mysqli_fetch_assoc($double_booking_result)) {
+        $booking1 = $row['booking1'];
+        $booking2 = $row['booking2'];
+        $room_code = $row['room_code'];
+        $check_in = $row['check_in'];
+        $check_out = $row['check_out'];
+        $status1 = $row['status1'];
+        $status2 = $row['status2'];
+        $pending_account_id = $row['pending_account_id'];
+
+        // If one booking is confirmed and the other is pending
+        if (($status1 == 'confirmed' && $status2 == 'pending') || ($status1 == 'pending' && $status2 == 'confirmed')) {
+            $pending_booking_id = ($status1 == 'pending') ? $booking1 : $booking2;
+
+            // Fetch the email of the user with the pending booking
+            $email_query = "SELECT a.username AS email, u.fname, u.lname 
+                            FROM account a
+                            INNER JOIN user u ON a.account_id = u.account_id
+                            WHERE a.account_id = $pending_account_id";
+            $email_result = mysqli_query($conn, $email_query);
+
+            if ($email_row = mysqli_fetch_assoc($email_result)) {
+                $to = $email_row['email'];
+                $name = $email_row['fname'] . " " . $email_row['lname'];
+                $subject = "Booking Status Update - Room #$room_code";
+                $message = "
+                <html>
+                <head>
+                    <title>Booking Status Update</title>
+                </head>
+                <body>
+                    <p>Dear $name,</p>
+                    <p>We regret to inform you that your booking for Room #$room_code from $check_in to $check_out has been cancelled due to a conflict with another confirmed booking.</p>
+                    <p>Please contact us for further assistance or to modify your booking.</p>
+                    <p>Best regards,<br>Sample Resort Team</p>
+                </body>
+                </html>";
+                $headers = "MIME-Version: 1.0" . "\r\n";
+                $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
+                $headers .= "From: Sample Resort <no-reply@sampleresort.com>" . "\r\n";
+
+                // Send email notification
+                mail($to, $subject, $message, $headers);
+
+                // Mark the pending booking as cancelled
+                $cancel_query = "UPDATE booking SET book_status = 'cancelled' WHERE book_id = $pending_booking_id";
+                mysqli_query($conn, $cancel_query);
+            }
+        }
+    }
+}
+
+// Notify users with pending downpayments and enforce minimum downpayment rule
+$downpayment_query = "SELECT 
+    p.payment_id, 
+    p.book_id, 
+    p.amount AS total_amount, 
+    p.pay_amount AS downpayment_amount, 
+    (p.amount - p.pay_amount) AS remaining_balance, 
+    p.payment_type, 
+    p.payment_status, 
+    p.created_at, 
+    b.check_in, 
+    b.check_out
+FROM resort_ms.payment p
+INNER JOIN booking b ON p.book_id = b.book_id
+WHERE (p.amount - p.pay_amount) > 0
+AND (p.pay_amount < (p.amount * 0.5))";
+
+$downpayment_result = mysqli_query($conn, $downpayment_query);
+
+if (mysqli_num_rows($downpayment_result) > 0) {
+    while ($row = mysqli_fetch_assoc($downpayment_result)) {
+        // Check if at least 50% of the total amount is paid
+        $minimum_downpayment = $row['total_amount'] * 0.5;
+        if ($row['downpayment_amount'] >= $minimum_downpayment) {
+            // Booking can be confirmed
+            $update_booking_status = "UPDATE booking SET book_status = 'confirmed' WHERE book_id = {$row['book_id']}";
+            mysqli_query($conn, $update_booking_status);
+        } else {
+            // Booking remains pending
+            $update_booking_status = "UPDATE booking SET book_status = 'pending' WHERE book_id = {$row['book_id']}";
+            mysqli_query($conn, $update_booking_status);
+        }
+    }
+}
 
 //booking real time tracking and update
 $check="SELECT * FROM booking INNER JOIN room USING(room_id)";
@@ -534,4 +647,4 @@ if (mysqli_num_rows($pres) > 0) {
         unlink($pdf_file);
     }
 }
-?>
+?>  
