@@ -20,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $check_in_time = $_POST['checkInTime'];
         $check_out_time = $_POST['checkOutTime'];
         // $price = floatval($_POST['price']);
-        $book_status = "pending";
 
 
         if (!$room_id || empty($check_in) || empty($check_in_time) || empty($check_out) || empty($check_out_time)) {
@@ -35,9 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Insert booking
         $sql = "INSERT INTO booking (account_id, room_id, check_in, check_out, book_status, created_at) 
-                VALUES (?, ?, ?, ?, ?, NOW())";
+                VALUES (?, ?, ?, ?, 'pending', NOW())";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iisss", $account_id, $room_id, $check_in_datetime, $check_out_datetime, $book_status);
+        $stmt->bind_param("iiss", $account_id, $room_id, $check_in_datetime, $check_out_datetime);
         $stmt->execute();
 
         if ($stmt->affected_rows == 0) {
