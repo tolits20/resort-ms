@@ -414,22 +414,22 @@ include("../includes/system_update.php");
                     <h3 class="section-title">Basic Information</h3>
                     
                     <div class="form-group">
-                        <label class="form-label" for="room_number">Room Code</label>
+                        <label class="form-label" for="room_number">Name</label>
                         <input type="text" name="room_number" id="room_number" class="form-control" placeholder="Enter room code (e.g. RM-101)" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="room_type">Room Type</label>
+                        <label class="form-label" for="room_type">Type</label>
                         <select name="type" id="room_type" class="form-select" required>
-                            <option value="">Select room type</option>
+                            <option value="">Select type</option>
                             <option value="single_room">Single Room</option>
                             <option value="family_room">Family Room</option>
                             <option value="studio_room">Studio Room</option>
                              <option value="standard">Standard Room</option>
                             <option value="deluxe">Deluxe Room</option>
                             <option value="suite">Suite</option>
-                     
-
+                            <option value="banquet_hall">Banquet Hall</option>
+                            <option value="garden_venue">Garden Venue</option>
                         </select>
                     </div>
                     

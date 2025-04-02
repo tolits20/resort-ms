@@ -231,7 +231,7 @@ $result1 = mysqli_query($conn, $sql1);
                 <div>
                     <div class="form-group">
                         <label for="room_code" class="form-label">
-                            <i class="fas fa-barcode"></i> Room Code
+                            <i class="fas fa-barcode"></i>Name
                         </label>
                         <input type="text" id="room_code" class="form-control" name="room_code" 
                                value="<?php echo $room['room_code']; ?>" required>
@@ -239,7 +239,7 @@ $result1 = mysqli_query($conn, $sql1);
 
                     <div class="form-group">
                         <label for="type" class="form-label">
-                            <i class="fas fa-bed"></i> Room Type
+                            <i class="fas fa-bed"></i>Type
                         </label>
                         <select id="type" class="form-select" name="type" required>
                             <option value="standard" <?php echo ($room['room_type'] == 'standard') ? 'selected' : ''; ?>>
@@ -259,6 +259,12 @@ $result1 = mysqli_query($conn, $sql1);
                             </option>
                             <option value="deluxe" <?php echo ($room['room_type'] == 'deluxe') ? 'selected' : ''; ?>>
                                 Deluxe Room
+                            </option>
+                            <option value="deluxe" <?php echo ($room['room_type'] == 'banquet_hall') ? 'selected' : ''; ?>>
+                                Banquet Hall
+                            </option>
+                            <option value="deluxe" <?php echo ($room['room_type'] == 'garden_venue') ? 'selected' : ''; ?>>
+                                Garden Venue
                             </option>
                         </select>
                     </div>
