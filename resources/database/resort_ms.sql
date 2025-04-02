@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2025 at 12:53 AM
+-- Generation Time: Apr 02, 2025 at 04:32 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -39,24 +39,25 @@ CREATE TABLE IF NOT EXISTS `account` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account`
 --
 
 INSERT INTO `account` (`account_id`, `username`, `password`, `role`, `last_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-03-23 10:21:21', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
+(5, 'levipenaverde@example.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 'admin', '2025-04-02 21:47:03', '2025-02-14 15:10:14', '2025-02-14 15:10:14', NULL),
 (9, 'tolits@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', '2025-03-09 13:13:34', '2025-02-15 05:24:00', '2025-03-04 14:20:11', NULL),
-(10, 'allan@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'admin', NULL, '2025-02-16 10:43:34', '2025-02-27 13:42:18', NULL),
-(12, 'catuera@example.com', '9d2dd1c52280572bf5d0aedd5aeda096fc1f8f54', 'staff', '2025-03-23 03:34:00', '2025-02-23 15:06:58', '2025-03-10 08:09:10', NULL),
-(27, 'lems.leviasherpenaverde@gmail.com', 'fadfbfb90c6d801b3421e5df0b8c0e7c7555d175', 'user', '2025-03-23 04:15:44', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
+(10, 'allan@example.com', 'cbfdac6008f9cab4083784cbd1874f76618d2a97', 'user', '2025-04-01 10:23:34', '2025-02-16 10:43:34', '2025-03-26 00:27:01', NULL),
+(12, 'catuera@example.com', '9d2dd1c52280572bf5d0aedd5aeda096fc1f8f54', 'staff', '2025-03-26 15:57:24', '2025-02-23 15:06:58', '2025-03-10 08:09:10', NULL),
+(27, 'lems.leviasherpenaverde@gmail.com', 'cbfdac6008f9cab4083784cbd1874f76618d2a97', 'user', '2025-04-02 22:24:42', '2025-02-26 16:17:06', '2025-03-03 13:58:06', NULL),
 (38, 'asherxd102345@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-04 13:33:51', '2025-03-06 13:43:42', '2025-03-11 23:13:41'),
-(40, 'user@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-26 04:36:58', '2025-03-06 01:39:18', '2025-03-25 20:53:26', NULL),
+(40, 'user@example.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', '2025-03-26 08:25:40', '2025-03-06 01:39:18', '2025-03-25 20:53:26', NULL),
 (45, 'jyren@gmail.com', '803e4a8e0a6f26ec9fa75321c0d551a83b9a075d', 'staff', '2025-03-16 16:22:45', '2025-03-09 03:04:02', '2025-03-16 08:22:18', NULL),
-(47, 'alexa@gmail.com', '4dfd0d9665c9f63e437e054f57d4407867dacce5', 'user', NULL, '2025-03-12 14:26:19', NULL, NULL),
-(54, 'billonedlloyd@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', 'user', NULL, '2025-03-15 04:25:50', NULL, NULL),
-(55, 'admin@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'admin', '2025-03-26 03:43:25', '2025-03-25 19:42:41', NULL, NULL);
+(47, 'alexa@gmail.com', '803e4a8e0a6f26ec9fa75321c0d551a83b9a075d', 'user', '2025-03-26 08:12:28', '2025-03-12 14:26:19', '2025-03-26 00:10:16', NULL),
+(54, 'billonedlloyd@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', 'user', NULL, '2025-03-15 04:25:50', NULL, '2025-03-26 15:49:39'),
+(55, 'admin@example.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'admin', '2025-03-26 03:43:25', '2025-03-25 19:42:41', NULL, NULL),
+(57, 'davimher@gmail.com', '88ea39439e74fa27c09a4fc0bc8ebe6d00978392', 'user', '2025-03-26 15:30:00', '2025-03-26 07:29:43', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -72,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `account_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`cnotif_id`),
   KEY `account_notification_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `account_notification`
@@ -82,7 +83,10 @@ INSERT INTO `account_notification` (`cnotif_id`, `account_id`, `message`, `is_re
 (1, 27, 'this is a test notification', '1', '2025-03-14 14:18:03'),
 (2, 54, 'hello good morning kumain ka na', '1', '2025-03-15 12:25:50'),
 (3, 45, 'Jyren Santestiban Account is Updated Succesfully', '0', '2025-03-16 16:22:18'),
-(4, 55, 'New User Admin Admin Registered!', '0', '2025-03-26 03:42:41');
+(4, 55, 'New User Admin Admin Registered!', '0', '2025-03-26 03:42:41'),
+(6, 47, 'Alexa Santestiban updated successfully!', '0', '2025-03-26 08:10:16'),
+(7, 10, 'Allan Monforte Account is Updated Succesfully', '0', '2025-03-26 08:27:01'),
+(8, 57, 'New User Davimher Landas Registered!', '0', '2025-03-26 15:29:43');
 
 -- --------------------------------------------------------
 
@@ -106,15 +110,46 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `book_room_fk` (`room_id`),
   KEY `book_account_fk` (`account_id`),
   KEY `book_guest_fk` (`guest_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
 INSERT INTO `booking` (`book_id`, `account_id`, `guest_id`, `room_id`, `check_in`, `check_out`, `book_status`, `reminder_sent`, `completion_sent`, `created_at`, `updated_at`) VALUES
-(43, 40, NULL, 31, '2025-03-27 07:00:00', '2025-03-28 05:00:00', 'completed', NULL, NULL, '2025-03-26 04:19:27', '2025-03-25 20:23:40'),
-(44, 40, NULL, 27, '2025-03-27 07:00:00', '2025-03-28 05:00:00', 'pending', NULL, NULL, '2025-03-26 04:40:11', '2025-03-25 20:40:11');
+(43, 40, NULL, 31, '2025-03-24 07:00:00', '2025-03-25 05:00:00', 'completed', NULL, '2025-03-26 08:19:34', '2025-03-24 04:19:27', '2025-03-25 20:23:40'),
+(44, 40, NULL, 27, '2025-03-19 07:00:00', '2025-03-20 05:00:00', 'completed', '2025-03-26 08:15:42', '2025-03-26 08:21:17', '2025-03-26 04:40:11', '2025-03-18 20:40:11'),
+(45, 47, NULL, 28, '2025-03-25 07:00:00', '2025-03-26 17:00:00', 'completed', NULL, '2025-04-01 09:59:40', '2025-03-25 08:13:04', '2025-03-26 00:13:04'),
+(46, 40, NULL, 30, '2025-03-26 19:00:00', '2025-03-27 05:00:00', 'cancelled', NULL, NULL, '2025-03-26 08:25:59', '2025-03-26 00:25:59'),
+(47, 10, NULL, 29, '2025-03-26 19:00:00', '2025-03-27 17:00:00', 'completed', '2025-03-26 08:30:33', '2025-04-01 10:00:06', '2025-03-26 08:28:13', '2025-03-26 00:28:13'),
+(48, 10, NULL, 29, '2025-03-28 19:00:00', '2025-03-29 05:00:00', 'cancelled', NULL, NULL, '2025-03-26 08:45:18', '2025-03-26 00:45:18'),
+(49, 27, NULL, 27, '2025-03-26 19:00:00', '2025-03-27 05:00:00', 'completed', '2025-03-26 08:55:34', '2025-04-01 09:59:49', '2025-03-26 08:54:46', '2025-03-26 07:43:39'),
+(50, 57, NULL, 31, '2025-03-27 07:00:00', '2025-03-27 17:00:00', 'cancelled', NULL, NULL, '2025-03-26 15:30:53', '2025-03-26 07:38:05'),
+(51, 27, NULL, 27, '2025-03-27 07:00:00', '2025-03-27 17:00:00', 'completed', '2025-03-26 15:34:23', '2025-04-01 09:59:57', '2025-03-26 15:32:54', '2025-03-26 07:40:43'),
+(52, 5, NULL, 27, '2025-03-28 07:00:00', '2025-03-28 17:00:00', 'cancelled', NULL, NULL, '2025-03-26 15:45:27', '2025-03-26 07:45:27'),
+(53, 27, NULL, 27, '2025-04-03 07:00:00', '2025-04-03 17:00:00', 'cancelled', NULL, NULL, '2025-04-01 10:22:22', '2025-04-01 02:22:22'),
+(54, 10, NULL, 27, '2025-04-03 07:00:00', '2025-04-03 17:00:00', 'confirmed', '2025-04-02 21:47:03', NULL, '2025-04-01 10:24:03', '2025-04-01 02:25:05');
+
+--
+-- Triggers `booking`
+--
+DELIMITER $$
+CREATE TRIGGER `prevent_double_booking` BEFORE INSERT ON `booking` FOR EACH ROW BEGIN
+        DECLARE conflict_count INT;
+        SELECT COUNT(*) INTO conflict_count
+        FROM booking
+        WHERE room_id = NEW.room_id
+        AND book_status IN ('confirmed', 'booked')
+        AND NEW.check_in < check_out
+        AND NEW.check_out > check_in;
+
+        IF conflict_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Double booking detected. Please choose a different room or time.';
+        END IF;
+    END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -130,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`booking_notif_id`),
   KEY `booking_notif_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking_notification`
@@ -139,7 +174,19 @@ CREATE TABLE IF NOT EXISTS `booking_notification` (
 INSERT INTO `booking_notification` (`booking_notif_id`, `book_id`, `message`, `is_read`, `Date`) VALUES
 (19, 43, 'New Booking', 0, '2025-03-26 04:19:27'),
 (20, 43, 'Updated Booking', 0, '2025-03-26 04:21:11'),
-(21, 44, 'New Booking', 0, '2025-03-26 04:40:11');
+(21, 44, 'New Booking', 0, '2025-03-26 04:40:11'),
+(22, 45, 'New Booking', 0, '2025-03-26 08:13:04'),
+(23, 46, 'New Booking', 0, '2025-03-26 08:25:59'),
+(24, 47, 'New Booking', 0, '2025-03-26 08:28:13'),
+(25, 48, 'New Booking', 0, '2025-03-26 08:45:18'),
+(26, 49, 'New Booking', 0, '2025-03-26 08:54:46'),
+(27, 50, 'New Booking', 0, '2025-03-26 15:30:53'),
+(28, 51, 'New Booking', 0, '2025-03-26 15:32:54'),
+(29, 50, 'Updated Booking', 0, '2025-03-26 15:37:37'),
+(30, 50, 'Booking cancelled', 0, '2025-03-26 15:38:05'),
+(31, 52, 'New Booking', 0, '2025-03-26 15:45:27'),
+(32, 53, 'New Booking', 0, '2025-04-01 10:22:22'),
+(33, 54, 'New Booking', 0, '2025-04-01 10:24:03');
 
 -- --------------------------------------------------------
 
@@ -175,16 +222,17 @@ CREATE TABLE IF NOT EXISTS `discount` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`discount_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `discount`
 --
 
 INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percentage`, `discount_start`, `discount_end`, `discount_status`, `applicable_room`, `created_at`, `updated_at`) VALUES
-(2, 'summer sale ', 20, '2025-03-02 11:14:00', '2025-03-15 12:00:00', 'activate', 'standard', '2025-03-02 11:15:12', '2025-03-02 11:15:12'),
+(2, 'summer sale ', 20, '2025-03-02 11:14:00', '2025-03-28 12:00:00', 'activate', 'family_room', '2025-03-02 11:15:12', '2025-03-02 11:15:12'),
 (3, 'just discount', 32, '2025-03-07 21:55:00', '2025-03-09 21:55:00', 'deactivate', 'deluxe', '2025-03-07 21:55:46', '2025-03-07 21:55:46'),
-(7, 'sample', 50, '2025-03-23 10:33:00', '2025-03-24 10:33:00', 'activate', 'suite', '2025-03-23 10:34:06', '2025-03-23 10:34:06');
+(7, 'sample', 50, '2025-03-23 10:33:00', '2025-03-27 10:33:00', 'activate', 'suite', '2025-03-23 10:34:06', '2025-03-23 10:34:06'),
+(8, 'sample1', 30, '2025-03-26 15:51:00', '2025-03-29 15:51:00', 'activate', 'standard', '2025-03-26 15:52:07', '2025-03-26 15:52:07');
 
 -- --------------------------------------------------------
 
@@ -276,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `password_recovery` (
   PRIMARY KEY (`otp_id`),
   UNIQUE KEY `otp_code` (`otp_code`),
   KEY `account_recovery_fk` (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -298,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`payment_id`),
   KEY `payment_book_fk` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `payment`
@@ -306,7 +354,16 @@ CREATE TABLE IF NOT EXISTS `payment` (
 
 INSERT INTO `payment` (`payment_id`, `book_id`, `amount`, `pay_amount`, `payment_type`, `payment_img`, `transaction_id`, `payment_status`, `email_receipt`, `created_at`, `updated_at`) VALUES
 (13, 43, 2000.00, 2000.00, 'e-wallet', '67e310111aec7.png', '14141', 'paid', '2025-03-26 04:23:29', '2025-03-26 04:19:45', '2025-03-26 04:20:33'),
-(14, 44, 4000.00, 4000.00, 'credit_card', 'pay_67e314bdd01946.62057107.png', '234234', 'pending', NULL, '2025-03-26 04:40:29', '2025-03-26 04:40:29');
+(14, 44, 4000.00, 4000.00, 'credit_card', 'pay_67e314bdd01946.62057107.png', '234234', 'paid', '2025-03-26 08:15:51', '2025-03-26 04:40:29', '2025-03-26 04:40:29'),
+(15, 45, 3000.00, 3000.00, 'e-wallet', 'pay_67e3469fba6bd4.52068405.png', '765432', 'pending', NULL, '2025-03-26 08:13:19', '2025-03-26 08:13:19'),
+(16, 46, 1000.00, 1000.00, 'e-wallet', 'pay_67e349a4bc7f32.27217285.png', '76545', 'pending', NULL, '2025-03-26 08:26:12', '2025-03-26 08:26:12'),
+(17, 47, 3000.00, 3000.00, 'e-wallet', 'pay_67e34a290a68f8.32682819.png', '98765', 'paid', '2025-03-26 08:29:30', '2025-03-26 08:28:25', '2025-03-26 08:28:25'),
+(18, 48, 1500.00, 1500.00, 'e-wallet', 'pay_67e34e2ca020c4.41782331.png', '87654', 'pending', NULL, '2025-03-26 08:45:32', '2025-03-26 08:45:32'),
+(19, 49, 1000.00, 1000.00, 'e-wallet', 'pay_67e35066e2ef46.98556440.png', '8765', 'paid', '2025-03-26 08:55:44', '2025-03-26 08:55:02', '2025-03-26 08:55:02'),
+(20, 50, 1000.00, 1000.00, 'e-wallet', 'pay_67e3ad5d21ea56.48894103.jpg', '2322323', 'pending', NULL, '2025-03-26 15:31:41', '2025-03-26 15:31:56'),
+(21, 51, 1000.00, 1000.00, 'credit_card', 'pay_67e3adb25c5f51.92574815.jpg', '22222', 'paid', '2025-03-26 15:34:31', '2025-03-26 15:33:06', '2025-03-26 15:33:06'),
+(22, 53, 2000.00, 2000.00, 'e-wallet', 'pay_67eb4dec0af439.79759713.jpg', '8765', 'pending', NULL, '2025-04-01 10:22:36', '2025-04-01 10:22:36'),
+(23, 54, 2000.00, 1000.00, 'e-wallet', 'pay_67eb4e5023c9e4.44106226.jpg', '7653', 'pending', NULL, '2025-04-01 10:24:16', '2025-04-01 10:24:16');
 
 -- --------------------------------------------------------
 
@@ -317,7 +374,7 @@ INSERT INTO `payment` (`payment_id`, `book_id`, `amount`, `pay_amount`, `payment
 CREATE TABLE IF NOT EXISTS `room` (
   `room_id` int(11) NOT NULL AUTO_INCREMENT,
   `room_code` varchar(50) NOT NULL,
-  `room_type` enum('standard','single_room','deluxe','family_room','studio_room','suite') NOT NULL,
+  `room_type` enum('standard','single_room','deluxe','family_room','studio_room','suite','banquet_hall','garden_venue') NOT NULL,
   `room_status` enum('available','booked','under maintenance') NOT NULL,
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
@@ -325,7 +382,7 @@ CREATE TABLE IF NOT EXISTS `room` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`room_id`),
   UNIQUE KEY `room_ code` (`room_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room`
@@ -336,7 +393,10 @@ INSERT INTO `room` (`room_id`, `room_code`, `room_type`, `room_status`, `descrip
 (28, 'Family Suite', 'family_room', 'available', '', 3000.00, '2025-03-25 20:10:43', '2025-03-25 20:11:02'),
 (29, 'Deluxe Room', 'deluxe', 'available', '', 1500.00, '2025-03-25 20:13:42', '2025-03-25 20:13:42'),
 (30, 'Standard Room', 'standard', 'available', '', 1000.00, '2025-03-25 20:15:12', '2025-03-25 20:15:12'),
-(31, 'Solo Retreat', 'single_room', 'available', '', 1000.00, '2025-03-25 20:17:58', '2025-03-25 20:17:58');
+(31, 'Solo Retreat', 'single_room', 'available', '', 1000.00, '2025-03-25 20:17:58', '2025-03-26 07:38:05'),
+(32, 'room110', 'standard', 'available', '', 1500.00, '2025-03-26 07:51:06', '2025-03-26 07:51:06'),
+(33, 'Crystal Banquet Hall', 'banquet_hall', 'available', '', 10000.00, '2025-04-02 14:19:32', '2025-04-02 14:19:32'),
+(34, 'Sunset Garden Terrace', 'garden_venue', 'available', '', 5000.00, '2025-04-02 14:20:29', '2025-04-02 14:20:29');
 
 -- --------------------------------------------------------
 
@@ -362,7 +422,16 @@ INSERT INTO `room_gallery` (`room_id`, `room_img`, `created_at`) VALUES
 (28, '167e30dd635f04.jpg', '2025-03-25 20:11:02'),
 (29, '167e30e76d8ba5.jpg', '2025-03-25 20:13:42'),
 (30, '167e30ed08c823.jpg', '2025-03-25 20:15:12'),
-(31, '167e30f76e49d9.jpg', '2025-03-25 20:17:58');
+(31, '167e30f76e49d9.jpg', '2025-03-25 20:17:58'),
+(32, '167e3b1ead4687.jpg', '2025-03-26 07:51:06'),
+(32, '167e3b1ead5b2e.jpg', '2025-03-26 07:51:06'),
+(32, '167e3b1ead6174.jpg', '2025-03-26 07:51:06'),
+(33, '167ed4774272ee.png', '2025-04-02 14:19:32'),
+(33, '167ed4774288ab.png', '2025-04-02 14:19:32'),
+(33, '167ed4774290b6.png', '2025-04-02 14:19:32'),
+(34, '167ed47ad8edb6.png', '2025-04-02 14:20:29'),
+(34, '167ed47ad92255.png', '2025-04-02 14:20:29'),
+(34, '167ed47ad92823.png', '2025-04-02 14:20:29');
 
 -- --------------------------------------------------------
 
@@ -378,7 +447,7 @@ CREATE TABLE IF NOT EXISTS `room_notification` (
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`rnotif_id`),
   KEY `room_notification_fk` (`room_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room_notification`
@@ -393,7 +462,12 @@ INSERT INTO `room_notification` (`rnotif_id`, `room_id`, `message`, `is_read`, `
 (21, 28, 'Details for Room #[Family Suite] have been modified', 0, '2025-03-26 04:11:02'),
 (22, 29, 'Deluxe Room added to the system successfully', 0, '2025-03-26 04:13:42'),
 (23, 30, 'Standard Room added to the system successfully', 0, '2025-03-26 04:15:12'),
-(24, 31, 'Solo Retreat added to the system successfully', 0, '2025-03-26 04:17:58');
+(24, 31, 'Solo Retreat added to the system successfully', 0, '2025-03-26 04:17:58'),
+(25, 27, 'Room #[Ocean View Villa] is now availble', 0, '2025-03-26 08:21:07'),
+(26, 32, 'room110 added to the system successfully', 0, '2025-03-26 15:51:06'),
+(27, 29, 'Room #[Deluxe Room] is now availble', 0, '2025-04-01 09:59:57'),
+(28, 33, 'Crystal Banquet Hall added to the system successfully', 0, '2025-04-02 22:19:32'),
+(29, 34, 'Sunset Garden Terrace added to the system successfully', 0, '2025-04-02 22:20:29');
 
 -- --------------------------------------------------------
 
@@ -407,7 +481,7 @@ CREATE TABLE IF NOT EXISTS `summary_payment` (
 ,`NAME` varchar(101)
 ,`email` varchar(50)
 ,`room_code` varchar(50)
-,`room_type` varchar(11)
+,`room_type` varchar(12)
 ,`price` decimal(10,2)
 ,`check_in` datetime
 ,`check_out` datetime
@@ -440,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `tasks_ibfk_1` (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=324 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=326 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tasks`
@@ -451,7 +525,9 @@ INSERT INTO `tasks` (`id`, `title`, `description`, `priority`, `status`, `due_da
 (320, 'Clean Pool', 'you guys need to clean the pool every time the resort is under maintenance got it??', 'High', 'Completed', '2025-03-15', 'Daily', 2, '2025-03-15 02:09:07', '2025-03-15 03:02:58'),
 (321, 'clean AC', 'clean the AC do maintenance after customer bookings', 'Medium', 'Completed', '2025-03-16', 'Weekly', 11, '2025-03-15 03:10:48', '2025-03-15 03:48:23'),
 (322, 'Clean Pool', 'you guys need to clean the pool every time the resort is under maintenance got it??', 'High', 'Completed', '2025-03-16', 'Daily', 2, '2025-03-16 06:52:13', '2025-03-16 07:02:31'),
-(323, 'clean AC', 'clean the AC do maintenance after customer bookings', 'Medium', 'Completed', '2025-03-24', 'Daily', 11, '2025-03-22 19:18:44', '2025-03-22 19:35:55');
+(323, 'clean AC', 'clean the AC do maintenance after customer bookings', 'Medium', 'Completed', '2025-03-24', 'Daily', 11, '2025-03-22 19:18:44', '2025-03-22 19:35:55'),
+(324, 'sample', 'vsdfsdfdsfsd', 'High', 'Completed', '2025-03-27', 'Daily', 12, '2025-03-26 00:39:49', '2025-03-26 08:09:42'),
+(325, 'sample', 'vsdfsdfdsfsd', 'High', 'Overdue', '2025-03-27', 'Daily', 12, '2025-03-26 07:53:14', '2025-04-01 01:59:57');
 
 -- --------------------------------------------------------
 
@@ -468,7 +544,7 @@ CREATE TABLE IF NOT EXISTS `task_assignees` (
   PRIMARY KEY (`id`),
   KEY `task_id` (`task_id`),
   KEY `task_assigness_fk_1` (`staff_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_assignees`
@@ -483,7 +559,9 @@ INSERT INTO `task_assignees` (`id`, `task_id`, `staff_id`, `assignee_task`, `com
 (53, 321, 45, 'Complete', '2025-03-15 11:48:23'),
 (54, 322, 12, 'Complete', '2025-03-16 15:02:31'),
 (55, 322, 45, 'Complete', '2025-03-16 15:02:31'),
-(56, 323, 12, 'Complete', '2025-03-23 03:35:55');
+(56, 323, 12, 'Complete', '2025-03-23 03:35:55'),
+(57, 324, 12, 'Complete', '2025-03-26 16:09:42'),
+(58, 325, 45, 'Overdue', NULL);
 
 -- --------------------------------------------------------
 
@@ -501,7 +579,7 @@ CREATE TABLE IF NOT EXISTS `task_notifications` (
   PRIMARY KEY (`id`),
   KEY `task_notifications_ibfk_2` (`staff_id`),
   KEY `task_notification_fk_1` (`task_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_notifications`
@@ -516,7 +594,9 @@ INSERT INTO `task_notifications` (`id`, `task_id`, `staff_id`, `message`, `is_re
 (66, 321, 45, 'New task assigned: clean AC', 1, '2025-03-15 03:10:48'),
 (67, 322, 12, 'You have a new task: Clean Pool', 1, '2025-03-16 06:52:13'),
 (68, 322, 45, 'You have a new task: Clean Pool', 1, '2025-03-16 06:52:13'),
-(69, 323, 12, 'New task assigned: clean AC', 1, '2025-03-22 19:18:44');
+(69, 323, 12, 'New task assigned: clean AC', 1, '2025-03-22 19:18:44'),
+(70, 324, 12, 'New task assigned: sample', 1, '2025-03-26 00:39:49'),
+(71, 325, 45, 'New task assigned: sample', 0, '2025-03-26 07:53:14');
 
 -- --------------------------------------------------------
 
@@ -531,15 +611,16 @@ CREATE TABLE IF NOT EXISTS `task_templates` (
   `priority` enum('Low','Medium','High') DEFAULT 'Medium',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`task_template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_templates`
 --
 
 INSERT INTO `task_templates` (`task_template_id`, `title`, `description`, `priority`, `created_at`) VALUES
-(2, 'Clean Pool', 'you guys need to clean the pool every time the resort is under maintenance got it??', 'High', '2025-03-09 09:33:57'),
-(11, 'clean AC', 'clean the AC do maintenance after customer bookings', 'Medium', '2025-03-09 09:38:08');
+(2, 'Clean Pool', 'Cleaning a pool involves skimming debris, brushing the surfaces, vacuuming the floor, checking and cleaning the filter, and balancing the water\'s chemical levels.', 'High', '2025-03-09 09:33:57'),
+(11, 'clean AC', 'Cleaning an AC involves turning off the power, cleaning or replacing the air filter, wiping the coils and fins, and checking the drainage system for any clogs.', 'Medium', '2025-03-09 09:38:08'),
+(12, 'sample', 'vsdfsdfdsfsd', 'High', '2025-03-26 00:39:17');
 
 -- --------------------------------------------------------
 
@@ -561,7 +642,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `contact` (`contact`),
   KEY `user_account_fk` (`account_id`),
   KEY `unique_fullname` (`fname`,`lname`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -576,9 +657,27 @@ INSERT INTO `user` (`user_id`, `account_id`, `fname`, `lname`, `age`, `gender`, 
 (25, 38, 'Scarlet', 'Penaverde', 18, 'female', '912345678', '67c7013f97ae19.64225426.png'),
 (27, 40, 'Joe', 'Ey', 57, 'male', '914154147', '67c8fcc661d110.05298683.jpg'),
 (32, 45, 'Jyren', 'Santestiban', 19, 'female', '987867521', '67cd05220ac740.71267362.png'),
-(33, 47, 'Alexa', 'Santestiban', 19, 'female', '987654476', NULL),
+(33, 47, 'Alexa', 'Santestiban', 19, 'female', '987654476', '67e345e8dc2934.96809605.png'),
 (40, 54, 'Lloyd', 'Billoned', 56, 'female', '9876545461', NULL),
-(41, 55, 'Admin', 'Admin', 22, 'male', '9232562547', NULL);
+(41, 55, 'Admin', 'Admin', 22, 'male', '9232562547', NULL),
+(43, 57, 'Davimher', 'Landas', 20, 'female', '9585895874', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vw_pending_payments`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `vw_pending_payments` (
+`payment_id` int(11)
+,`book_id` int(11)
+,`total_amount` decimal(10,2)
+,`downpayment_amount` decimal(10,2)
+,`remaining_balance` decimal(11,2)
+,`payment_type` enum('cash','credit_card','e-wallet')
+,`payment_status` enum('pending','paid','refunded')
+,`created_at` datetime
+);
 
 -- --------------------------------------------------------
 
@@ -606,6 +705,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `summary_payment`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `summary_payment`  AS SELECT `b`.`book_id` AS `booking_id`, 'User' AS `booking_type`, concat(`cb`.`fname`,' ',`cb`.`lname`) AS `NAME`, `cb`.`email` AS `email`, `cb`.`room_code` AS `room_code`, `r`.`room_type` AS `room_type`, `r`.`price` AS `price`, `cb`.`check_in` AS `check_in`, `cb`.`check_out` AS `check_out`, `cb`.`status` AS `book_status`, coalesce(`p`.`amount`,0) AS `amount`, coalesce(`p`.`pay_amount`,0) AS `amount_paid`, coalesce(`p`.`payment_status`,'Pending') AS `payment_status`, coalesce(`p`.`payment_type`,'N/A') AS `payment_type`, `p`.`email_receipt` AS `attached_receipt`, `p`.`created_at` AS `payment_created_at`, `p`.`payment_img` AS `receipt` FROM (((`customer_booking` `cb` left join `payment` `p` on(`cb`.`id` = `p`.`book_id`)) join `booking` `b` on(`p`.`book_id` = `b`.`book_id`)) join `room` `r` on(`cb`.`room_code` = `r`.`room_code`))union all select `b`.`book_id` AS `booking_id`,'Guest' AS `booking_type`,concat(`gb`.`fname`,' ',`gb`.`lname`) AS `NAME`,`gb`.`email` AS `email`,`gb`.`room_code` AS `room_code`,`r`.`room_type` AS `room_type`,`r`.`price` AS `price`,`gb`.`check_in` AS `check_in`,`gb`.`check_out` AS `check_out`,`gb`.`status` AS `book_status`,coalesce(`p`.`amount`,0) AS `amount`,coalesce(`p`.`pay_amount`,0) AS `amount_paid`,coalesce(`p`.`payment_status`,'Pending') AS `payment_status`,coalesce(`p`.`payment_type`,'N/A') AS `payment_type`,`p`.`email_receipt` AS `attached_receipt`,`p`.`created_at` AS `payment_created_at`,`p`.`payment_img` AS `receipt` from (((`guest_booking` `gb` left join `payment` `p` on(`gb`.`id` = `p`.`book_id`)) join `booking` `b` on(`p`.`book_id` = `b`.`book_id`)) join `room` `r` on(`gb`.`room_code` = `r`.`room_code`))  ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vw_pending_payments`
+--
+DROP TABLE IF EXISTS `vw_pending_payments`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_pending_payments`  AS SELECT `payment`.`payment_id` AS `payment_id`, `payment`.`book_id` AS `book_id`, `payment`.`amount` AS `total_amount`, `payment`.`pay_amount` AS `downpayment_amount`, `payment`.`amount`- `payment`.`pay_amount` AS `remaining_balance`, `payment`.`payment_type` AS `payment_type`, `payment`.`payment_status` AS `payment_status`, `payment`.`created_at` AS `created_at` FROM `payment` WHERE `payment`.`amount` - `payment`.`pay_amount` > 0 ;
 
 --
 -- Constraints for dumped tables
