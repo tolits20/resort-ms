@@ -120,8 +120,6 @@
         <a href="../../login.php" class="nav-button login-btn">
             <i class="fas fa-sign-in-alt"></i> Login
         </a>
-        <a href="../../admin/customer/create.php" class="nav-button register-btn">
-            <i class="fas fa-user-plus"></i> Register
-        </a>
+
     </div>
 </nav>
