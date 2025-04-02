@@ -1104,7 +1104,7 @@ smtp_port=58todis
 
 ; For Win32 only.
 ; https://php.net/sendmail-from
-sendmail_from = leviashpenaverde@gmail.com
+sendmail_from = paradiseresort.bookings@gmail.com
 
 ; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
 ; https://php.net/sendmail-path

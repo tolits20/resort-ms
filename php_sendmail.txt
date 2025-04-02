@@ -42,8 +42,8 @@ debug_logfile=debug.log
 
 ; if your smtp server requires authentication, modify the following two lines
 
-auth_username=leviashpenaverde@gmail.com	
-auth_password=hngqaqntokefazsu
+auth_username=paradiseresort.bookings@gmail.com	
+auth_password=paradiseresort123
 
 ; if your smtp server uses pop3 before smtp authentication, modify the 
 ; following three lines.  do not enable unless it is required.
@@ -56,7 +56,7 @@ pop3_password=
 ; this will only affect the "MAIL FROM" command, it won't modify 
 ; the "From: " header of the message content
 
-force_sender=leviashpenaverde@gmail.com
+force_sender=paradiseresort.bookings@gmail.com	
 
 ; force the sender to always be the following email address
 ; this will only affect the "RCTP TO" command, it won't modify 
