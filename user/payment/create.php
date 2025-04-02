@@ -26,6 +26,7 @@ if ($book_id == 0 || $amount == 0) {
     echo "Invalid booking information.";
     exit;
 }
+$downpayment = $amount * 0.5;
 ?>
 
 <!DOCTYPE html>
@@ -164,6 +165,29 @@ if ($book_id == 0 || $amount == 0) {
             background: #219653;
             transform: translateY(-2px);
         }
+        
+        .payment-choice {
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-choice label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .payment-choice .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .payment-choice .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: normal;
+        }
 
         @media (max-width: 768px) {
             .main-container {
@@ -202,6 +226,20 @@ if ($book_id == 0 || $amount == 0) {
                 <input type="hidden" name="book_id" value="<?php echo htmlspecialchars($book_id); ?>">
                 <input type="hidden" name="amount" value="<?php echo htmlspecialchars($amount); ?>">
 
+                                <!-- Payment Choice Section -->
+                                <div class="payment-choice">
+                    <label>Payment Option:</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="payment_option" value="full" checked onchange="updatePaymentAmount()">
+                            Full Payment (₱<?php echo number_format($amount, 2); ?>)
+                        </label>
+                        <label>
+                            <input type="radio" name="payment_option" value="downpayment" onchange="updatePaymentAmount()">
+                            Downpayment (₱<?php echo number_format($downpayment, 2); ?>)
+                        </label>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="pay_amount">Payment Amount:</label>
                     <input type="number" id="pay_amount" name="pay_amount" step="0.01" min="1" 
