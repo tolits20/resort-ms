@@ -43,7 +43,7 @@ debug_logfile=debug.log
 ; if your smtp server requires authentication, modify the following two lines
 
 auth_username=paradiseresort.bookings@gmail.com	
-auth_password=paradiseresort123
+auth_password=vryg jjgr vhbb hdkm
 
 ; if your smtp server uses pop3 before smtp authentication, modify the 
 ; following three lines.  do not enable unless it is required.
