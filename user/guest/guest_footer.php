@@ -68,7 +68,7 @@
                 <ul class="footer-links">
                     <li><i class="fas fa-phone"></i> +1 234 567 890</li>
                     <li><i class="fas fa-envelope"></i> info@paradiseresort.com</li>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Paradise Street, Beach City</li>
+                    <li><i class="fas fa-map-marker-alt"></i>Sitio Bulaksina, Brgy. Pakiing, Mulanay Quezon</li>
                 </ul>
             </div>
             <div class="footer-column">

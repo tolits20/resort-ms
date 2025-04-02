@@ -304,17 +304,28 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
     <div class="booking-form">
         <h2>Book <?= htmlspecialchars($room['room_code']); ?></h2>
 
-        <div class="price-box">
-            <p>Price: 
-                <?php if ($room['discount_percentage'] > 0): ?>
-                    <span class="discounted">₱<?= number_format($room['price'], 2); ?></span>
-                    <strong  id="dynamic-price">₱<?= number_format($room['discounted_price'], 2); ?></strong>
-                    (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
-                <?php else: ?>
-                    <strong id="dynamic-price">₱<?= number_format($room['price'], 2); ?></strong>
-                <?php endif; ?>
-            </p>
-        </div>
+<!-- Price Box -->
+<div class="price-box">
+    <p>
+        <?php
+        // Calculate the downpayment (50% of the full price)
+        $full_price = $room['discount_percentage'] > 0 ? $room['discounted_price'] : $room['price'];
+        $downpayment = $full_price * 0.5;
+        ?>
+
+        Full Price: 
+        <?php if ($room['discount_percentage'] > 0): ?>
+            <span class="discounted">₱<?= number_format($room['price'], 2); ?></span>
+            <strong id="dynamic-price">₱<?= number_format($full_price, 2); ?></strong>
+            (<?= htmlspecialchars($room['discount_percentage']); ?>% off)
+        <?php else: ?>
+            <strong id="dynamic-price">₱<?= number_format($full_price, 2); ?></strong>
+        <?php endif; ?>
+    </p>
+    <p>
+        Downpayment (50%): <strong id="downpayment-price">₱<?= number_format($downpayment, 2); ?></strong>
+    </p>
+</div>
         <input type="hidden" id="original-price" value="<?= $room['discount_percentage'] > 0 ? $room['discounted_price'] : $room['price']; ?>">
         <form method="POST" action="store.php?price=<?php echo $discounted_price; ?>">
         <input type="hidden" id="updated-price" name="updated_price" value="<?= $room['discount_percentage'] > 0 ? $room['discounted_price'] : $room['price']; ?>">
@@ -384,66 +395,67 @@ $feedbacks = $feedbackResult->fetch_all(MYSQLI_ASSOC);
         });
 
         function updateCheckoutDate(checkInDate) {
-            console.log("updateCheckoutDate called"); // Debugging line
+    console.log("updateCheckoutDate called"); // Debugging line
 
-            let timeSlot = $("#time_slot").val();
-            console.log("Selected Time Slot:", timeSlot); // Debugging line
+    let timeSlot = $("#time_slot").val();
+    console.log("Selected Time Slot:", timeSlot); // Debugging line
 
-            if (!timeSlot) return;
+    if (!timeSlot) return;
 
-            let checkInDateTime = new Date(checkInDate);
-            let checkOutDateTime = new Date(checkInDate);
-            let checkInTime, checkOutTime;
+    let checkInDateTime = new Date(checkInDate);
+    let checkOutDateTime = new Date(checkInDate);
+    let checkInTime, checkOutTime;
 
-            // Get the original price from the hidden input
-            const originalPrice = parseFloat($("#original-price").val());
-            console.log("Original Price:", originalPrice); // Debugging line
+    // Get the original price from the hidden input
+    const originalPrice = parseFloat($("#original-price").val());
+    console.log("Original Price:", originalPrice); // Debugging line
 
-            let newPrice = originalPrice;
+    let newPrice = originalPrice;
 
-            switch (timeSlot) {
-                case "7:00 AM - 5:00 PM":
-                    checkInTime = "07:00:00";
-                    checkOutTime = "17:00:00";
-                    break;
+    switch (timeSlot) {
+        case "7:00 AM - 5:00 PM":
+            checkInTime = "07:00:00";
+            checkOutTime = "17:00:00";
+            break;
 
-                case "7:00 PM - 5:00 AM":
-                    checkInTime = "19:00:00";
-                    checkOutTime = "05:00:00";
-                    checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-                    break;
+        case "7:00 PM - 5:00 AM":
+            checkInTime = "19:00:00";
+            checkOutTime = "05:00:00";
+            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+            break;
 
-                case "7:00 PM - 5:00 PM":
-                    checkInTime = "19:00:00";
-                    checkOutTime = "17:00:00";
-                    checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-                    newPrice = originalPrice * 2; // Double the price for this time slot
-                    break;
+        case "7:00 PM - 5:00 PM":
+            checkInTime = "19:00:00";
+            checkOutTime = "17:00:00";
+            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+            newPrice = originalPrice * 2; // Double the price for this time slot
+            break;
 
-                case "7:00 AM - 5:00 AM":
-                    checkInTime = "07:00:00";
-                    checkOutTime = "05:00:00";
-                    checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
-                    newPrice = originalPrice * 2;
-                    // Update the discounted price in PHP
-                    // Double the price for this time slot
-                    break;
-            }
+        case "7:00 AM - 5:00 AM":
+            checkInTime = "07:00:00";
+            checkOutTime = "05:00:00";
+            checkOutDateTime.setDate(checkOutDateTime.getDate() + 1);
+            newPrice = originalPrice * 2; // Double the price for this time slot
+            break;
+    }
 
-            // console.log("New Price:", newPrice); // Debugging line
+    // Update the check-out date and time
+    let checkOutFormatted = $.datepicker.formatDate("yy-mm-dd", checkOutDateTime);
+    $("#check_out").val(checkOutFormatted);
+    $("#hidden_check_out").val(checkOutFormatted);
+    $("#check_in_time").val(checkInTime);
+    $("#check_out_time").val(checkOutTime);
 
-            // Update the check-out date and time
-            let checkOutFormatted = $.datepicker.formatDate("yy-mm-dd", checkOutDateTime);
-            $("#check_out").val(checkOutFormatted);
-            $("#hidden_check_out").val(checkOutFormatted);
-            $("#check_in_time").val(checkInTime);
-            $("#check_out_time").val(checkOutTime);
+    // Update the full price and downpayment
+    $("#dynamic-price").text(`₱${newPrice.toFixed(2)}`);
+    $("#updated-price").val(newPrice);
 
+    // Calculate and update the downpayment (50% of the new price)
+    const downpayment = newPrice * 0.5;
+    $("#downpayment-price").text(`₱${downpayment.toFixed(2)}`);
 
-            $("#dynamic-price").text(`₱${newPrice.toFixed(2)}`);
-            $("#updated-price").val(newPrice);
-            console.log("Updated #dynamic-price element:", $("#dynamic-price").text()); // Debugging line
-        }
+    console.log("Updated #dynamic-price element:", $("#dynamic-price").text()); // Debugging line
+}
 
         // Initialize the price and check-out date on page load
         if ($("#check_in").val()) {
