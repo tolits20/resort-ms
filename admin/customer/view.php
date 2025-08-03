@@ -164,7 +164,7 @@ function timeAgo($datetime) {
             <ul class="activity-list">
                 <?php foreach ($activities as $activity): ?>
                     <li>
-                        <span><?php echo ucfirst($activity['account_notification']); ?></span>
+                        <span><?php echo ucfirst($activity['message']); ?></span>
                         <span><?php echo timeAgo($activity['Date']); ?></span>
                     </li>
                 <?php endforeach; ?>

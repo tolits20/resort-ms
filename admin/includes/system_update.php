@@ -4,234 +4,234 @@ use Dom\Mysql;
 
  date_default_timezone_set('Asia/Manila'); // Change to your timezone if needed
 
-//automatic email sending
-try{
-    $now = date("Y-m-d H:i:s");
+// //automatic email sending
+// try{
+//     $now = date("Y-m-d H:i:s");
 
-// 1. Send reminder email 24 hours before check-in
-    $sql = "SELECT 
-        'user' AS identifier,
-        b.book_id,
-        b.created_at,
-        b.check_in,
-        b.check_out,
-        b.book_status,
-        b.reminder_sent,
-        u.fname AS fname, 
-        u.lname AS lname, 
-        a.username AS email, 
-        r.room_code
-    FROM booking b
-    INNER JOIN user u ON b.account_id = u.account_id
-    INNER JOIN room r ON b.room_id = r.room_id
-    INNER JOIN account a ON b.account_id = a.account_id
-    WHERE b.book_status = 'confirmed' 
-    AND b.reminder_sent IS NULL 
-    AND b.check_in BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR)
+// // 1. Send reminder email 24 hours before check-in
+//     $sql = "SELECT 
+//         'user' AS identifier,
+//         b.book_id,
+//         b.created_at,
+//         b.check_in,
+//         b.check_out,
+//         b.book_status,
+//         b.reminder_sent,
+//         u.fname AS fname, 
+//         u.lname AS lname, 
+//         a.username AS email, 
+//         r.room_code
+//     FROM booking b
+//     INNER JOIN user u ON b.account_id = u.account_id
+//     INNER JOIN room r ON b.room_id = r.room_id
+//     INNER JOIN account a ON b.account_id = a.account_id
+//     WHERE b.book_status = 'confirmed' 
+//     AND b.reminder_sent IS NULL 
+//     AND b.check_in BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR)
 
-    UNION ALL
+//     UNION ALL
 
-    SELECT 
-        'guest' AS identifier,
-        b.book_id,
-        b.created_at,
-        b.check_in,
-        b.check_out,
-        b.book_status,
-        b.reminder_sent,
-        g.fname AS fname, 
-        g.lname AS lname, 
-        g.email AS email, 
-        r.room_code
-    FROM booking b
-    INNER JOIN guest g ON b.guest_id = g.guest_id
-    INNER JOIN room r ON b.room_id = r.room_id
-    WHERE b.book_status = 'confirmed' 
-    AND b.reminder_sent IS NULL 
-    AND b.check_in BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR);
-    ";
-$result = mysqli_query($conn, $sql);
+//     SELECT 
+//         'guest' AS identifier,
+//         b.book_id,
+//         b.created_at,
+//         b.check_in,
+//         b.check_out,
+//         b.book_status,
+//         b.reminder_sent,
+//         g.fname AS fname, 
+//         g.lname AS lname, 
+//         g.email AS email, 
+//         r.room_code
+//     FROM booking b
+//     INNER JOIN guest g ON b.guest_id = g.guest_id
+//     INNER JOIN room r ON b.room_id = r.room_id
+//     WHERE b.book_status = 'confirmed' 
+//     AND b.reminder_sent IS NULL 
+//     AND b.check_in BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 24 HOUR);
+//     ";
+// $result = mysqli_query($conn, $sql);
 
-while ($row = mysqli_fetch_assoc($result)) {
-    $to = $row['email'];
-    $subject = "Booking Confirmation - Your Stay at SAMPLE Resort";
+// while ($row = mysqli_fetch_assoc($result)) {
+//     $to = $row['email'];
+//     $subject = "Booking Confirmation - Your Stay at SAMPLE Resort";
     
-    $name=$row['fname']." ".$row['lname'];
-    $bookingDate = $row['created_at']; 
-    $checkInDate = $row['check_in']; 
-    $checkout = $row['check_out'];
-    $roomNumber = $row['room_code'];
+//     $name=$row['fname']." ".$row['lname'];
+//     $bookingDate = $row['created_at']; 
+//     $checkInDate = $row['check_in']; 
+//     $checkout = $row['check_out'];
+//     $roomNumber = $row['room_code'];
     
-    $message = "
-    <html>
-    <head>
-        <title>Booking Confirmation</title>
-        <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; }
-            .email-container { padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
-            h2 { color: #2c3e50; }
-            p { color: #333; }
-            .footer { font-size: 12px; color: #666; margin-top: 20px; }
-        </style>
-    </head>
-    <body>
-        <div class='email-container'>
-            <h2>Dear $name,</h2>
-            <p>Thank you for booking with <strong>Sample Resort</strong>.</p>
-            <p>Your reservation details are as follows:</p>
-            <ul>
-                <li><strong>Booking Date:</strong> $bookingDate</li>
-                <li><strong>Check-in Date:</strong> $checkInDate</li>
-                <li><strong>Check-out Date:</strong> $checkout</li>
-                <li><strong>Room Number:</strong> $roomNumber</li>
-            </ul>
-            <p>If you have any questions, feel free to contact us.</p>
-            <p>We look forward to welcoming you!</p>
-            <p class='footer'>Best Regards, <br>Sample Resort Team</p>
-        </div>
-    </body>
-    </html>";
+//     $message = "
+//     <html>
+//     <head>
+//         <title>Booking Confirmation</title>
+//         <style>
+//             body { font-family: Arial, sans-serif; line-height: 1.6; }
+//             .email-container { padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+//             h2 { color: #2c3e50; }
+//             p { color: #333; }
+//             .footer { font-size: 12px; color: #666; margin-top: 20px; }
+//         </style>
+//     </head>
+//     <body>
+//         <div class='email-container'>
+//             <h2>Dear $name,</h2>
+//             <p>Thank you for booking with <strong>Sample Resort</strong>.</p>
+//             <p>Your reservation details are as follows:</p>
+//             <ul>
+//                 <li><strong>Booking Date:</strong> $bookingDate</li>
+//                 <li><strong>Check-in Date:</strong> $checkInDate</li>
+//                 <li><strong>Check-out Date:</strong> $checkout</li>
+//                 <li><strong>Room Number:</strong> $roomNumber</li>
+//             </ul>
+//             <p>If you have any questions, feel free to contact us.</p>
+//             <p>We look forward to welcoming you!</p>
+//             <p class='footer'>Best Regards, <br>Sample Resort Team</p>
+//         </div>
+//     </body>
+//     </html>";
     
-    // Email Headers
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-    $headers .= "From: Sample Resort <no-reply@sampleresort.com>" . "\r\n";
-    $headers .= "Reply-To: support@sampleresort.com" . "\r\n";
+//     // Email Headers
+//     $headers = "MIME-Version: 1.0" . "\r\n";
+//     $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
+//     $headers .= "From: Sample Resort <no-reply@sampleresort.com>" . "\r\n";
+//     $headers .= "Reply-To: support@sampleresort.com" . "\r\n";
     
-    // Send Email
-    if (mail($to, $subject, $message, $headers)) {
-        $update = "UPDATE booking SET reminder_sent=NOW() WHERE book_id=" . $row['book_id'];
-        mysqli_query($conn, $update);
+//     // Send Email
+//     if (mail($to, $subject, $message, $headers)) {
+//         $update = "UPDATE booking SET reminder_sent=NOW() WHERE book_id=" . $row['book_id'];
+//         mysqli_query($conn, $update);
       
-    } else {
-        echo "Error: Email not sent!";
-    }
+//     } else {
+//         echo "Error: Email not sent!";
+//     }
     
    
-}
-}catch(Exception $e){
-    echo 'Error: ' . $e->getMessage();
-}
+// }
+// }catch(Exception $e){
+//     echo 'Error: ' . $e->getMessage();
+// }
 
 
 
 
-// 2. Send completion email after checkout
-try{
-    mysqli_begin_transaction($conn);
-        $sql2 = "SELECT 
-        'user' AS identifier,
-        b.book_id,
-        b.check_in,
-        b.check_out,
-        b.book_status,
-        b.reminder_sent,
-        u.fname AS fname, 
-        u.lname AS lname, 
-        a.username AS email, 
-        r.room_code
-    FROM booking b
-    INNER JOIN user u ON b.account_id = u.account_id
-    INNER JOIN room r ON b.room_id = r.room_id
-    INNER JOIN account a ON b.account_id = a.account_id
-    WHERE b.book_status = 'completed' 
-    AND b.completion_sent IS NULL 
-    AND b.check_out <= NOW()
+// // 2. Send completion email after checkout
+// try{
+//     mysqli_begin_transaction($conn);
+//         $sql2 = "SELECT 
+//         'user' AS identifier,
+//         b.book_id,
+//         b.check_in,
+//         b.check_out,
+//         b.book_status,
+//         b.reminder_sent,
+//         u.fname AS fname, 
+//         u.lname AS lname, 
+//         a.username AS email, 
+//         r.room_code
+//     FROM booking b
+//     INNER JOIN user u ON b.account_id = u.account_id
+//     INNER JOIN room r ON b.room_id = r.room_id
+//     INNER JOIN account a ON b.account_id = a.account_id
+//     WHERE b.book_status = 'completed' 
+//     AND b.completion_sent IS NULL 
+//     AND b.check_out <= NOW()
 
-    UNION ALL
+//     UNION ALL
 
-    SELECT 
-        'guest' AS identifier,
-        b.book_id,
-        b.check_in,
-        b.check_out,
-        b.book_status,
-        b.reminder_sent,
-        g.fname AS fname, 
-        g.lname AS lname, 
-        g.email AS email, 
-        r.room_code
-    FROM booking b
-    INNER JOIN guest g ON b.guest_id = g.guest_id
-    INNER JOIN room r ON b.room_id = r.room_id
-    WHERE b.book_status = 'completed' 
-    AND b.completion_sent IS NULL 
-    AND b.check_out<=NOW();
-    ";  
-$result2 = mysqli_query($conn, $sql2);
+//     SELECT 
+//         'guest' AS identifier,
+//         b.book_id,
+//         b.check_in,
+//         b.check_out,
+//         b.book_status,
+//         b.reminder_sent,
+//         g.fname AS fname, 
+//         g.lname AS lname, 
+//         g.email AS email, 
+//         r.room_code
+//     FROM booking b
+//     INNER JOIN guest g ON b.guest_id = g.guest_id
+//     INNER JOIN room r ON b.room_id = r.room_id
+//     WHERE b.book_status = 'completed' 
+//     AND b.completion_sent IS NULL 
+//     AND b.check_out<=NOW();
+//     ";  
+// $result2 = mysqli_query($conn, $sql2);
 
-while ($row = mysqli_fetch_assoc($result2)) {
-    $to = $row['email'];
-    $name=$row['fname']." ".$row['lname'];
-    $subject = "Booking Completed - Thank You for Staying with Us!";
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-    $headers .= "From: Sample Resort <noreply@sampleresort.com>" . "\r\n";
+// while ($row = mysqli_fetch_assoc($result2)) {
+//     $to = $row['email'];
+//     $name=$row['fname']." ".$row['lname'];
+//     $subject = "Booking Completed - Thank You for Staying with Us!";
+//     $headers = "MIME-Version: 1.0" . "\r\n";
+//     $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
+//     $headers .= "From: Sample Resort <noreply@sampleresort.com>" . "\r\n";
 
-    $message = '
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                padding: 20px;
-                text-align: center;
-            }
-            .container {
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                max-width: 500px;
-                margin: auto;
-            }
-            h2 {
-                color: #007bff;
-            }
-            p {
-                font-size: 16px;
-                color: #333;
-            }
-            .footer {
-                margin-top: 20px;
-                font-size: 14px;
-                color: #777;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h2>Booking Completed!</h2>
-            <p>Dear <strong>' . $name . '</strong>,</p>
-            <p>Your booking at <strong>Our Resort</strong> has been successfully completed!</p>
-            <p>We hope you had a wonderful stay. If you have any feedback, we’d love to hear from you.</p>
-            <p>Looking forward to welcoming you again soon!</p>
-            <br>
-            <p class="footer">If you have any questions, feel free to contact us at <a href="mailto:support@yourresort.com">support@yourresort.com</a>.</p>
-        </div>
-    </body>
-    </html>
-    ';
-    if(empty($to)){
-        echo 'email is empty';
-    }else{
-        if (mail($to,$subject, $message, $headers)) {
-            $update = "UPDATE booking SET completion_sent=NOW() WHERE book_id=" . $row['book_id'];
-            if(mysqli_query($conn, $update)){
-                mysqli_commit($conn);
-            }
-        }else{
-            echo 'failed to update the email fields in booking table';
-        }
-    }
-}
+//     $message = '
+//     <!DOCTYPE html>
+//     <html>
+//     <head>
+//         <style>
+//             body {
+//                 font-family: Arial, sans-serif;
+//                 background-color: #f4f4f4;
+//                 padding: 20px;
+//                 text-align: center;
+//             }
+//             .container {
+//                 background: white;
+//                 padding: 20px;
+//                 border-radius: 10px;
+//                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//                 max-width: 500px;
+//                 margin: auto;
+//             }
+//             h2 {
+//                 color: #007bff;
+//             }
+//             p {
+//                 font-size: 16px;
+//                 color: #333;
+//             }
+//             .footer {
+//                 margin-top: 20px;
+//                 font-size: 14px;
+//                 color: #777;
+//             }
+//         </style>
+//     </head>
+//     <body>
+//         <div class="container">
+//             <h2>Booking Completed!</h2>
+//             <p>Dear <strong>' . $name . '</strong>,</p>
+//             <p>Your booking at <strong>Our Resort</strong> has been successfully completed!</p>
+//             <p>We hope you had a wonderful stay. If you have any feedback, we’d love to hear from you.</p>
+//             <p>Looking forward to welcoming you again soon!</p>
+//             <br>
+//             <p class="footer">If you have any questions, feel free to contact us at <a href="mailto:support@yourresort.com">support@yourresort.com</a>.</p>
+//         </div>
+//     </body>
+//     </html>
+//     ';
+//     if(empty($to)){
+//         echo 'email is empty';
+//     }else{
+//         if (mail($to,$subject, $message, $headers)) {
+//             $update = "UPDATE booking SET completion_sent=NOW() WHERE book_id=" . $row['book_id'];
+//             if(mysqli_query($conn, $update)){
+//                 mysqli_commit($conn);
+//             }
+//         }else{
+//             echo 'failed to update the email fields in booking table';
+//         }
+//     }
+// }
 
-}catch(Exception $e){
-    mysqli_rollback($conn);
-    echo 'Error: ' . $e->getMessage();
-}
+// }catch(Exception $e){
+//     mysqli_rollback($conn);
+//     echo 'Error: ' . $e->getMessage();
+// }
 
 //auto booked when meets the check_in date
 $auto_booked_query = "SELECT * FROM booking WHERE book_status='pending' AND check_in <= NOW()";
@@ -254,66 +254,66 @@ if ($auto_booked_result) {
 // Notify users of double bookings and ensure double booking checks are properly implemented
 
 // Check for double bookings
-$double_booking_query = "SELECT b1.book_id AS booking1, b2.book_id AS booking2, r.room_code, b1.check_in, b1.check_out, b1.book_status AS status1, b2.book_status AS status2, b2.account_id AS pending_account_id
-                         FROM booking b1
-                         INNER JOIN booking b2 ON b1.room_id = b2.room_id AND b1.book_id != b2.book_id
-                         INNER JOIN room r ON b1.room_id = r.room_id
-                         WHERE b1.check_in < b2.check_out 
-                         AND b1.check_out > b2.check_in";
-$double_booking_result = mysqli_query($conn, $double_booking_query);
+// $double_booking_query = "SELECT b1.book_id AS booking1, b2.book_id AS booking2, r.room_code, b1.check_in, b1.check_out, b1.book_status AS status1, b2.book_status AS status2, b2.account_id AS pending_account_id
+//                          FROM booking b1
+//                          INNER JOIN booking b2 ON b1.room_id = b2.room_id AND b1.book_id != b2.book_id
+//                          INNER JOIN room r ON b1.room_id = r.room_id
+//                          WHERE b1.check_in < b2.check_out 
+//                          AND b1.check_out > b2.check_in";
+// $double_booking_result = mysqli_query($conn, $double_booking_query);
 
-if (mysqli_num_rows($double_booking_result) > 0) {
-    while ($row = mysqli_fetch_assoc($double_booking_result)) {
-        $booking1 = $row['booking1'];
-        $booking2 = $row['booking2'];
-        $room_code = $row['room_code'];
-        $check_in = $row['check_in'];
-        $check_out = $row['check_out'];
-        $status1 = $row['status1'];
-        $status2 = $row['status2'];
-        $pending_account_id = $row['pending_account_id'];
+// if (mysqli_num_rows($double_booking_result) > 0) {
+//     while ($row = mysqli_fetch_assoc($double_booking_result)) {
+//         $booking1 = $row['booking1'];
+//         $booking2 = $row['booking2'];
+//         $room_code = $row['room_code'];
+//         $check_in = $row['check_in'];
+//         $check_out = $row['check_out'];
+//         $status1 = $row['status1'];
+//         $status2 = $row['status2'];
+//         $pending_account_id = $row['pending_account_id'];
 
-        // If one booking is confirmed and the other is pending
-        if (($status1 == 'confirmed' && $status2 == 'pending') || ($status1 == 'pending' && $status2 == 'confirmed')) {
-            $pending_booking_id = ($status1 == 'pending') ? $booking1 : $booking2;
+//         // If one booking is confirmed and the other is pending
+//         if (($status1 == 'confirmed' && $status2 == 'pending') || ($status1 == 'pending' && $status2 == 'confirmed')) {
+//             $pending_booking_id = ($status1 == 'pending') ? $booking1 : $booking2;
 
-            // Fetch the email of the user with the pending booking
-            $email_query = "SELECT a.username AS email, u.fname, u.lname 
-                            FROM account a
-                            INNER JOIN user u ON a.account_id = u.account_id
-                            WHERE a.account_id = $pending_account_id";
-            $email_result = mysqli_query($conn, $email_query);
+//             // Fetch the email of the user with the pending booking
+//             $email_query = "SELECT a.username AS email, u.fname, u.lname 
+//                             FROM account a
+//                             INNER JOIN user u ON a.account_id = u.account_id
+//                             WHERE a.account_id = $pending_account_id";
+//             $email_result = mysqli_query($conn, $email_query);
 
-            if ($email_row = mysqli_fetch_assoc($email_result)) {
-                $to = $email_row['email'];
-                $name = $email_row['fname'] . " " . $email_row['lname'];
-                $subject = "Booking Status Update - Room #$room_code";
-                $message = "
-                <html>
-                <head>
-                    <title>Booking Status Update</title>
-                </head>
-                <body>
-                    <p>Dear $name,</p>
-                    <p>We regret to inform you that your booking for Room #$room_code from $check_in to $check_out has been cancelled due to a conflict with another confirmed booking.</p>
-                    <p>Please contact us for further assistance or to modify your booking.</p>
-                    <p>Best regards,<br>Sample Resort Team</p>
-                </body>
-                </html>";
-                $headers = "MIME-Version: 1.0" . "\r\n";
-                $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-                $headers .= "From: Sample Resort <no-reply@sampleresort.com>" . "\r\n";
+//             if ($email_row = mysqli_fetch_assoc($email_result)) {
+//                 $to = $email_row['email'];
+//                 $name = $email_row['fname'] . " " . $email_row['lname'];
+//                 $subject = "Booking Status Update - Room #$room_code";
+//                 $message = "
+//                 <html>
+//                 <head>
+//                     <title>Booking Status Update</title>
+//                 </head>
+//                 <body>
+//                     <p>Dear $name,</p>
+//                     <p>We regret to inform you that your booking for Room #$room_code from $check_in to $check_out has been cancelled due to a conflict with another confirmed booking.</p>
+//                     <p>Please contact us for further assistance or to modify your booking.</p>
+//                     <p>Best regards,<br>Sample Resort Team</p>
+//                 </body>
+//                 </html>";
+//                 $headers = "MIME-Version: 1.0" . "\r\n";
+//                 $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
+//                 $headers .= "From: Sample Resort <no-reply@sampleresort.com>" . "\r\n";
 
-                // Send email notification
-                mail($to, $subject, $message, $headers);
+//                 // Send email notification
+//                 mail($to, $subject, $message, $headers);
 
-                // Mark the pending booking as cancelled
-                $cancel_query = "UPDATE booking SET book_status = 'cancelled' WHERE book_id = $pending_booking_id";
-                mysqli_query($conn, $cancel_query);
-            }
-        }
-    }
-}
+//                 // Mark the pending booking as cancelled
+//                 $cancel_query = "UPDATE booking SET book_status = 'cancelled' WHERE book_id = $pending_booking_id";
+//                 mysqli_query($conn, $cancel_query);
+//             }
+//         }
+//     }
+// }
 
 // Notify users with pending downpayments and enforce minimum downpayment rule
 $downpayment_query = "SELECT 
@@ -545,106 +545,106 @@ $set_staff_overdue_set=mysqli_query($conn,$set_staff_overdue);
 //sent receipt email
 
 // Fetch payment details
-$payment_sent = "SELECT * FROM summary_payment WHERE attached_receipt IS NULL AND payment_status ='paid'";
-$pres = mysqli_query($conn, $payment_sent);
+// $payment_sent = "SELECT * FROM summary_payment WHERE attached_receipt IS NULL AND payment_status ='paid'";
+// $pres = mysqli_query($conn, $payment_sent);
 
-if (mysqli_num_rows($pres) > 0) {
-    while ($row = mysqli_fetch_assoc($pres)) {
-        require_once('../../resources/fpdf186/fpdf.php');
+// if (mysqli_num_rows($pres) > 0) {
+//     while ($row = mysqli_fetch_assoc($pres)) {
+//         require_once('../../resources/fpdf186/fpdf.php');
 
-        $booking_id = $row['booking_id'];
-        $customer_email = $row['email'];
-        $customer_name = $row['NAME'];
-        $amount_paid = $row['amount_paid'];
-        $check_in = date("F d, Y", strtotime($row['check_in']));
-        $check_out = date("F d, Y", strtotime($row['check_out']));
-        $room_code = $row['room_code'];
-        $room_type = $row['room_type'];
+//         $booking_id = $row['booking_id'];
+//         $customer_email = $row['email'];
+//         $customer_name = $row['NAME'];
+//         $amount_paid = $row['amount_paid'];
+//         $check_in = date("F d, Y", strtotime($row['check_in']));
+//         $check_out = date("F d, Y", strtotime($row['check_out']));
+//         $room_code = $row['room_code'];
+//         $room_type = $row['room_type'];
 
-        // Generate PDF Invoice
-        $pdf = new FPDF();
-        $pdf->AddPage();
-        $pdf->SetFont('Arial', 'B', 16);
+//         // Generate PDF Invoice
+//         $pdf = new FPDF();
+//         $pdf->AddPage();
+//         $pdf->SetFont('Arial', 'B', 16);
 
-        // Header
-        $pdf->Cell(190, 10, 'Resort Management System', 0, 1, 'C');
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(190, 10, '123 Beachfront Road, Paradise Island', 0, 1, 'C');
-        $pdf->Cell(190, 10, 'Email: info@resort.com | Phone: (123) 456-7890', 0, 1, 'C');
-        $pdf->Ln(10);
+//         // Header
+//         $pdf->Cell(190, 10, 'Resort Management System', 0, 1, 'C');
+//         $pdf->SetFont('Arial', '', 12);
+//         $pdf->Cell(190, 10, '123 Beachfront Road, Paradise Island', 0, 1, 'C');
+//         $pdf->Cell(190, 10, 'Email: info@resort.com | Phone: (123) 456-7890', 0, 1, 'C');
+//         $pdf->Ln(10);
 
-        // Title
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(190, 10, 'INVOICE', 0, 1, 'C');
-        $pdf->Ln(5);
+//         // Title
+//         $pdf->SetFont('Arial', 'B', 16);
+//         $pdf->Cell(190, 10, 'INVOICE', 0, 1, 'C');
+//         $pdf->Ln(5);
 
-        // Customer Details
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(190, 10, 'Customer Details', 0, 1, 'L');
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(190, 10, 'Name: ' . $customer_name, 0, 1, 'L');
-        $pdf->Cell(190, 10, 'Email: ' . $customer_email, 0, 1, 'L');
-        $pdf->Ln(5);
+//         // Customer Details
+//         $pdf->SetFont('Arial', 'B', 12);
+//         $pdf->Cell(190, 10, 'Customer Details', 0, 1, 'L');
+//         $pdf->SetFont('Arial', '', 12);
+//         $pdf->Cell(190, 10, 'Name: ' . $customer_name, 0, 1, 'L');
+//         $pdf->Cell(190, 10, 'Email: ' . $customer_email, 0, 1, 'L');
+//         $pdf->Ln(5);
 
-        // Booking Details
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(190, 10, 'Booking Details', 0, 1, 'L');
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(190, 10, 'Booking ID: ' . $booking_id, 0, 1, 'L');
-        $pdf->Cell(190, 10, 'Room: ' . $room_code . ' (' . $room_type . ')', 0, 1, 'L');
-        $pdf->Cell(190, 10, 'Check-in: ' . $check_in, 0, 1, 'L');
-        $pdf->Cell(190, 10, 'Check-out: ' . $check_out, 0, 1, 'L');
-        $pdf->Ln(10);
+//         // Booking Details
+//         $pdf->SetFont('Arial', 'B', 12);
+//         $pdf->Cell(190, 10, 'Booking Details', 0, 1, 'L');
+//         $pdf->SetFont('Arial', '', 12);
+//         $pdf->Cell(190, 10, 'Booking ID: ' . $booking_id, 0, 1, 'L');
+//         $pdf->Cell(190, 10, 'Room: ' . $room_code . ' (' . $room_type . ')', 0, 1, 'L');
+//         $pdf->Cell(190, 10, 'Check-in: ' . $check_in, 0, 1, 'L');
+//         $pdf->Cell(190, 10, 'Check-out: ' . $check_out, 0, 1, 'L');
+//         $pdf->Ln(10);
 
-        // Payment Details
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(190, 10, 'Payment Details', 0, 1, 'L');
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(190, 10, 'Amount Paid: PHP ' . number_format($amount_paid, 2), 0, 1, 'L');
-        $pdf->Ln(10);
+//         // Payment Details
+//         $pdf->SetFont('Arial', 'B', 12);
+//         $pdf->Cell(190, 10, 'Payment Details', 0, 1, 'L');
+//         $pdf->SetFont('Arial', '', 12);
+//         $pdf->Cell(190, 10, 'Amount Paid: PHP ' . number_format($amount_paid, 2), 0, 1, 'L');
+//         $pdf->Ln(10);
 
-        // Footer
-        $pdf->SetFont('Arial', 'I', 10);
-        $pdf->Cell(190, 10, 'Thank you for choosing our resort!', 0, 1, 'C');
-        $pdf->Cell(190, 10, 'For inquiries, contact us at (123) 456-7890', 0, 1, 'C');
+//         // Footer
+//         $pdf->SetFont('Arial', 'I', 10);
+//         $pdf->Cell(190, 10, 'Thank you for choosing our resort!', 0, 1, 'C');
+//         $pdf->Cell(190, 10, 'For inquiries, contact us at (123) 456-7890', 0, 1, 'C');
 
-        // Save PDF to a file
-        $pdf_file = "invoice_{$booking_id}.pdf";
-        $pdf->Output($pdf_file, 'F');
+//         // Save PDF to a file
+//         $pdf_file = "invoice_{$booking_id}.pdf";
+//         $pdf->Output($pdf_file, 'F');
 
-        // Prepare Email
-        $to = $customer_email;
-        $subject = "Payment Receipt - Booking #$booking_id";
-        $from_email = "info@resort.com";
-        $boundary = md5(time());
-        $headers = "From: Resort Management <$from_email>\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+//         // Prepare Email
+//         $to = $customer_email;
+//         $subject = "Payment Receipt - Booking #$booking_id";
+//         $from_email = "info@resort.com";
+//         $boundary = md5(time());
+//         $headers = "From: Resort Management <$from_email>\r\n";
+//         $headers .= "MIME-Version: 1.0\r\n";
+//         $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
 
-        // Email body
-        $message = "--$boundary\r\n";
-        $message .= "Content-Type: text/plain; charset=\"UTF-8\"\r\n";
-        $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-        $message .= "Dear $customer_name,\n\nThank you for your payment. Please find your invoice attached.\n\nBest Regards,\nResort Management System\r\n";
+//         // Email body
+//         $message = "--$boundary\r\n";
+//         $message .= "Content-Type: text/plain; charset=\"UTF-8\"\r\n";
+//         $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+//         $message .= "Dear $customer_name,\n\nThank you for your payment. Please find your invoice attached.\n\nBest Regards,\nResort Management System\r\n";
 
-        // Read and attach PDF
-        $file_content = chunk_split(base64_encode(file_get_contents($pdf_file)));
-        $message .= "--$boundary\r\n";
-        $message .= "Content-Type: application/pdf; name=\"$pdf_file\"\r\n";
-        $message .= "Content-Transfer-Encoding: base64\r\n";
-        $message .= "Content-Disposition: attachment; filename=\"$pdf_file\"\r\n\r\n";
-        $message .= $file_content . "\r\n";
-        $message .= "--$boundary--";
+//         // Read and attach PDF
+//         $file_content = chunk_split(base64_encode(file_get_contents($pdf_file)));
+//         $message .= "--$boundary\r\n";
+//         $message .= "Content-Type: application/pdf; name=\"$pdf_file\"\r\n";
+//         $message .= "Content-Transfer-Encoding: base64\r\n";
+//         $message .= "Content-Disposition: attachment; filename=\"$pdf_file\"\r\n\r\n";
+//         $message .= $file_content . "\r\n";
+//         $message .= "--$boundary--";
 
-        // Send email
-        if (mail($to, $subject, $message, $headers)) {
-            // Mark email as sent
-            $update_query = "UPDATE payment SET email_receipt = NOW() WHERE book_id = $booking_id";
-            mysqli_query($conn, $update_query);
-        }
+//         // Send email
+//         if (mail($to, $subject, $message, $headers)) {
+//             // Mark email as sent
+//             $update_query = "UPDATE payment SET email_receipt = NOW() WHERE book_id = $booking_id";
+//             mysqli_query($conn, $update_query);
+//         }
 
-        // Delete the temporary PDF file
-        unlink($pdf_file);
-    }
-}
+//         // Delete the temporary PDF file
+//         unlink($pdf_file);
+//     }
+// }
 ?>  
